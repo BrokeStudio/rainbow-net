@@ -102,8 +102,7 @@ Read register $5000 to get next byte from the ESP.
 
 Write to register $5000 to send byte to the ESP.  
 ```
-  ; this is how to send a message
-  ; from a data buffer
+  ; this is how to send a message from a buffer
 
   ldx #0            ; set X to 0
   lda buffer+0      ; get message length...
@@ -115,7 +114,7 @@ Write to register $5000 to send byte to the ESP.
   cpx buffer+0      ; compare X to message length
   bne :-            ; loop if not equal
 
-  ; this how to send a short message or fixed values message
+  ; this is how to send a short message or fixed values message
 
   lda #3                      ; message length
   sta $5000
@@ -572,10 +571,9 @@ If there is working file currently open, number of bytes will be 0.
 | ---- | ------------------------------------------- | ------------------------------ |
 | 0    | Length of the message (excluding this byte) | `4`                            |
 | 1    | Command ID (see ESP to NES commands list)   | `N2E_CMDS::FILE_DATA`          |
-| 2    | Data length                                 | `3 (0 : no data/no file open)` |
-| 3    | Data                                        | `0x12`                         |
-| 4    | Data                                        | `0xDA`                         |
-| 5    | Data                                        | `0x4C`                         |
+| 2    | Data                                        | `0x12`                         |
+| 3    | Data                                        | `0xDA`                         |
+| 4    | Data                                        | `0x4C`                         |
 
 [Back to command list](#commands)
 
@@ -589,10 +587,11 @@ This command writes data to the working file.
 | ---- | ------------------------------------------- | ---------------------- |
 | 0    | Length of the message (excluding this byte) | `66`                   |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_WRITE` |
-| 2    | Data length                                 | `64 (min 1)`           |
-| 3    | Data                                        | `0x5F`                 |
+| 2    | Data                                        | `0x5F`                 |
 | ...  | Data                                        | `...`                  |
 | 66   | Data                                        | `0xAF`                 |
+
+**Note:** Data length is byte 0 minus 1.
 
 [Back to command list](#commands)
 
@@ -607,10 +606,11 @@ The current cursor position is not affected.
 | ---- | ------------------------------------------- | ----------------------- |
 | 0    | Length of the message (excluding this byte) | `66`                    |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_APPEND` |
-| 2    | Data length                                 | `64 (min 1)`            |
-| 3    | Data                                        | `0x5F`                  |
+| 2    | Data                                        | `0x5F`                  |
 | ...  | Data                                        | `...`                   |
 | 66   | Data                                        | `0xAF`                  |
+
+**Note:** Data length is byte 0 minus 1.
 
 [Back to command list](#commands)
 

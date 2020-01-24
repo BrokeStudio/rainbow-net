@@ -29,7 +29,7 @@ Thanks to :
   - [UART (\$5000 - R/W)](#uart-5000---rw)
   - [Status (\$5001 - R/W)](#status-5001---rw)
 - [Buffers](#buffers)
-- [Commands format](#commands-format)
+- [Messages format](#messages-format)
 - [Commands](#commands)
   - [GET_ESP_STATUS](#getespstatus)
   - [DEBUG_LOG](#debuglog)
@@ -162,11 +162,11 @@ The ESP has 2 FIFO buffers :
 
 Both buffers can store up to 20 messages.
 
-# Commands format
+# Messages format
 
-Commands always have the same format.  
-First byte is the number of bytes following this first byte.  
-The minimum command length is two bytes, and maximum is 72.  
+Messages always have the same format.  
+First byte is the message length (number of bytes following this first byte).  
+The minimum message length is 2 bytes, and maximum is 256.  
 
 # Commands
 
@@ -219,14 +219,14 @@ The ESP will only answer when ready, so once you sent the message, just wait for
 
 | Byte | Description                                 | Example                    |
 | ---- | ------------------------------------------- | -------------------------- |
-| 0    | Length of the command (excluding this byte) | `1`                        |
+| 0    | Length of the message (excluding this byte) | `1`                        |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::GET_ESP_STATUS` |
 
 **Returns:**
 
 | Byte | Description                                 | Example           |
 | ---- | ------------------------------------------- | ----------------- |
-| 0    | Length of the command (excluding this byte) | `1`               |
+| 0    | Length of the message (excluding this byte) | `1`               |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::READY` |
 
 [Back to command list](#commands)
@@ -239,7 +239,7 @@ This command logs data on the serial port of the ESP. (pin 5 of the ESP board ed
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the command (excluding this byte) | `4`                   |
+| 0    | Length of the message (excluding this byte) | `4`                   |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::DEBUG_LOG` |
 | 2    | Data length                                 | `2`                   |
 | 3    | Data                                        | `0x41`                |
@@ -256,7 +256,7 @@ Can be use on startup to make sure that we start with a clean setup.
 
 | Byte | Description                                 | Example                   |
 | ---- | ------------------------------------------- | ------------------------- |
-| 0    | Length of the command (excluding this byte) | `1`                       |
+| 0    | Length of the message (excluding this byte) | `1`                       |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::CLEAR_BUFFERS` |
 
 [Back to command list](#commands)
@@ -269,14 +269,14 @@ This command asks the WiFi status.
 
 | Byte | Description                                 | Example                     |
 | ---- | ------------------------------------------- | --------------------------- |
-| 0    | Length of the command (excluding this byte) | `1`                         |
+| 0    | Length of the message (excluding this byte) | `1`                         |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::GET_WIFI_STATUS` |
 
 **Returns:**
 
 | Byte | Description                                 | Example                  |
 | ---- | ------------------------------------------- | ------------------------ |
-| 0    | Length of the command (excluding this byte) | `2`                      |
+| 0    | Length of the message (excluding this byte) | `2`                      |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::WIFI_STATUS`  |
 | 2    | WiFi status (see below)                     | `WIFI_STATUS::CONNECTED` |
 
@@ -303,14 +303,14 @@ This command returns a random byte between 0 and 255.
 
 | Byte | Description                                 | Example                  |
 | ---- | ------------------------------------------- | ------------------------ |
-| 0    | Length of the command (excluding this byte) | `1`                      |
+| 0    | Length of the message (excluding this byte) | `1`                      |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::GET_RND_BYTE` |
 
 **Returns:**
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the command (excluding this byte) | `2`                     |
+| 0    | Length of the message (excluding this byte) | `2`                     |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::RND_BYTE`    |
 | 2    | Random value between 0 and 255              | Random value (0 to 255) |
 
@@ -324,7 +324,7 @@ This command returns a random byte between custom min and max values.
 
 | Byte | Description                                 | Example                        |
 | ---- | ------------------------------------------- | ------------------------------ |
-| 0    | Length of the command (excluding this byte) | `3`                            |
+| 0    | Length of the message (excluding this byte) | `3`                            |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::GET_RND_BYTE_RANGE` |
 | 2    | Custom min value (0 to 254)                 | Min value                      |
 | 3    | Custom max value (1 to 255)                 | Max value                      |
@@ -333,7 +333,7 @@ This command returns a random byte between custom min and max values.
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the command (excluding this byte) | `2`                     |
+| 0    | Length of the message (excluding this byte) | `2`                     |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::RND_BYTE`    |
 | 2    | Random value between 0 and 255              | Random value (0 to 255) |
 
@@ -347,14 +347,14 @@ This command returns a random word between 0 and 65535.
 
 | Byte | Description                                 | Example                  |
 | ---- | ------------------------------------------- | ------------------------ |
-| 0    | Length of the command (excluding this byte) | `1`                      |
+| 0    | Length of the message (excluding this byte) | `1`                      |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::GET_RND_WORD` |
 
 **Returns:**
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
-| 0    | Length of the command (excluding this byte) | `3`                  |
+| 0    | Length of the message (excluding this byte) | `3`                  |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::RND_WORD` |
 | 2    | Random value HI byte                        | HI byte              |
 | 3    | Random value LO byte                        | LO byte              |
@@ -369,7 +369,7 @@ This command returns a random word between custom min and max values.
 
 | Byte | Description                                 | Example                        |
 | ---- | ------------------------------------------- | ------------------------------ |
-| 0    | Length of the command (excluding this byte) | `5`                            |
+| 0    | Length of the message (excluding this byte) | `5`                            |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::GET_RND_WORD_RANGE` |
 | 2    | Custom min value (0 to 65534)               | Min value HI byte              |
 | 3    | Custom min value (0 to 65534)               | Min value LO byte              |
@@ -380,7 +380,7 @@ This command returns a random word between custom min and max values.
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
-| 0    | Length of the command (excluding this byte) | `3`                  |
+| 0    | Length of the message (excluding this byte) | `3`                  |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::RND_WORD` |
 | 2    | Random value HI byte                        | HI byte              |
 | 3    | Random value LO byte                        | LO byte              |
@@ -395,14 +395,14 @@ This command asks the server status.
 
 | Byte | Description                                 | Example                       |
 | ---- | ------------------------------------------- | ----------------------------- |
-| 0    | Length of the command (excluding this byte) | `1`                           |
+| 0    | Length of the message (excluding this byte) | `1`                           |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E_CMDS::GET_SERVER_STATUS` |
 
 **Returns:**
 
 | Byte | Description                                 | Example                    |
 | ---- | ------------------------------------------- | -------------------------- |
-| 0    | Length of the command (excluding this byte) | `2`                        |
+| 0    | Length of the message (excluding this byte) | `2`                        |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N_CMDS::SERVER_STATUS`  |
 | 2    | Server status (see below)                   | `SERVER_STATUS::CONNECTED` |
 
@@ -425,7 +425,7 @@ This command sends a message to the Rainbow server.
 
 | Byte | Description                                                    | Example                        |
 | ---- | -------------------------------------------------------------- | ------------------------------ |
-| 0    | Length of the command (excluding this byte)                    | `6`                            |
+| 0    | Length of the message (excluding this byte)                    | `6`                            |
 | 1    | Command ID (see NES 2 ESP commands list)                       | `N2E_CMDS::SEND_MSG_TO_SERVER` |
 |      | *from here, it depends on the server message you want to send* |                                |
 |      | *it could be something like this:*                             |                                |
@@ -445,7 +445,7 @@ This command sends a message to the game server.
 
 | Byte | Description                                                    | Example                      |
 | ---- | -------------------------------------------------------------- | ---------------------------- |
-| 0    | Length of the command (excluding this byte)                    | `6`                          |
+| 0    | Length of the message (excluding this byte)                    | `6`                          |
 | 1    | Command ID (see NES 2 ESP commands list)                       | `N2E_CMDS::SEND_MSG_TO_GAME` |
 |      | *from here, it depends on the server message you want to send* |                              |
 |      | *it could be something like this:*                             |                              |
@@ -468,7 +468,7 @@ If another file is already open, it will be closed.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the command (excluding this byte) | `3`                   |
+| 0    | Length of the message (excluding this byte) | `3`                   |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_OPEN` |
 | 2    | File path (see FILE_PATHS below)            | `FILE_PATHS::SAVE`    |
 | 3    | File index                                  | `5 (0 to 63)`         |
@@ -491,7 +491,7 @@ This command closes the working file.
 
 | Byte | Description                                 | Example                |
 | ---- | ------------------------------------------- | ---------------------- |
-| 0    | Length of the command (excluding this byte) | `1`                    |
+| 0    | Length of the message (excluding this byte) | `1`                    |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_CLOSE` |
 
 [Back to command list](#commands)
@@ -505,7 +505,7 @@ This command returns 1 if the file exists, or 0 if it doesn't.
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the command (excluding this byte) | `3`                     |
+| 0    | Length of the message (excluding this byte) | `3`                     |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_EXISTS` |
 | 2    | File path (see FILE_PATHS below)            | `FILE_PATHS::SAVE`      |
 | 3    | File index                                  | `5 (0 to 63)`           |
@@ -514,7 +514,7 @@ This command returns 1 if the file exists, or 0 if it doesn't.
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the command (excluding this byte) | `2`                     |
+| 0    | Length of the message (excluding this byte) | `2`                     |
 | 1    | Command ID (see ESP to NES commands list)   | `N2E_CMDS::FILE_EXISTS` |
 | 2    | File exists                                 | `0 | 1`                 |
 
@@ -528,7 +528,7 @@ This command deletes (if exists) the file corresponding of the passed index.
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the command (excluding this byte) | `3`                     |
+| 0    | Length of the message (excluding this byte) | `3`                     |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_DELETE` |
 | 2    | File path (see FILE_PATHS below)            | `FILE_PATHS::SAVE`      |
 | 3    | File index                                  | `5 (0 to 63)`           |
@@ -544,7 +544,7 @@ If the file is smaller than the passed offset, it'll be filled with 0x00.
 
 | Byte    | Description                                 | Example                  |
 | ------- | ------------------------------------------- | ------------------------ |
-| 0       | Length of the command (excluding this byte) | `2 to 5`                 |
+| 0       | Length of the message (excluding this byte) | `2 to 5`                 |
 | 1       | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_SET_CUR` |
 | 2       | Offset LSB                                  | `0x00`                   |
 | 3 (opt) | Offset                                      | `0x00`                   |
@@ -562,7 +562,7 @@ If there is working file currently open, number of bytes will be 0.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the command (excluding this byte) | `2`                   |
+| 0    | Length of the message (excluding this byte) | `2`                   |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_READ` |
 | 2    | Number of bytes to read                     | `64 (minimum 1)`      |
 
@@ -570,7 +570,7 @@ If there is working file currently open, number of bytes will be 0.
 
 | Byte | Description                                 | Example                        |
 | ---- | ------------------------------------------- | ------------------------------ |
-| 0    | Length of the command (excluding this byte) | `5`                            |
+| 0    | Length of the message (excluding this byte) | `4`                            |
 | 1    | Command ID (see ESP to NES commands list)   | `N2E_CMDS::FILE_DATA`          |
 | 2    | Data length                                 | `3 (0 : no data/no file open)` |
 | 3    | Data                                        | `0x12`                         |
@@ -587,7 +587,7 @@ This command writes data to the working file.
 
 | Byte | Description                                 | Example                |
 | ---- | ------------------------------------------- | ---------------------- |
-| 0    | Length of the command (excluding this byte) | `66`                   |
+| 0    | Length of the message (excluding this byte) | `66`                   |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_WRITE` |
 | 2    | Data length                                 | `64 (min 1)`           |
 | 3    | Data                                        | `0x5F`                 |
@@ -605,7 +605,7 @@ The current cursor position is not affected.
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the command (excluding this byte) | `66`                    |
+| 0    | Length of the message (excluding this byte) | `66`                    |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_APPEND` |
 | 2    | Data length                                 | `64 (min 1)`            |
 | 3    | Data                                        | `0x5F`                  |
@@ -622,7 +622,7 @@ Get list of existing files in a specific path.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the command (excluding this byte) | `2`                   |
+| 0    | Length of the message (excluding this byte) | `2`                   |
 | 1    | Command ID (see NES to ESP commands list)   | `N2E_CMDS::FILE_LIST` |
 | 2    | File path (see FILE_PATHS below)            | `FILE_PATHS::SAVE`    |
 
@@ -630,7 +630,7 @@ Get list of existing files in a specific path.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the command (excluding this byte) | `5`                   |
+| 0    | Length of the message (excluding this byte) | `5`                   |
 | 1    | Command ID (see ESP to NES commands list)   | `N2E_CMDS::FILE_LIST` |
 | 2    | Number of files                             | `3 (0 : no files)`    |
 | 3    | File index                                  | `1`                   |

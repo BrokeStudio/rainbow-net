@@ -15,7 +15,7 @@ Thanks to :
 - Sylvain Gadrat aka RogerBidon for updating FCEUX to emulate the Rainbow mapper
 - NESdev community
 
-*last update : 2019/12/11*
+*last update : 2020/01/24*
 
 # Table of content
 
@@ -79,9 +79,63 @@ For now, the Rainbow mapper is based on NROM mapper to make the development easi
 ## UART (\$5000 - R/W)
 
 Read register $5000 to get next byte from the ESP.  
+```
+  ; this is how to read an incomming message
+  ; and store it in a buffer
+
+  lda $5000         ; dummy read
+  nop               ; let it breathe
+  lda $5000         ; read first byte (message length)...
+  sta buffer+0      ; ... and store it
+  
+  ; get the rest of the message
+
+  ldx #0            ; set X to 0
+:
+  lda $5000         ; read next byte...
+  sta buffer+1,x    ; ... and store it
+  inx               ; increment X
+  cpx buffer+0      ; compare X to message length
+  bne :-            ; loop if not equal
+```
 **Note:** Because of the mapper buffer, the first read of a new message will always return the last read of the previous message. So a dummy read is required in this case. (*this is subject to change*)
 
 Write to register $5000 to send byte to the ESP.  
+```
+  ; this is how to send a message
+  ; from a data buffer
+
+  ldx #0            ; set X to 0
+  lda buffer+0      ; get message length...
+  sta $5000         ; ... and send it
+:
+  lda buffer+1,x    ; get next message byte...
+  sta $5000         ; ... and send it
+  inx               ; increment X
+  cpx buffer+0      ; compare X to message length
+  bne :-            ; loop if not equal
+
+  ; this how to send a short message or fixed values message
+
+  lda #3                      ; message length
+  sta $5000
+  lda #N2E_CMDS::FILE_DELETE  ; opcode / command
+  sta $5000
+  lda #FILE_PATHS::ROMS       ; paramater (path id)
+  sta $5000
+  lda #0                      ; parameter (file id)
+  sta $5000
+
+  ; this is possible too
+
+  lda #2
+  ldx #N2E_CMDS::GET_FILE_LIST
+  ldy #FILE_PATHS::ROMS
+  sta $5000
+  stx $5000
+  sty $5000
+
+```
 **Note:** After you send the first byte of a new message, you have one second to send the rest of the message before the RX buffer is reset. This is to prevent the ESP to be stuck, waiting for a message that could never come. (*this is subject to change*)
 
 ## Status (\$5001 - R/W)

@@ -471,34 +471,29 @@ This command gets the server settings (IP address and port).
 
 **Returns:**
 
-| Byte | Description                                 | Example                          |
-| ---- | ------------------------------------------- | -------------------------------- |
-| 0    | Length of the message (excluding this byte) | `18` (depends on message length) |
-| 1    | Command ID (see ESP to NES commands list)   | `E2N::HOST_SETTINGS`             |
-| 2    | Port MSB                                    | `0x0B`                           |
-| 3    | Port LSB                                    | `0xB8`                           |
-| 4    | Hostname string                             | `G`                              |
-| 5    | ...                                         | `A`                              |
-| 6    | ...                                         | `M`                              |
-| 7    | ...                                         | `E`                              |
-| 8    | ...                                         | `.`                              |
-| 9    | ...                                         | `S`                              |
-| 10   | ...                                         | `E`                              |
-| 11   | ...                                         | `R`                              |
-| 12   | ...                                         | `V`                              |
-| 13   | ...                                         | `E`                              |
-| 14   | ...                                         | `R`                              |
-| 15   | ...                                         | `.`                              |
-| 16   | ...                                         | `N`                              |
-| 17   | ...                                         | `E`                              |
-| 18   | ...                                         | `T`                              |
-
-If no server host OR port are set then the response will be:
-
-| Byte | Description                                 | Example              |
-| ---- | ------------------------------------------- | -------------------- |
-| 0    | Length of the message (excluding this byte) | `1`                  |
-| 1    | Command ID (see ESP to NES commands list)   | `E2N::HOST_SETTINGS` |
+| Byte | Description                                                                           | Example              |
+| ---- | ------------------------------------------------------------------------------------- | -------------------- |
+| 0    | Length of the message (excluding this byte)                                           | `1` or more          |
+| 1    | Command ID (see ESP to NES commands list)                                             | `E2N::HOST_SETTINGS` |
+|      | *from here, it depends on if a server host AND port are set in the ESP config or not* |                      |
+|      | *it could be something like this:*                                                    |
+| 2    | Port MSB                                                                              | `0x0B`               |
+| 3    | Port LSB                                                                              | `0xB8`               |
+| 4    | Hostname string                                                                       | `G`                  |
+| 5    | ...                                                                                   | `A`                  |
+| 6    | ...                                                                                   | `M`                  |
+| 7    | ...                                                                                   | `E`                  |
+| 8    | ...                                                                                   | `.`                  |
+| 9    | ...                                                                                   | `S`                  |
+| 10   | ...                                                                                   | `E`                  |
+| 11   | ...                                                                                   | `R`                  |
+| 12   | ...                                                                                   | `V`                  |
+| 13   | ...                                                                                   | `E`                  |
+| 14   | ...                                                                                   | `R`                  |
+| 15   | ...                                                                                   | `.`                  |
+| 16   | ...                                                                                   | `N`                  |
+| 17   | ...                                                                                   | `E`                  |
+| 18   | ...                                                                                   | `T`                  |
 
 [Back to command list](#commands)
 
@@ -515,21 +510,16 @@ It doesn't overwrite values set via the ESP web interface.
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E::SET_SERVER_SETTINGS`       |
 | 2    | Port MSB                                    | `0x0B`                           |
 | 3    | Port LSB                                    | `0xB8`                           |
-| 4    | Hostname string                             | `G`                              |
-| 5    | ...                                         | `A`                              |
-| 6    | ...                                         | `M`                              |
-| 7    | ...                                         | `E`                              |
-| 8    | ...                                         | `.`                              |
-| 9    | ...                                         | `S`                              |
-| 10   | ...                                         | `E`                              |
-| 11   | ...                                         | `R`                              |
-| 12   | ...                                         | `V`                              |
-| 13   | ...                                         | `E`                              |
-| 14   | ...                                         | `R`                              |
-| 15   | ...                                         | `.`                              |
-| 16   | ...                                         | `N`                              |
-| 17   | ...                                         | `E`                              |
-| 18   | ...                                         | `T`                              |
+| 4    | Hostname string                             | `S`                              |
+| 5    | Hostname string                             | `E`                              |
+| 6    | Hostname string                             | `R`                              |
+| 7    | Hostname string                             | `V`                              |
+| 8    | Hostname string                             | `E`                              |
+| 9    | Hostname string                             | `R`                              |
+| 10   | Hostname string                             | `.`                              |
+| 11   | Hostname string                             | `N`                              |
+| 12   | Hostname string                             | `E`                              |
+| 13   | Hostname string                             | `T`                              |
 
 [Back to command list](#commands)
 
@@ -567,17 +557,13 @@ When using UDP protocol, this command stops the UDP server on the ESP side.
 
 This command sends a message to the server.  
 
-| Byte | Description                                                    | Example                         |
-| ---- | -------------------------------------------------------------- | ------------------------------- |
-| 0    | Length of the message (excluding this byte)                    | `6` (depends on message length) |
-| 1    | Command ID (see NES 2 ESP commands list)                       | `N2E::SEND_MSG_TO_SERVER`       |
-|      | *from here, it depends on the server message you want to send* |                                 |
-|      | *it could be something like this:*                             |                                 |
-| 2    | Server command                                                 | `depends on the server`         |
-| 3    | Data                                                           | `0xAA`                          |
-| 4    | Data                                                           | `0x12`                          |
-| 5    | Data                                                           | `0xFF`                          |
-| 6    | Data                                                           | `0xE9`                          |
+| Byte | Description                                 | Example                          |
+| ---- | ------------------------------------------- | -------------------------------- |
+| 0    | Length of the message (excluding this byte) | `30` (depends on message length) |
+| 1    | Command ID (see NES 2 ESP commands list)    | `N2E::SEND_MSG_TO_SERVER`        |
+| 2    | Data                                        | `0xAA`                           |
+| ...  | Data                                        | `0x12`                           |
+| 30   | Data                                        | `0xE9`                           |
 
 [Back to command list](#commands)
 
@@ -602,7 +588,7 @@ If another file is already open, it will be closed.
 | Value | FILE_PATHS | Description                                     |
 | ----- | ---------- | ----------------------------------------------- |
 | 0     | SAVE       | Use this folder to load/save game data          |
-| 1     | ROMS       | Use this folder to dump/flash ROMS              |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
 | 2     | USER       | Use this folder to read/write data for the user |
 
 [Back to command list](#commands)
@@ -634,6 +620,14 @@ This command returns 1 if the file exists, or 0 if it doesn't.
 | 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE` |
 | 3    | File index                                  | `5 (0 to 63)`      |
 
+**File paths:**
+
+| Value | FILE_PATHS | Description                                     |
+| ----- | ---------- | ----------------------------------------------- |
+| 0     | SAVE       | Use this folder to load/save game data          |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
+| 2     | USER       | Use this folder to read/write data for the user |
+
 **Returns:**
 
 | Byte | Description                                 | Example            |
@@ -656,6 +650,14 @@ This command deletes (if exists) the file corresponding of the passed index.
 | 1    | Command ID (see NES to ESP commands list)   | `N2E::FILE_DELETE` |
 | 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE` |
 | 3    | File index                                  | `5 (0 to 63)`      |
+
+**File paths:**
+
+| Value | FILE_PATHS | Description                                     |
+| ----- | ---------- | ----------------------------------------------- |
+| 0     | SAVE       | Use this folder to load/save game data          |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
+| 2     | USER       | Use this folder to read/write data for the user |
 
 **Returns:**
 
@@ -768,18 +770,26 @@ Get list of existing files in a specific path.
 | 1    | Command ID (see NES to ESP commands list)   | `N2E::GET_FILE_LIST` |
 | 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE`   |
 
+**File paths:**
+
+| Value | FILE_PATHS | Description                                     |
+| ----- | ---------- | ----------------------------------------------- |
+| 0     | SAVE       | Use this folder to load/save game data          |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
+| 2     | USER       | Use this folder to read/write data for the user |
+
 **Returns:**
 
-| Byte | Description                                          | Example               |
-| ---- | ---------------------------------------------------- | --------------------- |
-| 0    | Length of the message (excluding this byte)          | `2` or more           |
-| 1    | Command ID (see ESP to NES commands list)            | `E2N::FILE_LIST`      |
-| 2    | Number of files                                      | `3` or `0` (no files) |
-|      | *from here, it depends on if files are foudn or not* |                       |
-|      | *it could be something like this:*                   |                       |
-| 3    | File index                                           | `1`                   |
-| 4    | File index                                           | `5`                   |
-| 5    | File index                                           | `10`                  |
+| Byte | Description                                          | Example          |
+| ---- | ---------------------------------------------------- | ---------------- |
+| 0    | Length of the message (excluding this byte)          | `1` or more      |
+| 1    | Command ID (see ESP to NES commands list)            | `E2N::FILE_LIST` |
+|      | *from here, it depends on if files are found or not* |                  |
+|      | *it could be something like this:*                   |                  |
+| 2    | Number of files                                      | `3`              |
+| 3    | File index                                           | `1`              |
+| 4    | File index                                           | `5`              |
+| 5    | File index                                           | `10`             |
 
 [Back to command list](#commands)
 
@@ -795,13 +805,23 @@ Get an unexisting file ID in a specific path.
 | 1    | Command ID (see NES to ESP commands list)   | `N2E::GET_FREE_FILE_ID` |
 | 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE`      |
 
+**File paths:**
+
+| Value | FILE_PATHS | Description                                     |
+| ----- | ---------- | ----------------------------------------------- |
+| 0     | SAVE       | Use this folder to load/save game data          |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
+| 2     | USER       | Use this folder to read/write data for the user |
+
 **Returns:**
 
-| Byte | Description                                 | Example                              |
-| ---- | ------------------------------------------- | ------------------------------------ |
-| 0    | Length of the message (excluding this byte) | `2`                                  |
-| 1    | Command ID (see ESP to NES commands list)   | `E2N::FILE_ID`                       |
-| 2    | File ID                                     | `3` or `128` (no free file id found) |
+| Byte | Description                                                  | Example        |
+| ---- | ------------------------------------------------------------ | -------------- |
+| 0    | Length of the message (excluding this byte)                  | `1` or more    |
+| 1    | Command ID (see ESP to NES commands list)                    | `E2N::FILE_ID` |
+|      | *from here, it depends on if a free file ID is found or not* |                |
+|      | *it could be something like this:*                           |                |
+| 2    | File ID                                                      | `3`            |
 
 [Back to command list](#commands)
 

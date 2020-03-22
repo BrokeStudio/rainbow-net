@@ -1,9 +1,11 @@
 # Rainbow documentation
 
-> **Disclaimer**
-> 
+> **Disclaimer**  
+>  
 > This document and the project are still WIP and are subject to modifications.  
-> &nbsp;
+> &nbsp;  
+> *last update : 2020/03/22*  
+> &nbsp;  
 
 ## Credits
 
@@ -17,14 +19,12 @@ Thanks to :
 - The NES WiFi Club (cheers guys 😊 )
 - NESdev community
 
-*last update : 2020/03/20*
-
 ## Table of content
 
 - [Credits](#Credits)
 - [Table of content](#Table-of-content)
-- [What is Rainbow ?](#What-is-Rainbow)
-- [Why 'Rainbow' ?](#Why-Rainbow)
+- [What is Rainbow?](#What-is-Rainbow)
+- [Why 'Rainbow'?](#Why-Rainbow)
 - [Mapper registers](#Mapper-registers)
 - [Rainbow registers](#Rainbow-registers)
   - [UART (\$5000 - R/W)](#UART-5000---RW)
@@ -65,12 +65,12 @@ Thanks to :
 
 ---
 
-## What is Rainbow ?
+## What is Rainbow?
 
 **Rainbow** is a mapper for the **NES** that allows to connect the console to the Internet.  
 It uses a WiFi chip (**ESP8266**, called **ESP** in this doc) embedded on the cart.
 
-## Why 'Rainbow' ?
+## Why 'Rainbow'?
 
 There are two reasons for this name.  
 
@@ -90,6 +90,7 @@ However, a brand new mapper will be used in the end, but I need my new prototype
 ### UART (\$5000 - R/W)
 
 Read register $5000 to get next byte from the ESP.  
+
 ```
   ; this is how to read an incomming message
   ; and store it in a buffer
@@ -109,9 +110,11 @@ Read register $5000 to get next byte from the ESP.
   cpx buffer+0      ; compare X to message length
   bne :-            ; loop if not equal
 ```
+
 **Note:** Because of the mapper buffer, the first read of a new message will always return the last read of the previous message. So a dummy read is required in this case. (*this is subject to change*)
 
 Write to register $5000 to send byte to the ESP.  
+
 ```
   ; this is how to send a message from a buffer
 
@@ -400,7 +403,7 @@ This command returns a random word between custom min and max values.
 | Byte | Description                                 | Example         |
 | ---- | ------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte) | `3`             |
-| 1    | Command ID (see ESP to NES commands list)   | `EN2::RND_WORD` |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_WORD` |
 | 2    | Random value HI byte                        | HI byte         |
 | 3    | Random value LO byte                        | LO byte         |
 
@@ -636,7 +639,7 @@ This command returns 1 if the file exists, or 0 if it doesn't.
 | Byte | Description                                 | Example            |
 | ---- | ------------------------------------------- | ------------------ |
 | 0    | Length of the message (excluding this byte) | `2`                |
-| 1    | Command ID (see ESP to NES commands list)   | `N2E::FILE_EXISTS` |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::FILE_EXISTS` |
 | 2    | Returns 1 if file exists, 0 otherwise       | `0` or `1`         |
 
 [Back to command list](#commands)

@@ -58,8 +58,8 @@ Thanks to :
   - [FILE_READ](#FILEREAD)
   - [FILE_WRITE](#FILEWRITE)
   - [FILE_APPEND](#FILEAPPEND)
-  - [GET_FILE_LIST](#GETFILELIST)
-  - [GET_FREE_FILE_ID](#GETFREEFILEID)
+  - [FILE_GET_LIST](#FILEGETLIST)
+  - [FILE_GET_FREE_ID](#FILEGETFREEID)
 - [Bootloader](#Bootloader)
 - [TODO](#TODO)
 
@@ -142,7 +142,7 @@ Write to register $5000 to send byte to the ESP.
   ; this is possible too
 
   lda #2
-  ldx #N2E::GET_FILE_LIST
+  ldx #N2E::FILE_GET_LIST
   ldy #FILE_PATHS::ROMS
   sta $5000
   stx $5000
@@ -212,8 +212,8 @@ A message always have the same format and follows these rules:
 | 20    | [FILE_READ](#FILE_READ)                     | Read working file (at specific position)         |
 | 21    | [FILE_WRITE](#FILE_WRITE)                   | Write working file (at specific position)        |
 | 22    | [FILE_APPEND](#FILE_APPEND)                 | Append data to working file                      |
-| 23    | [GET_FILE_LIST](#GET_FILE_LIST)             | Get list of existing files in a specific path    |
-| 24    | [GET_FREE_FILE_ID](#GET_FREE_FILE_ID)       | Get an unexisting file ID in a specific path.    |
+| 23    | [FILE_GET_LIST](#FILE_GET_LIST)             | Get list of existing files in a specific path    |
+| 24    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)       | Get an unexisting file ID in a specific path.    |
 
 ### ESP to NES commands
 
@@ -222,9 +222,9 @@ A message always have the same format and follows these rules:
 | 0     | [READY](#GET_ESP_STATUS)                   |             |
 | 1     | [FILE_EXISTS](#FILE_EXISTS)                |             |
 | 2     | [FILE_DELETE](#FILE_DELETE)                |             |
-| 3     | [FILE_LIST](#GET_FILE_LIST)                |             |
+| 3     | [FILE_LIST](#FILE_GET_LIST)                |             |
 | 4     | [FILE_DATA](#FILE_READ)                    |             |
-| 5     | [FILE_ID](#GET_FREE_FILE_ID)               |             |
+| 5     | [FILE_ID](#FILE_GET_FREE_ID)               |             |
 | 6     | [WIFI_STATUS](#GET_WIFI_STATUS)            |             |
 | 7     | [SERVER_STATUS](#GET_SERVER_STATUS)        |             |
 | 8     | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
@@ -760,14 +760,14 @@ The current cursor position is not affected.
 
 ---
 
-### GET_FILE_LIST
+### FILE_GET_LIST
 
 Get list of existing files in a specific path.  
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
 | 0    | Length of the message (excluding this byte) | `2`                  |
-| 1    | Command ID (see NES to ESP commands list)   | `N2E::GET_FILE_LIST` |
+| 1    | Command ID (see NES to ESP commands list)   | `N2E::FILE_GET_LIST` |
 | 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE`   |
 
 **File paths:**
@@ -795,14 +795,14 @@ Get list of existing files in a specific path.
 
 ---
 
-### GET_FREE_FILE_ID
+### FILE_GET_FREE_ID
 
 Get an unexisting file ID in a specific path.
 
 | Byte | Description                                 | Example                 |
 | ---- | ------------------------------------------- | ----------------------- |
 | 0    | Length of the message (excluding this byte) | `2`                     |
-| 1    | Command ID (see NES to ESP commands list)   | `N2E::GET_FREE_FILE_ID` |
+| 1    | Command ID (see NES to ESP commands list)   | `N2E::FILE_GET_FREE_ID` |
 | 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE`      |
 
 **File paths:**

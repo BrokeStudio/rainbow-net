@@ -35,8 +35,8 @@ BUF_OUT       = $0380
   FILE_READ
   FILE_WRITE
   FILE_APPEND
-  GET_FILE_LIST
-  GET_FREE_FILE_ID
+  FILE_GET_LIST
+  FILE_GET_FREE_ID
 
 ; DEBUG
   GET_N_BYTES = 254
@@ -61,9 +61,6 @@ BUF_OUT       = $0380
   RND_WORD
   
   MESSAGE_FROM_SERVER
-
-  SUCCESS = 254
-  ERROR = 255
 .endenum
 
 ; WiFi status
@@ -97,9 +94,4 @@ BUF_OUT       = $0380
   SAVE
   ROMS
   USER
-.endenum
-
-; Errors
-.enum ERRORS
-  FILE_DOES_NOT_EXIST
 .endenum

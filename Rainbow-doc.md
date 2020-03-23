@@ -179,7 +179,7 @@ Both buffers can store up to 20 messages.
 
 A message always have the same format and follows these rules:  
 
-- First byte is the message length (number of bytes following this first byte, can't be zero (0), minimum is one (1) ).
+- First byte is the message length (number of bytes following this first byte, can't be 0, minimum is 1).
 - Second byte is the command (see NES to ESP commands).
 - Following bytes are the parameters/data for the command.
 
@@ -471,29 +471,28 @@ This command gets the server settings (IP address and port).
 
 **Returns:**
 
-| Byte | Description                                                                           | Example              |
-| ---- | ------------------------------------------------------------------------------------- | -------------------- |
-| 0    | Length of the message (excluding this byte)                                           | `1` or more          |
-| 1    | Command ID (see ESP to NES commands list)                                             | `E2N::HOST_SETTINGS` |
-|      | *from here, it depends on if a server host AND port are set in the ESP config or not* |                      |
-|      | *it could be something like this:*                                                    |
-| 2    | Port MSB                                                                              | `0x0B`               |
-| 3    | Port LSB                                                                              | `0xB8`               |
-| 4    | Hostname string                                                                       | `G`                  |
-| 5    | ...                                                                                   | `A`                  |
-| 6    | ...                                                                                   | `M`                  |
-| 7    | ...                                                                                   | `E`                  |
-| 8    | ...                                                                                   | `.`                  |
-| 9    | ...                                                                                   | `S`                  |
-| 10   | ...                                                                                   | `E`                  |
-| 11   | ...                                                                                   | `R`                  |
-| 12   | ...                                                                                   | `V`                  |
-| 13   | ...                                                                                   | `E`                  |
-| 14   | ...                                                                                   | `R`                  |
-| 15   | ...                                                                                   | `.`                  |
-| 16   | ...                                                                                   | `N`                  |
-| 17   | ...                                                                                   | `E`                  |
-| 18   | ...                                                                                   | `T`                  |
+| Byte | Description                                                                   | Example              |
+| ---- | ----------------------------------------------------------------------------- | -------------------- |
+| 0    | Length of the message (excluding this byte)                                   | `1` or more          |
+| 1    | Command ID (see ESP to NES commands list)                                     | `E2N::HOST_SETTINGS` |
+|      | *next bytes are returned if a server host AND port are set in the ESP config* |                      |
+| 2    | Port MSB                                                                      | `0x0B`               |
+| 3    | Port LSB                                                                      | `0xB8`               |
+| 4    | Hostname string                                                               | `G`                  |
+| 5    | ...                                                                           | `A`                  |
+| 6    | ...                                                                           | `M`                  |
+| 7    | ...                                                                           | `E`                  |
+| 8    | ...                                                                           | `.`                  |
+| 9    | ...                                                                           | `S`                  |
+| 10   | ...                                                                           | `E`                  |
+| 11   | ...                                                                           | `R`                  |
+| 12   | ...                                                                           | `V`                  |
+| 13   | ...                                                                           | `E`                  |
+| 14   | ...                                                                           | `R`                  |
+| 15   | ...                                                                           | `.`                  |
+| 16   | ...                                                                           | `N`                  |
+| 17   | ...                                                                           | `E`                  |
+| 18   | ...                                                                           | `T`                  |
 
 [Back to command list](#commands)
 
@@ -699,7 +698,8 @@ If the file is smaller than the passed offset, it'll be filled with 0x00.
 
 ### FILE_READ
 
-This command reads and sends data from the working file. You have to pass the number of bytes you want to read.  
+This command reads and sends data from the working file.  
+You have to pass the number of bytes you want to read.  
 If there is working file currently open, number of bytes will be 0.
 
 | Byte | Description                                 | Example          |
@@ -710,18 +710,16 @@ If there is working file currently open, number of bytes will be 0.
 
 **Returns:**
 
-| Byte | Description                                 | Example                                        |
-| ---- | ------------------------------------------- | ---------------------------------------------- |
-| 0    | Length of the message (excluding this byte) | `4` (depends on the number of bytes requested) |
-| 1    | Command ID (see ESP to NES commands list)   | `E2N::FILE_DATA`                               |
-| 2    | Data                                        | `0x12`                                         |
-| 3    | Data                                        | `0xDA`                                         |
-| 4    | Data                                        | `0x4C`                                         |
+| Byte | Description                                 | Example                                   |
+| ---- | ------------------------------------------- | ----------------------------------------- |
+| 0    | Length of the message (excluding this byte) | `5` (depends on the number of bytes read) |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::FILE_DATA`                          |
+| 2    | Number of bytes returned                    | `03`                                      |
+| 3    | Data                                        | `0x12`                                    |
+| 4    | Data                                        | `0xDA`                                    |
+| 5    | Data                                        | `0x4C`                                    |
 
-**Note:**
-
-- Data length is byte zero (0) minus one (1).  
-- It can be less than the number of bytes requested depending on the file size and file cursor position.  
+**Note:** Number of bytes returned can be less than the number of bytes requested depending on the file size and the file cursor position.  
 
 [Back to command list](#commands)
 
@@ -764,11 +762,14 @@ The current cursor position is not affected.
 
 Get list of existing files in a specific path.  
 
-| Byte | Description                                 | Example              |
-| ---- | ------------------------------------------- | -------------------- |
-| 0    | Length of the message (excluding this byte) | `2`                  |
-| 1    | Command ID (see NES to ESP commands list)   | `N2E::FILE_GET_LIST` |
-| 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE`   |
+| Byte | Description                                                          | Example              |
+| ---- | -------------------------------------------------------------------- | -------------------- |
+| 0    | Length of the message (excluding this byte)                          | `2` or more          |
+| 1    | Command ID (see NES to ESP commands list)                            | `N2E::FILE_GET_LIST` |
+| 2    | File path (see FILE_PATHS)                                           | `FILE_PATHS::SAVE`   |
+|      | *the next bytes are required if you want to use a pagination system* |                      |
+| 3    | Page size (number of files per page)                                 | `9`                  |
+| 4    | Current page (0 indexed)                                             | `1`                  |
 
 **File paths:**
 
@@ -780,16 +781,15 @@ Get list of existing files in a specific path.
 
 **Returns:**
 
-| Byte | Description                                          | Example          |
-| ---- | ---------------------------------------------------- | ---------------- |
-| 0    | Length of the message (excluding this byte)          | `1` or more      |
-| 1    | Command ID (see ESP to NES commands list)            | `E2N::FILE_LIST` |
-|      | *from here, it depends on if files are found or not* |                  |
-|      | *it could be something like this:*                   |                  |
-| 2    | Number of files                                      | `3`              |
-| 3    | File index                                           | `1`              |
-| 4    | File index                                           | `5`              |
-| 5    | File index                                           | `10`             |
+| Byte | Description                                  | Example          |
+| ---- | -------------------------------------------- | ---------------- |
+| 0    | Length of the message (excluding this byte)  | `2` or more      |
+| 1    | Command ID (see ESP to NES commands list)    | `E2N::FILE_LIST` |
+| 2    | Number of files                              | `3`              |
+|      | *next bytes are returned if files are found* |                  |
+| 3    | File index                                   | `1`              |
+| 4    | File index                                   | `5`              |
+| 5    | File index                                   | `10`             |
 
 [Back to command list](#commands)
 
@@ -815,13 +815,12 @@ Get an unexisting file ID in a specific path.
 
 **Returns:**
 
-| Byte | Description                                                  | Example        |
-| ---- | ------------------------------------------------------------ | -------------- |
-| 0    | Length of the message (excluding this byte)                  | `1` or more    |
-| 1    | Command ID (see ESP to NES commands list)                    | `E2N::FILE_ID` |
-|      | *from here, it depends on if a free file ID is found or not* |                |
-|      | *it could be something like this:*                           |                |
-| 2    | File ID                                                      | `3`            |
+| Byte | Description                                        | Example        |
+| ---- | -------------------------------------------------- | -------------- |
+| 0    | Length of the message (excluding this byte)        | `1` or more    |
+| 1    | Command ID (see ESP to NES commands list)          | `E2N::FILE_ID` |
+|      | *next byte is returned if a free file ID is found* |                |
+| 2    | File ID                                            | `3`            |
 
 [Back to command list](#commands)
 

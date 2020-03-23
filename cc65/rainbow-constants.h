@@ -38,9 +38,6 @@ BUF_OUT       = $0380
   FILE_GET_LIST
   FILE_GET_FREE_ID
 
-; DEBUG
-  GET_N_BYTES = 254
-
 .endenum
 
 ; ESP to NES opcodes
@@ -85,8 +82,6 @@ BUF_OUT       = $0380
 .enum SERVER_STATUS
   DISCONNECTED
   CONNECTED
-  AUTH_SUCCESS
-  AUTH_FAILED
 .endenum
 
 ; File paths

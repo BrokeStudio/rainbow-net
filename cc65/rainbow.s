@@ -27,19 +27,23 @@
 ; ################################################################################
 ; MACROS
 
+.if .not .definedmacro(RNBW_waitResponse)
   .macro RNBW_waitResponse
     ; wait for response
   :
     bit $5001
     bpl :-
   .endmacro
+.endif
 
+.if .not .definedmacro(RNBW_waitAnswer)
   .macro RNBW_waitAnswer
     ; wait for response
   :
     bit $5001
     bpl :-
   .endmacro
+.endif
 
 ; ################################################################################
 ; CODE

@@ -4,6 +4,9 @@
 BUF_IN        = $0300
 BUF_OUT       = $0380
 
+NUM_PATHS     = 3
+NUM_FILES     = 64
+
 ; NES to ESP opcodes
 .enum N2E
 
@@ -35,6 +38,7 @@ BUF_OUT       = $0380
   FILE_READ
   FILE_WRITE
   FILE_APPEND
+  FILE_COUNT
   FILE_GET_LIST
   FILE_GET_FREE_ID
 
@@ -48,6 +52,7 @@ BUF_OUT       = $0380
   FILE_DELETE
   FILE_LIST
   FILE_DATA
+  FILE_COUNT
   FILE_ID
 
   WIFI_STATUS

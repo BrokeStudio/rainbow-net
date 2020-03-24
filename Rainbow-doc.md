@@ -58,6 +58,7 @@ Thanks to :
   - [FILE_READ](#FILEREAD)
   - [FILE_WRITE](#FILEWRITE)
   - [FILE_APPEND](#FILEAPPEND)
+  - [FILE_COUNT](#FILECOUNT)
   - [FILE_GET_LIST](#FILEGETLIST)
   - [FILE_GET_FREE_ID](#FILEGETFREEID)
 - [Bootloader](#Bootloader)
@@ -212,8 +213,9 @@ A message always have the same format and follows these rules:
 | 20    | [FILE_READ](#FILE_READ)                     | Read working file (at specific position)         |
 | 21    | [FILE_WRITE](#FILE_WRITE)                   | Write working file (at specific position)        |
 | 22    | [FILE_APPEND](#FILE_APPEND)                 | Append data to working file                      |
-| 23    | [FILE_GET_LIST](#FILE_GET_LIST)             | Get list of existing files in a specific path    |
-| 24    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)       | Get an unexisting file ID in a specific path.    |
+| 23    | [FILE_COUNT](#FILE_COUNT)                   | Get number of tiles in a specific path           |
+| 24    | [FILE_GET_LIST](#FILE_GET_LIST)             | Get list of existing files in a specific path    |
+| 25    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)       | Get an unexisting file ID in a specific path.    |
 
 ### ESP to NES commands
 
@@ -224,13 +226,14 @@ A message always have the same format and follows these rules:
 | 2     | [FILE_DELETE](#FILE_DELETE)                |             |
 | 3     | [FILE_LIST](#FILE_GET_LIST)                |             |
 | 4     | [FILE_DATA](#FILE_READ)                    |             |
-| 5     | [FILE_ID](#FILE_GET_FREE_ID)               |             |
+| 5     | [FILE_COUNT](#FILE_COUNT)                  |             |
+| 6     | [FILE_ID](#FILE_GET_FREE_ID)               |             |
 | 6     | [WIFI_STATUS](#GET_WIFI_STATUS)            |             |
-| 7     | [SERVER_STATUS](#GET_SERVER_STATUS)        |             |
-| 8     | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
-| 9     | [RND_BYTE](#GET_RND_BYTE)                  |             |
-| 10    | [RND_WORD](#GET_RND_WORD)                  |             |
-| 11    | [MESSAGE_FROM_SERVER](#SEND_MSG_TO_SERVER) |             |
+| 8     | [SERVER_STATUS](#GET_SERVER_STATUS)        |             |
+| 9     | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
+| 10    | [RND_BYTE](#GET_RND_BYTE)                  |             |
+| 11    | [RND_WORD](#GET_RND_WORD)                  |             |
+| 12    | [MESSAGE_FROM_SERVER](#SEND_MSG_TO_SERVER) |             |
 
 ## Commands details
 
@@ -755,6 +758,34 @@ The current cursor position is not affected.
 | 66   | Data                                        | `0xAF`                                             |
 
 [Back to command list](#commands)
+
+---
+
+### FILE_COUNT
+
+This command sends the number of files in a specific path.  
+
+| Byte | Description                                 | Example           |
+| ---- | ------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte) | `1`               |
+| 1    | Command ID (see NES to ESP commands list)   | `N2E::FILE_COUNT` |
+
+**File paths:**
+
+| Value | FILE_PATHS | Description                                     |
+| ----- | ---------- | ----------------------------------------------- |
+| 0     | SAVE       | Use this folder to load/save game data          |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
+| 2     | USER       | Use this folder to read/write data for the user |
+[Back to command list](#commands)
+
+**Returns:**
+
+| Byte | Description                                 | Example           |
+| ---- | ------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte) | `2`               |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::FILE_COUNT` |
+| 2    | Number of files                             | `3`               |
 
 ---
 

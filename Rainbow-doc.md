@@ -4,7 +4,7 @@
 >  
 > This document and the project are still WIP and are subject to modifications.  
 > &nbsp;  
-> *last update : 2020/03/22*  
+> *last update : 2020/03/25*  
 > &nbsp;  
 
 ## Credits
@@ -61,6 +61,7 @@ Thanks to :
   - [FILE_COUNT](#FILECOUNT)
   - [FILE_GET_LIST](#FILEGETLIST)
   - [FILE_GET_FREE_ID](#FILEGETFREEID)
+  - [FILE_GET_INFO](#FILEGETINFO)
 - [Bootloader](#Bootloader)
 - [TODO](#TODO)
 
@@ -216,6 +217,7 @@ A message always have the same format and follows these rules:
 | 23    | [FILE_COUNT](#FILE_COUNT)                   | Get number of tiles in a specific path           |
 | 24    | [FILE_GET_LIST](#FILE_GET_LIST)             | Get list of existing files in a specific path    |
 | 25    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)       | Get an unexisting file ID in a specific path.    |
+| 26    | [FILE_GET_INFO](#FILE_GET_INFO)             | Get file info (size + crc32)                     |
 
 ### ESP to NES commands
 
@@ -228,12 +230,13 @@ A message always have the same format and follows these rules:
 | 4     | [FILE_DATA](#FILE_READ)                    |             |
 | 5     | [FILE_COUNT](#FILE_COUNT)                  |             |
 | 6     | [FILE_ID](#FILE_GET_FREE_ID)               |             |
-| 6     | [WIFI_STATUS](#GET_WIFI_STATUS)            |             |
-| 8     | [SERVER_STATUS](#GET_SERVER_STATUS)        |             |
-| 9     | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
-| 10    | [RND_BYTE](#GET_RND_BYTE)                  |             |
-| 11    | [RND_WORD](#GET_RND_WORD)                  |             |
-| 12    | [MESSAGE_FROM_SERVER](#SEND_MSG_TO_SERVER) |             |
+| 7     | [FILE_INFO](#FILE_GET_INFO)                |             |
+| 8     | [WIFI_STATUS](#GET_WIFI_STATUS)            |             |
+| 9     | [SERVER_STATUS](#GET_SERVER_STATUS)        |             |
+| 10    | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
+| 11    | [RND_BYTE](#GET_RND_BYTE)                  |             |
+| 12    | [RND_WORD](#GET_RND_WORD)                  |             |
+| 13    | [MESSAGE_FROM_SERVER](#SEND_MSG_TO_SERVER) |             |
 
 ## Commands details
 
@@ -852,6 +855,45 @@ Get an unexisting file ID in a specific path.
 | 1    | Command ID (see ESP to NES commands list)          | `E2N::FILE_ID` |
 |      | *next byte is returned if a free file ID is found* |                |
 | 2    | File ID                                            | `3`            |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### FILE_GET_INFO
+
+This command returns file info (size in bytes and crc32).  
+
+| Byte | Description                                 | Example              |
+| ---- | ------------------------------------------- | -------------------- |
+| 0    | Length of the message (excluding this byte) | `3`                  |
+| 1    | Command ID (see NES to ESP commands list)   | `N2E::FILE_GET_INFO` |
+| 2    | File path (see FILE_PATHS)                  | `FILE_PATHS::SAVE`   |
+| 3    | File index                                  | `5 (0 to 63)`        |
+
+**File paths:**
+
+| Value | FILE_PATHS | Description                                     |
+| ----- | ---------- | ----------------------------------------------- |
+| 0     | SAVE       | Use this folder to load/save game data          |
+| 1     | ROMS       | Use this folder to dump/flash ROMS, patches     |
+| 2     | USER       | Use this folder to read/write data for the user |
+
+**Returns:**
+
+| Byte | Description                                 | Example          |
+| ---- | ------------------------------------------- | ---------------- |
+| 0    | Length of the message (excluding this byte) | `1` or `9`       |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::FILE_INFO` |
+|      | *next bytes are returned if file is  found* |                  |
+| 2    | CRC32 MSB                                   | `3B`             |
+| 3    | CRC32                                       | `84`             |
+| 4    | CRC32                                       | `E6`             |
+| 5    | CRC32 LSB                                   | `FB`             |
+| 6    | Size MSB                                    | `00`             |
+| 7    | Size                                        | `00`             |
+| 8    | Size                                        | `10`             |
+| 9    | Size LSB                                    | `00`             |
 
 [Back to command list](#Commands-overview)
 

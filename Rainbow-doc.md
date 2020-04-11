@@ -38,12 +38,14 @@ Thanks to :
   - [GET_ESP_STATUS](#GETESPSTATUS)
   - [DEBUG_LOG](#DEBUGLOG)
   - [CLEAR_BUFFERS](#CLEARBUFFERS)
+  - [E2N_BUFFER_DROP](#E2NBUFFERDROP)
   - [GET_WIFI_STATUS](#GETWIFISTATUS)
   - [GET_RND_BYTE](#GETRNDBYTE)
   - [GET_RND_BYTE_RANGE](#GETRNDBYTERANGE)
   - [GET_RND_WORD](#GETRNDWORD)
   - [GET_RND_WORD_RANGE](#GETRNDWORDRANGE)
   - [GET_SERVER_STATUS](#GETSERVERSTATUS)
+  - [GET_SERVER_PING](#GETSERVERPING)
   - [SET_SERVER_PROTOCOL](#SETSERVERPROTOCOL)
   - [GET_SERVER_SETTINGS](#GETSERVERSETTINGS)
   - [SET_SERVER_SETTINGS](#SETSERVERSETTINGS)
@@ -194,30 +196,32 @@ A message always have the same format and follows these rules:
 | 0     | [GET_ESP_STATUS](#GET_ESP_STATUS)           | Get ESP status                                   |
 | 1     | [DEBUG_LOG](#DEBUG_LOG)                     | Debug / Log data                                 |
 | 2     | [CLEAR_BUFFERS](#CLEAR_BUFFERS)             | Clear RX/TX buffers                              |
+| 3     | [E2N_BUFFER_DROP](#E2N_BUFFER_DROP)         | Drop messages from TX (ESP->NES) buffer          |
 | 3     | [GET_WIFI_STATUS](#GET_WIFI_STATUS)         | Get WiFi connection status                       |
-| 4     | [GET_RND_BYTE](#GET_RND_BYTE)               | Get random byte                                  |
-| 5     | [GET_RND_BYTE_RANGE](#GET_RND_BYTE_RANGE)   | Get random byte between custom min/max           |
-| 6     | [GET_RND_WORD](#GET_RND_WORD)               | Get random word                                  |
-| 7     | [GET_RND_WORD_RANGE](#GET_RND_WORD_RANGE)   | Get random word between custom min/max           |
-| 8     | [GET_SERVER_STATUS](#GET_SERVER_STATUS)     | Get server connection status                     |
-| 9     | [SET_SERVER_PROTOCOL](#SET_SERVER_PROTOCOL) | Set protocol to be used to communicate (WS/UDP)  |
-| 10    | [GET_SERVER_SETTINGS](#GET_SERVER_SETTINGS) | Get host name and port defined in the ESP config |
-| 11    | [SET_SERVER_SETTINGS](#SET_SERVER_SETTINGS) | Set host name and port                           |
-| 12    | [CONNECT_SERVER](#CONNECT_SERVER)           | Connect to server                                |
-| 13    | [DISCONNECT_SERVER](#DISCONNECT_SERVER)     | Disconnect from server                           |
-| 14    | [SEND_MSG_TO_SERVER](#SEND_MSG_TO_SERVER)   | Send message to rainbow server                   |
-| 15    | [FILE_OPEN](#FILE_OPEN)                     | Open working file                                |
-| 16    | [FILE_CLOSE](#FILE_CLOSE)                   | Close working file                               |
-| 17    | [FILE_EXISTS](#FILE_EXISTS)                 | Check if file exists                             |
-| 18    | [FILE_DELETE](#FILE_DELETE)                 | Delete a file                                    |
-| 19    | [FILE_SET_CUR](#FILE_SET_CUR)               | Set working file cursor position a file          |
-| 20    | [FILE_READ](#FILE_READ)                     | Read working file (at specific position)         |
-| 21    | [FILE_WRITE](#FILE_WRITE)                   | Write working file (at specific position)        |
-| 22    | [FILE_APPEND](#FILE_APPEND)                 | Append data to working file                      |
-| 23    | [FILE_COUNT](#FILE_COUNT)                   | Get number of tiles in a specific path           |
-| 24    | [FILE_GET_LIST](#FILE_GET_LIST)             | Get list of existing files in a specific path    |
-| 25    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)       | Get an unexisting file ID in a specific path.    |
-| 26    | [FILE_GET_INFO](#FILE_GET_INFO)             | Get file info (size + crc32)                     |
+| 5     | [GET_RND_BYTE](#GET_RND_BYTE)               | Get random byte                                  |
+| 6     | [GET_RND_BYTE_RANGE](#GET_RND_BYTE_RANGE)   | Get random byte between custom min/max           |
+| 7     | [GET_RND_WORD](#GET_RND_WORD)               | Get random word                                  |
+| 8     | [GET_RND_WORD_RANGE](#GET_RND_WORD_RANGE)   | Get random word between custom min/max           |
+| 9     | [GET_SERVER_STATUS](#GET_SERVER_STATUS)     | Get server connection status                     |
+| 10    | [GET_SERVER_PING](#GET_SERVER_PING)         | Get ping between ESP and server                  |
+| 11    | [SET_SERVER_PROTOCOL](#SET_SERVER_PROTOCOL) | Set protocol to be used to communicate (WS/UDP)  |
+| 12    | [GET_SERVER_SETTINGS](#GET_SERVER_SETTINGS) | Get host name and port defined in the ESP config |
+| 13    | [SET_SERVER_SETTINGS](#SET_SERVER_SETTINGS) | Set host name and port                           |
+| 14    | [CONNECT_SERVER](#CONNECT_SERVER)           | Connect to server                                |
+| 15    | [DISCONNECT_SERVER](#DISCONNECT_SERVER)     | Disconnect from server                           |
+| 16    | [SEND_MSG_TO_SERVER](#SEND_MSG_TO_SERVER)   | Send message to rainbow server                   |
+| 17    | [FILE_OPEN](#FILE_OPEN)                     | Open working file                                |
+| 18    | [FILE_CLOSE](#FILE_CLOSE)                   | Close working file                               |
+| 19    | [FILE_EXISTS](#FILE_EXISTS)                 | Check if file exists                             |
+| 20    | [FILE_DELETE](#FILE_DELETE)                 | Delete a file                                    |
+| 21    | [FILE_SET_CUR](#FILE_SET_CUR)               | Set working file cursor position a file          |
+| 22    | [FILE_READ](#FILE_READ)                     | Read working file (at specific position)         |
+| 23    | [FILE_WRITE](#FILE_WRITE)                   | Write working file (at specific position)        |
+| 24    | [FILE_APPEND](#FILE_APPEND)                 | Append data to working file                      |
+| 25    | [FILE_COUNT](#FILE_COUNT)                   | Get number of tiles in a specific path           |
+| 26    | [FILE_GET_LIST](#FILE_GET_LIST)             | Get list of existing files in a specific path    |
+| 27    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)       | Get an unexisting file ID in a specific path.    |
+| 28    | [FILE_GET_INFO](#FILE_GET_INFO)             | Get file info (size + crc32)                     |
 
 ### ESP to NES commands
 
@@ -233,10 +237,11 @@ A message always have the same format and follows these rules:
 | 7     | [FILE_INFO](#FILE_GET_INFO)                |             |
 | 8     | [WIFI_STATUS](#GET_WIFI_STATUS)            |             |
 | 9     | [SERVER_STATUS](#GET_SERVER_STATUS)        |             |
-| 10    | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
-| 11    | [RND_BYTE](#GET_RND_BYTE)                  |             |
-| 12    | [RND_WORD](#GET_RND_WORD)                  |             |
-| 13    | [MESSAGE_FROM_SERVER](#SEND_MSG_TO_SERVER) |             |
+| 10    | [SERVER_PING](#GET_SERVER_PING)            |             |
+| 11    | [HOST_SETTINGS](#GET_SERVER_SETTINGS)      |             |
+| 12    | [RND_BYTE](#GET_RND_BYTE)                  |             |
+| 13    | [RND_WORD](#GET_RND_WORD)                  |             |
+| 14    | [MESSAGE_FROM_SERVER](#SEND_MSG_TO_SERVER) |             |
 
 ## Commands details
 
@@ -286,6 +291,22 @@ Can be use on startup to make sure that we start with a clean setup.
 | ---- | ------------------------------------------- | -------------------- |
 | 0    | Length of the message (excluding this byte) | `1`                  |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E::CLEAR_BUFFERS` |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### E2N_BUFFER_DROP
+
+This command drops messages of a given type from TX (ESP->NES) buffer.  
+You can keep the most recent messages using the second parameter.  
+
+| Byte | Description                                     | Example                    |
+| ---- | ----------------------------------------------- | -------------------------- |
+| 0    | Length of the message (excluding this byte)     | `3`                        |
+| 1    | Command ID (see NES 2 ESP commands list)        | `N2E::E2N_BUFFER_DROP`     |
+| 2    | Message type / ID (see ESP 2 NES commands list) | `E2N::MESSAGE_FROM_SERVER` |
+| 3    | Number of most recent messages to keep          | `1`                        |
 
 [Back to command list](#Commands-overview)
 
@@ -440,6 +461,45 @@ This command asks the server status.
 | ----- | ------------- | ------------ |
 | 0     | DISCONNECTED  | Disconnected |
 | 1     | CONNECTED     | Connected    |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### GET_SERVER_PING
+
+This command pings the server and returns the min, max and average round-trip time and number of lost packets.  
+If another ping is already in progress, the command will be ignored.  
+Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.  
+If no number of pings is passed, the default value will be 4.  
+
+| Byte | Description                                                            | Example                |
+| ---- | ---------------------------------------------------------------------- | ---------------------- |
+| 0    | Length of the message (excluding this byte)                            | `1` or `2`             |
+| 1    | Command ID (see NES 2 ESP commands list)                               | `N2E::GET_SERVER_PING` |
+|      | *the next byte is required if you want to specify the number of pings* |                        |
+| 2    | Number of pings                                                        | `4`                    |
+|      | *if 0 is passed, this will perform 4 pings by default*                 |                        |
+
+**Returns:**
+
+Following message will be sent if server hostname couldn't be resolved or is empty:
+
+| Byte | Description                                 | Example            |
+| ---- | ------------------------------------------- | ------------------ |
+| 0    | Length of the message (excluding this byte) | `1`                |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::SERVER_PING` |
+
+Following message will be sent after ping:
+
+| Byte | Description                                  | Example            |
+| ---- | -------------------------------------------- | ------------------ |
+| 0    | Length of the message (excluding this byte)  | `5`                |
+| 1    | Command ID (see ESP to NES commands list)    | `E2N::SERVER_PING` |
+| 2    | Minimum ping round-trip time (4ms precision) | `0x2D`             |
+| 3    | Maximum ping round-trip time (4ms precision) | `0x42`             |
+| 4    | Average ping round-trip time (4ms precision) | `0x37`             |
+| 5    | Number of lost packets                       | `0x01`             |
 
 [Back to command list](#Commands-overview)
 

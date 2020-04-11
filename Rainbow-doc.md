@@ -336,11 +336,11 @@ This command returns a random byte between 0 and 255.
 
 **Returns:**
 
-| Byte | Description                                 | Example                 |
-| ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the message (excluding this byte) | `2`                     |
-| 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_BYTE`         |
-| 2    | Random value between 0 and 255              | Random value (0 to 255) |
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `2`             |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_BYTE` |
+| 2    | Random value between 0 and 255              | `0xAA`          |
 
 [Back to command list](#Commands-overview)
 
@@ -354,16 +354,16 @@ This command returns a random byte between custom min and max values.
 | ---- | ------------------------------------------- | ------------------------- |
 | 0    | Length of the message (excluding this byte) | `3`                       |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E::GET_RND_BYTE_RANGE` |
-| 2    | Custom min value (0 to 254)                 | Min value                 |
-| 3    | Custom max value (1 to 255)                 | Max value                 |
+| 2    | Custom min value (0 to 254)                 | `0x00`                    |
+| 3    | Custom max value (1 to 255)                 | `0x80`                    |
 
 **Returns:**
 
-| Byte | Description                                 | Example                 |
-| ---- | ------------------------------------------- | ----------------------- |
-| 0    | Length of the message (excluding this byte) | `2`                     |
-| 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_BYTE`         |
-| 2    | Random value between 0 and 255              | Random value (0 to 255) |
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `2`             |
+| 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_BYTE` |
+| 2    | Random value between 0 and 255              | `0x14`          |
 
 [Back to command list](#Commands-overview)
 
@@ -384,8 +384,8 @@ This command returns a random word between 0 and 65535.
 | ---- | ------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte) | `3`             |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_WORD` |
-| 2    | Random value HI byte                        | HI byte         |
-| 3    | Random value LO byte                        | LO byte         |
+| 2    | Random value HI byte                        | `0xA7`          |
+| 3    | Random value LO byte                        | `0xEF`          |
 
 [Back to command list](#Commands-overview)
 
@@ -399,10 +399,10 @@ This command returns a random word between custom min and max values.
 | ---- | ------------------------------------------- | ------------------------- |
 | 0    | Length of the message (excluding this byte) | `5`                       |
 | 1    | Command ID (see NES 2 ESP commands list)    | `N2E::GET_RND_WORD_RANGE` |
-| 2    | Custom min value (0 to 65534)               | Min value HI byte         |
-| 3    | Custom min value (0 to 65534)               | Min value LO byte         |
-| 4    | Custom max value (1 to 65535)               | Max value HI byte         |
-| 5    | Custom max value (1 to 65535)               | Max value LO byte         |
+| 2    | Custom min value (0 to 65534) HI byte       | `0x00`                    |
+| 3    | Custom min value (0 to 65534) LO byte       | `0x00`                    |
+| 4    | Custom max value (1 to 65535) HI byte       | `0x20`                    |
+| 5    | Custom max value (1 to 65535) LO byte       | `0x00`                    |
 
 **Returns:**
 
@@ -410,8 +410,8 @@ This command returns a random word between custom min and max values.
 | ---- | ------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte) | `3`             |
 | 1    | Command ID (see ESP to NES commands list)   | `E2N::RND_WORD` |
-| 2    | Random value HI byte                        | HI byte         |
-| 3    | Random value LO byte                        | LO byte         |
+| 2    | Random value HI byte                        | `0x06`          |
+| 3    | Random value LO byte                        | `0x82`          |
 
 [Back to command list](#Commands-overview)
 

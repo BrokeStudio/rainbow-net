@@ -197,7 +197,7 @@ A message always have the same format and follows these rules:
 | 1     | [DEBUG_LOG](#DEBUG_LOG)                     | Debug / Log data                                 |
 | 2     | [CLEAR_BUFFERS](#CLEAR_BUFFERS)             | Clear RX/TX buffers                              |
 | 3     | [E2N_BUFFER_DROP](#E2N_BUFFER_DROP)         | Drop messages from TX (ESP->NES) buffer          |
-| 3     | [GET_WIFI_STATUS](#GET_WIFI_STATUS)         | Get WiFi connection status                       |
+| 4     | [GET_WIFI_STATUS](#GET_WIFI_STATUS)         | Get WiFi connection status                       |
 | 5     | [GET_RND_BYTE](#GET_RND_BYTE)               | Get random byte                                  |
 | 6     | [GET_RND_BYTE_RANGE](#GET_RND_BYTE_RANGE)   | Get random byte between custom min/max           |
 | 7     | [GET_RND_WORD](#GET_RND_WORD)               | Get random word                                  |

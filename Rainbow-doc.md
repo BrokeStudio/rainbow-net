@@ -593,7 +593,7 @@ It doesn't overwrite values set via the ESP web interface.
 ### CONNECT_SERVER
 
 When using WS protocol, this command connects to server.  
-When using UDP protocol, this command starts the UDP server on the ESP side.  
+When using UDP protocol, this command starts the UDP server on the ESP side using a random port between 49152 and 65535.  
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |

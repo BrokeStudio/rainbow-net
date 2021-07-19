@@ -100,7 +100,7 @@ sta $AAAA
 
 ; actual chip erase command
 lda #$10
-sta $5555
+sta $D555
 ```
 
 Doing this will erase all bytes of the flash memory.  

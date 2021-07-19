@@ -19,9 +19,9 @@ Please read [SST39SF datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/
 CHR banks need to be initialized in a specific way to perform erase/program actions. CHR mode 1 (2K banks) must be used in this case.
 
 ```
-$0000-$07FF => bank to erase/program
-$0800-$0BFF => bank %----1010 for $AAAA writes (e.g. 10)
-$0C00-$0FFF => bank %----0101 for $5555 writes (e.g. 5)
+$0000-$0FFF => bank to erase/program
+$1000-$17FF => bank %----1010 for $AAAA writes (e.g. 10)
+$1800-$1FFF => bank %----0101 for $5555 writes (e.g. 5)
 ```
 
 ```
@@ -29,9 +29,8 @@ $0C00-$0FFF => bank %----0101 for $5555 writes (e.g. 5)
 lda #4
 sta $5006
 
-; however, PRG mode doesn't matter here,
-; so you could do this to preserve current config
-; (except CHR mode of course)
+; however, in order to preserve current configuration,
+; you could do this
 lda $5006
 and #%11111001
 ora #4

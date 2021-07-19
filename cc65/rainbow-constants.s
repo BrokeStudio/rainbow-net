@@ -11,8 +11,17 @@
   DEBUG_LOG                       ; Debug / Log data
   BUFFER_CLEAR_RX_TX              ; Clear RX/TX buffers
   BUFFER_DROP_FROM_ESP            ; Drop messages from ESP buffer (TX)
-  WIFI_GET_STATUS                 ; Get WiFi connection status
+  ESP_GET_FIRMWARE_VERSION        ; Get ESP/Rainbow firmware version
   ESP_RESTART                     ; Restart ESP
+
+; WIFI CMDS
+  WIFI_GET_STATUS                 ; Get WiFi connection status
+  WIFI_GET_SSID                   ; Get WiFi network SSID
+  WIFI_GET_IP                     ; Get WiFi IP address
+
+; ACESS POINT CMDS
+  AP_GET_SSID                     ; Get Access Point network SSID
+  AP_GET_IP                       ; Get Access Point IP address
 
 ; RND CMDS
   RND_GET_BYTE                    ; Get random byte
@@ -65,7 +74,12 @@
 ; ESP CMDS
   READY                           ; ESP is ready
   DEBUG_LEVEL                     ; Returns debug configuration
+  ESP_FIRMWARE_VERSION            ; Returns ESP/Rainbow firmware version
+
+; WIFI / AP CMDS
   WIFI_STATUS                     ; Returns WiFi connection status
+  SSID                            ; Returns WiFi / AP SSID
+  IP                              ; Returns WiFi / AP IP address
 
 ; RND CMDS
   RND_BYTE                        ; Returns random byte value
@@ -159,7 +173,7 @@ NUM_FILES = 64
 .endenum
 
 ; FILE_DOWNLOAD result codes
-enum FILE_DOWNLOAD_RES
+.enum FILE_DOWNLOAD_RES
   SUCCESS
   INVALID_DESTINATION
   ERROR_WHILE_DELETING_FILE
@@ -182,7 +196,3 @@ enum FILE_DOWNLOAD_RES
   STREAM_WRITE = -10
   READ_TIMEOUT = -11
 .endenum
-
-; Rainbow registers
-RNBW_DATA = $5000
-RNBW_FLAGS = $5001

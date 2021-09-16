@@ -1,6 +1,10 @@
 ; ################################################################################
 ; RAINBOW CONSTANTS
 
+; mapper registers
+ESP_DATA   = $4100
+ESP_CONFIG = $4101
+
 ; commands to ESP
 .enum TO_ESP
 

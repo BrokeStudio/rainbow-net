@@ -1,6 +1,10 @@
 ; ################################################################################
 ; RAINBOW CONSTANTS
 
+; mapper registers
+RNBW_ESP_DATA   = $4100
+RNBW_ESP_CONFIG = $4101
+
 ; commands to ESP
 
 ; ESP CMDS
@@ -23,7 +27,7 @@ TOESP_AP_GET_SSID                     = 11  ; Get Access Point network SSID
 TOESP_AP_GET_IP                       = 12  ; Get Access Point IP address
 
 ; RND CMDS
-TOESP_RND_GET_BYTE                    = 13   ; Get random byte
+TOESP_RND_GET_BYTE                    = 13  ; Get random byte
 TOESP_RND_GET_BYTE_RANGE              = 14  ; Get random byte between custom min/max
 TOESP_RND_GET_WORD                    = 15  ; Get random word
 TOESP_RND_GET_WORD_RANGE              = 16  ; Get random word between custom min/max

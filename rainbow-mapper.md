@@ -130,7 +130,7 @@ PPPv vvvv
 | 1               | v1.1 (second proto board) | n/a     | n/a     |
 | 2               | v1.3 (third proto board)  | v1.1    | n/a     |
 
-### PRG banking (\$4120-\$4124) Write-only
+### PRG / WRAM banking (\$4120-\$4124) Write-only
 
 ```
 7  bit  0
@@ -214,7 +214,7 @@ Register \$4124:
 - when chip selector is 1, \$6000-\$7FFF is mapped to FPGA WRAM which is 8K so other bits are ignored
 - when chip selector is 2 or 3, \$6000-\$7FFF is mapped to PRG-ROM and 'BBBBbb' is used to select the 8K bank
 
-### CHR banking (\$4130-\$4137) Write-only
+### CHR banking (\$4130-\$4138) Write-only
 
 \$4130-\$4137 registers work as follow:
 
@@ -262,7 +262,7 @@ This bit will *not* be modified when writing to a CHR bank registers if CHR mode
               1: Second CHR-ROM 256K half
 ```
 
-### Scanline IRQ
+### Scanline IRQ (\$4140-\$4143)
 
 Scanline IRQ works exactly like MMC3 IRQ (new/normal behaviour).  
 For more informations: https://wiki.nesdev.com/w/index.php/MMC3#IRQ_Specifics.  
@@ -310,7 +310,7 @@ xxxx xxxx
 Channels registers work exactly like VRC6 audio expansion minus the frequency scaling register.  
 For more informations: https://wiki.nesdev.com/w/index.php/VRC6_audio.  
 
-#### Pulse control (\$4150,\$4153) Write-only
+#### Pulse control (\$4150, \$4153) Write-only
 
 \$4150 controls Pulse 1  
 \$4153 controls Pulse 2  
@@ -325,7 +325,7 @@ MDDD VVVV
 +--------- mode (1: ignore duty)
 ```
 
-#### Saw Accum Rate (\$5C00) Write-only
+#### Saw Accum Rate (\$4156) Write-only
 
 ```
 7  bit  0
@@ -334,9 +334,9 @@ MDDD VVVV
   ++-++++- accumulator Rate (controls volume)
 ```
 
-#### Freq Low (\$4151,\$4154,\$4157) Write-only
+#### Freq Low (\$4151, \$4154, \$4157) Write-only
 
-\$4141 controls Pulse 1  
+\$4151 controls Pulse 1  
 \$4154 controls Pulse 2  
 \$4157 controls Saw  
 
@@ -348,7 +348,7 @@ FFFF FFFF
 ++++-++++- low 8 bits of frequency
 ```
 
-#### Freq High (\$4152,\$4155,\$4158) Write-only
+#### Freq High (\$4152, \$4155, \$4158) Write-only
 
 \$4152 controls Pulse 1  
 \$4155 controls Pulse 2  
@@ -363,7 +363,7 @@ E... FFFF
 +--------- enable (0: channel disabled)
 ```
 
-### WiFi (\$4100,\$4101)
+### WiFi (\$4100, \$4101)
 
 #### Data transfer (\$4100) R/W
 
@@ -396,7 +396,7 @@ di.. ...e
 
 ## Recap / Cheat sheet
 
-### ESP/WiFi
+### ESP / WiFi
 
 - \$4100  (R/W) data transfer  
 - \$4101  (R/W) configuration  
@@ -410,7 +410,7 @@ di.. ...e
   - cc - CHR banking mode  
   - p - PRG banking mode  
 
-### PRG-ROM/RAM banking
+### PRG-ROM / WRAM banking
 
 **Note:** \$E000-\$FFFF is fixed to last 8K bank  
 
@@ -426,49 +426,49 @@ di.. ...e
 - \$4124  (W)
   -  8K @ \$6000-\$7FFF  
 
-### CHR-ROM/RAM banking
+### CHR-ROM / CHR-RAM banking
 
-- \$4107  (W)
+- \$4138  (W)
   - 1K upper CHR bank bit (mode 0)
-- \$5400  (W)
+- \$4130  (W)
   - 1K @ \$0000-\$03FF (mode 0)  
   - 2k @ \$0000-\$07FF (mode 1)  
   - 4k @ \$0000-\$0FFF (mode 2)  
   - 8k @ \$0000-\$07FF (mode 3)  
-- \$5401  (W)
+- \$4131  (W)
   - 1K @ \$0400-\$07FF (mode 0)  
   - 2k @ \$0800-\$0FFF (mode 1)  
   - 4k @ \$1000-\$1FFF (mode 2)  
-- \$5402  (W)
+- \$4132  (W)
   - 1K @ \$0800-\$0BFF (mode 0)  
   - 2k @ \$1000-\$17FF (mode 1)  
-- \$5403  (W)
+- \$4133  (W)
   - 1K @ \$0C00-\$0FFF (mode 0)  
   - 2k @ \$1800-\$1FFF (mode 1)  
-- \$5404  (W)
+- \$4134  (W)
   - 1K @ \$1000-\$13FF (mode 0)  
-- \$5405  (W)
+- \$4135  (W)
   - 1K @ \$1400-\$17FF (mode 0)  
-- \$5406  (W)
+- \$4136  (W)
   - 1K @ \$1800-\$1BFF (mode 0)  
-- \$5407  (W)
+- \$4137  (W)
   - 1K @ \$1C00-\$1FFF (mode 0)  
 
 ### Scanline IRQ
 
-\$5C04  (W) latch  
-\$5C05  (W) reload  
-\$5C06  (W) disable  
-\$5C07  (W) enable  
+\$4140  (W) latch  
+\$4141  (W) reload  
+\$4142  (W) disable  
+\$4143  (W) enable  
 
 ### Audio expansion
 
-\$5800  (W) pusle 1 control  
-\$5801  (W) pulse 1 low freq  
-\$5802  (W) pulse 1 high freq  
-\$5803  (W) pusle 2 control  
-\$5804  (W) pulse 2 low freq  
-\$5805  (W) pulse 2 high freq  
-\$5C00  (W) saw accumulator rate  
-\$5C01  (W) saw low freq  
-\$5C02  (W) saw high freq  
+\$4150  (W) pusle 1 control  
+\$4151  (W) pulse 1 low freq  
+\$4152  (W) pulse 1 high freq  
+\$4153  (W) pusle 2 control  
+\$4154  (W) pulse 2 low freq  
+\$4155  (W) pulse 2 high freq  
+\$4156  (W) saw accumulator rate  
+\$4157  (W) saw low freq  
+\$4158  (W) saw high freq  

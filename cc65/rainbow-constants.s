@@ -26,6 +26,8 @@ ESP_CONFIG = $4101
 ; ACESS POINT CMDS
   AP_GET_SSID                     ; Get Access Point network SSID
   AP_GET_IP                       ; Get Access Point IP address
+  AP_GET_CONFIG                   ; Get Access Point config
+  AP_SET_CONFIG                   ; Set Access Point config
 
 ; RND CMDS
   RND_GET_BYTE                    ; Get random byte
@@ -84,6 +86,7 @@ ESP_CONFIG = $4101
   WIFI_STATUS                     ; Returns WiFi connection status
   SSID                            ; Returns WiFi / AP SSID
   IP                              ; Returns WiFi / AP IP address
+  AP_CONFIG                       ; Returns AP config
 
 ; RND CMDS
   RND_BYTE                        ; Returns random byte value

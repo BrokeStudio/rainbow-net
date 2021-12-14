@@ -47,6 +47,8 @@ Thanks to :
     - [WIFI_GET_IP](#wifi_get_ip)
     - [AP_GET_SSID](#ap_get_ssid)
     - [AP_GET_IP](#ap_get_ip)
+    - [AP_GET_CONFIG](#ap_get_config)
+    - [AP_SET_CONFIG](#ap_set_config)
     - [RND_GET_BYTE](#rnd_get_byte)
     - [RND_GET_BYTE_RANGE](#rnd_get_byte_range)
     - [RND_GET_WORD](#rnd_get_word)
@@ -231,45 +233,47 @@ A message always have the same format and follows these rules:
 |       |                                                                   | **ACCESS POINT CMDS**                                                     |
 | 11    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                             |
 | 12    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                               |
+| 13    | [AP_GET_CONFIG](#AP_GET_CONFIG)                                   | Get Access Point config                                                   |
+| 14    | [AP_SET_CONFIG](#AP_SET_CONFIG)                                   | Set Access Point config                                                   |
 |       |                                                                   | **RND CMDS**                                                              |
-| 13    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                           |
-| 14    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                    |
-| 15    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                           |
-| 16    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                    |
+| 15    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                           |
+| 16    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                    |
+| 17    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                           |
+| 18    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                    |
 |       |                                                                   | **SERVER CMDS**                                                           |
-| 17    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                              |
-| 18    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                           |
-| 19    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                       |
-| 20    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                     |
-| 21    | [SERVER_GET_CONFIG_SETTINGS](#SERVER_GET_CONFIG_SETTINGS)         | Get server host name and port defined in the Rainbow config file          |
-| 22    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                     |
-| 23    | [SERVER_RESTORE_SETTINGS](#SERVER_RESTORE_SETTINGS)               | Restore server host name and port to values defined in the Rainbow config |
-| 24    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                         |
-| 25    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                    |
-| 26    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                    |
+| 19    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                              |
+| 20    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                           |
+| 21    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                       |
+| 22    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                     |
+| 23    | [SERVER_GET_CONFIG_SETTINGS](#SERVER_GET_CONFIG_SETTINGS)         | Get server host name and port defined in the Rainbow config file          |
+| 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                     |
+| 25    | [SERVER_RESTORE_SETTINGS](#SERVER_RESTORE_SETTINGS)               | Restore server host name and port to values defined in the Rainbow config |
+| 26    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                         |
+| 27    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                    |
+| 28    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                    |
 |       |                                                                   | **NETWORK CMDS**                                                          |
-| 27    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks around and return count                                     |
-| 28    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                          |
-| 29    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                            |
-| 30    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                               |
-| 31    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                          |
-| 32    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                        |
+| 29    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks around and return count                                     |
+| 30    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                          |
+| 31    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                            |
+| 32    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                               |
+| 33    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                          |
+| 34    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                        |
 |       |                                                                   | **FILE CMDS**                                                             |
-| 33    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                         |
-| 34    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                        |
-| 35    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                   |
-| 36    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                      |
-| 37    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                             |
-| 38    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                   |
-| 39    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                  |
-| 40    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                 |
-| 41    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                               |
-| 42    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                    |
-| 43    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path                             |
-| 44    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path.                             |
-| 45    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                              |
-| 46    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
-| 47    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
+| 35    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                         |
+| 36    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                        |
+| 37    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                   |
+| 38    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                      |
+| 39    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                             |
+| 40    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                   |
+| 41    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                  |
+| 42    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                 |
+| 43    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                               |
+| 44    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                    |
+| 45    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path                             |
+| 46    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path.                             |
+| 47    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                              |
+| 48    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
+| 49    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
 
 ### Commands from the ESP
 
@@ -283,29 +287,30 @@ A message always have the same format and follows these rules:
 | 3     | [WIFI_STATUS](#WIFI_GET_STATUS)                                   |                            |
 | 4     | [SSID (WIFI)](#WIFI_GET_SSID) / [SSID (AP)](#AP_GET_SSID)         |                            |
 | 5     | [IP_ADDRESS (WIFI)](#WIFI_GET_IP) / [IP_ADDRESS (AP)](#AP_GET_IP) |                            |
+| 6     | [AP_CONFIG](#AP_GET_CONFIG)                                       |                            |
 |       |                                                                   | **RND CMDS**               |
-| 6     | [RND_BYTE](#RND_GET_BYTE)                                         |                            |
-| 7     | [RND_WORD](#RND_GET_WORD)                                         |                            |
+| 7     | [RND_BYTE](#RND_GET_BYTE)                                         |                            |
+| 8     | [RND_WORD](#RND_GET_WORD)                                         |                            |
 |       |                                                                   | **SERVER CMDS**            |
-| 8     | [SERVER_STATUS](#SERVER_GET_STATUS)                               |                            |
-| 9     | [SERVER_PING](#SERVER_GET_PING)                                   |                            |
-| 10    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                           |                            |
-| 11    | [MESSAGE_FROM_SERVER](#SERVER_SEND_MESSAGE)                       |                            |
+| 9     | [SERVER_STATUS](#SERVER_GET_STATUS)                               |                            |
+| 10    | [SERVER_PING](#SERVER_GET_PING)                                   |                            |
+| 11    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                           |                            |
+| 12    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                   |                            |
 |       |                                                                   | **NETWORK CMDS**           |
-| 12    | [NETWORK_COUNT](#NETWORK_SCAN)                                    |                            |
-| 13    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)           |                            |
-| 14    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)     |                            |
-| 15    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                     |                            |
+| 13    | [NETWORK_COUNT](#NETWORK_SCAN)                                    |                            |
+| 14    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)           |                            |
+| 15    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)     |                            |
+| 16    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                     |                            |
 |       |                                                                   | **FILE CMDS**              |
-| 16    | [FILE_STATUS](#FILE_STATUS)                                       |                            |
-| 17    | [FILE_EXISTS](#FILE_EXISTS)                                       |                            |
-| 18    | [FILE_DELETE](#FILE_DELETE)                                       |                            |
-| 19    | [FILE_LIST](#FILE_GET_LIST)                                       |                            |
-| 20    | [FILE_DATA](#FILE_READ)                                           |                            |
-| 21    | [FILE_COUNT](#FILE_COUNT)                                         |                            |
-| 22    | [FILE_ID](#FILE_GET_FREE_ID)                                      |                            |
-| 23    | [FILE_INFO](#FILE_GET_INFO)                                       |                            |
-| 24    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   |                            |
+| 17    | [FILE_STATUS](#FILE_STATUS)                                       |                            |
+| 18    | [FILE_EXISTS](#FILE_EXISTS)                                       |                            |
+| 19    | [FILE_DELETE](#FILE_DELETE)                                       |                            |
+| 20    | [FILE_LIST](#FILE_GET_LIST)                                       |                            |
+| 21    | [FILE_DATA](#FILE_READ)                                           |                            |
+| 22    | [FILE_COUNT](#FILE_COUNT)                                         |                            |
+| 23    | [FILE_ID](#FILE_GET_FREE_ID)                                      |                            |
+| 24    | [FILE_INFO](#FILE_GET_INFO)                                       |                            |
+| 25    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   |                            |
 
 ## Commands details
 
@@ -643,6 +648,45 @@ This command asks the acess point IP address.
 | 12   | ...                                         | `.`          |
 | 13   | ...                                         | `2`          |
 | 14   | ...                                         | `0`          |
+
+[Back to command list](#Commands-overview)
+
+### AP_GET_CONFIG
+
+This command returns the Access Point status.  
+
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `1`             |
+| 1    | Command ID (see commands to ESP)            | `AP_GET_CONFIG` |
+
+**Returns:**
+
+| Byte | Description                                     | Example     |
+| ---- | ----------------------------------------------- | ----------- |
+| 0    | Length of the message (excluding this byte)     | `2`         |
+| 1    | Command ID (see commands from ESP)              | `AP_CONFIG` |
+| 2    | Access Point Config                             | `%zzzzzzwa` |
+|      | a: access point status (0: disable / 1: enable) |             |
+|      | w: web server status (0: disable / 1: enable)   |             |
+|      | z: reserved for future use, must be set to zero |             |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### AP_SET_CONFIG
+
+This command returns the Access Point status.  
+
+| Byte | Description                                     | Example         |
+| ---- | ----------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte)     | `2`             |
+| 1    | Command ID (see commands to ESP)                | `AP_SET_CONFIG` |
+| 2    | Access Point Config                             | `%zzzzzzwa`     |
+|      | a: access point status (0: disable / 1: enable) |                 |
+|      | w: web server status (0: disable / 1: enable)   |                 |
+|      | z: reserved for future use, must be set to zero |                 |
 
 [Back to command list](#Commands-overview)
 

@@ -25,49 +25,51 @@ TOESP_WIFI_GET_IP                     = 10  ; Get WiFi IP address
 ; ACESS POINT CMDS
 TOESP_AP_GET_SSID                     = 11  ; Get Access Point network SSID
 TOESP_AP_GET_IP                       = 12  ; Get Access Point IP address
+TOESP_AP_GET_CONFIG                   = 13  ; Get Access Point config
+TOESP_AP_SET_CONFIG                   = 14  ; Set Access Point config
 
 ; RND CMDS
-TOESP_RND_GET_BYTE                    = 13  ; Get random byte
-TOESP_RND_GET_BYTE_RANGE              = 14  ; Get random byte between custom min/max
-TOESP_RND_GET_WORD                    = 15  ; Get random word
-TOESP_RND_GET_WORD_RANGE              = 16  ; Get random word between custom min/max
+TOESP_RND_GET_BYTE                    = 15  ; Get random byte
+TOESP_RND_GET_BYTE_RANGE              = 16  ; Get random byte between custom min/max
+TOESP_RND_GET_WORD                    = 17  ; Get random word
+TOESP_RND_GET_WORD_RANGE              = 18  ; Get random word between custom min/max
 
 ; SERVER CMDS
-TOESP_SERVER_GET_STATUS               = 17  ; Get server connection status
-TOESP_SERVER_PING                     = 18  ; Get ping between ESP and server
-TOESP_SERVER_SET_PROTOCOL             = 19  ; Set protocol to be used to communicate (WS/UDP/TCP)
-TOESP_SERVER_GET_SETTINGS             = 20  ; Get current server host name and port
-TOESP_SERVER_GET_CONFIG_SETTINGS      = 21  ; Get server host name and port defined in the Rainbow config file
-TOESP_SERVER_SET_SETTINGS             = 22  ; Set current server host name and port
-TOESP_SERVER_RESTORE_SETTINGS         = 23  ; Restore server host name and port to values defined in the Rainbow config
-TOESP_SERVER_CONNECT                  = 24  ; Connect to server
-TOESP_SERVER_DISCONNECT               = 25  ; Disconnect from server
-TOESP_SERVER_SEND_MSG                 = 26  ; Send message to rainbow server
+TOESP_SERVER_GET_STATUS               = 19  ; Get server connection status
+TOESP_SERVER_PING                     = 20  ; Get ping between ESP and server
+TOESP_SERVER_SET_PROTOCOL             = 21  ; Set protocol to be used to communicate (WS/UDP/TCP)
+TOESP_SERVER_GET_SETTINGS             = 22  ; Get current server host name and port
+TOESP_SERVER_GET_CONFIG_SETTINGS      = 23  ; Get server host name and port defined in the Rainbow config file
+TOESP_SERVER_SET_SETTINGS             = 24  ; Set current server host name and port
+TOESP_SERVER_RESTORE_SETTINGS         = 25  ; Restore server host name and port to values defined in the Rainbow config
+TOESP_SERVER_CONNECT                  = 26  ; Connect to server
+TOESP_SERVER_DISCONNECT               = 27  ; Disconnect from server
+TOESP_SERVER_SEND_MSG                 = 28  ; Send message to rainbow server
 
 ; NETWORK CMDS
-TOESP_NETWORK_SCAN                    = 27  ; Scan networks around and return count
-TOESP_NETWORK_GET_SCANNED_DETAILS     = 28  ; Get scanned network details
-TOESP_NETWORK_GET_REGISTERED          = 29  ; Get registered networks status
-TOESP_NETWORK_GET_REGISTERED_DETAILS  = 30  ; Get registered network SSID
-TOESP_NETWORK_REGISTER                = 31  ; Register network
-TOESP_NETWORK_UNREGISTER              = 32  ; Unregister network
+TOESP_NETWORK_SCAN                    = 29  ; Scan networks around and return count
+TOESP_NETWORK_GET_SCANNED_DETAILS     = 30  ; Get scanned network details
+TOESP_NETWORK_GET_REGISTERED          = 31  ; Get registered networks status
+TOESP_NETWORK_GET_REGISTERED_DETAILS  = 32  ; Get registered network SSID
+TOESP_NETWORK_REGISTER                = 33  ; Register network
+TOESP_NETWORK_UNREGISTER              = 34  ; Unregister network
 
 ; FILE COMMANDS
-TOESP_FILE_OPEN                       = 33  ; Open working file
-TOESP_FILE_CLOSE                      = 34  ; Close working file
-TOESP_FILE_STATUS                     = 35  ; Get working file status
-TOESP_FILE_EXISTS                     = 36  ; Check if file exists
-TOESP_FILE_DELETE                     = 37  ; Delete a file
-TOESP_FILE_SET_CUR                    = 38  ; Set working file cursor position a file
-TOESP_FILE_READ                       = 39  ; Read working file (at specific position)
-TOESP_FILE_WRITE                      = 40  ; Write working file (at specific position)
-TOESP_FILE_APPEND                     = 41  ; Append data to working file
-TOESP_FILE_COUNT                      = 42  ; Count files in a specific path
-TOESP_FILE_GET_LIST                   = 43  ; Get list of existing files in a path
-TOESP_FILE_GET_FREE_ID                = 44  ; Get an unexisting file ID in a specific path
-TOESP_FILE_GET_INFO                   = 45  ; Get file info (size + crc32)
-TOESP_FILE_DOWNLOAD                   = 46  ; Download a file
-TOESP_FILE_FORMAT                     = 47  ; Format file system and save current config
+TOESP_FILE_OPEN                       = 35  ; Open working file
+TOESP_FILE_CLOSE                      = 36  ; Close working file
+TOESP_FILE_STATUS                     = 37  ; Get working file status
+TOESP_FILE_EXISTS                     = 38  ; Check if file exists
+TOESP_FILE_DELETE                     = 39  ; Delete a file
+TOESP_FILE_SET_CUR                    = 40  ; Set working file cursor position a file
+TOESP_FILE_READ                       = 41  ; Read working file (at specific position)
+TOESP_FILE_WRITE                      = 42  ; Write working file (at specific position)
+TOESP_FILE_APPEND                     = 43  ; Append data to working file
+TOESP_FILE_COUNT                      = 44  ; Count files in a specific path
+TOESP_FILE_GET_LIST                   = 45  ; Get list of existing files in a path
+TOESP_FILE_GET_FREE_ID                = 46  ; Get an unexisting file ID in a specific path
+TOESP_FILE_GET_INFO                   = 47  ; Get file info (size + crc32)
+TOESP_FILE_DOWNLOAD                   = 48  ; Download a file
+TOESP_FILE_FORMAT                     = 49  ; Format file system and save current config
 
 ; commands from ESP
 
@@ -80,33 +82,34 @@ FROMESP_ESP_FIRMWARE_VERSION          = 2   ; Returns ESP/Rainbow firmware versi
 FROMESP_WIFI_STATUS                   = 3   ; Returns WiFi connection status
 FROMESP_SSID                          = 4   ; Returns WiFi / AP SSID
 FROMESP_IP                            = 5   ; Returns WiFi / AP IP address
+FROMESP_AP_CONFIG                     = 6   ; Returns AP config
 
 ; RND CMDS
-FROMESP_RND_BYTE                      = 6   ; Returns random byte value
-FROMESP_RND_WORD                      = 7   ; Returns random word value
+FROMESP_RND_BYTE                      = 7   ; Returns random byte value
+FROMESP_RND_WORD                      = 8   ; Returns random word value
 
 ; SERVER CMDS
-FROMESP_SERVER_STATUS                 = 8   ; Returns server connection status
-FROMESP_SERVER_PING                   = 9   ; Returns min, max and average round-trip time and number of lost packets
-FROMESP_SERVER_SETTINGS               = 10  ; Returns server settings (host name + port)
-FROMESP_MESSAGE_FROM_SERVER           = 11  ; Message from server
+FROMESP_SERVER_STATUS                 = 9   ; Returns server connection status
+FROMESP_SERVER_PING                   = 10   ; Returns min, max and average round-trip time and number of lost packets
+FROMESP_SERVER_SETTINGS               = 11  ; Returns server settings (host name + port)
+FROMESP_MESSAGE_FROM_SERVER           = 12  ; Message from server
 
 ; NETWORK CMDS
-FROMESP_NETWORK_COUNT                 = 12  ; Returns number of networks found
-FROMESP_NETWORK_SCANNED_DETAILS       = 13  ; Returns details for a scanned network
-FROMESP_NETWORK_REGISTERED_DETAILS    = 14  ; Returns SSID for a registered network
-FROMESP_NETWORK_REGISTERED            = 15  ; Returns registered networks status
+FROMESP_NETWORK_COUNT                 = 13  ; Returns number of networks found
+FROMESP_NETWORK_SCANNED_DETAILS       = 14  ; Returns details for a scanned network
+FROMESP_NETWORK_REGISTERED_DETAILS    = 15  ; Returns SSID for a registered network
+FROMESP_NETWORK_REGISTERED            = 16  ; Returns registered networks status
 
 ; FILE CMDS
-FROMESP_FILE_STATUS                   = 16  ; Returns working file status
-FROMESP_FILE_EXISTS                   = 17  ; Returns if file exists or not
-FROMESP_FILE_DELETE                   = 18  ; See RNBW_FILE_DELETE_xxx constants for details on returned value
-FROMESP_FILE_LIST                     = 19  ; Returns path file list (FILE_GET_LIST)
-FROMESP_FILE_DATA                     = 20  ; Returns file data (FILE_READ)
-FROMESP_FILE_COUNT                    = 21  ; Returns file count in a specific path
-FROMESP_FILE_ID                       = 22  ; Returns a free file ID (FILE_GET_FREE_ID)
-FROMESP_FILE_INFO                     = 23  ; Returns file info (size + CRC32) (FILE_GET_INFO)
-FROMESP_FILE_DOWNLOAD                 = 24  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
+FROMESP_FILE_STATUS                   = 17  ; Returns working file status
+FROMESP_FILE_EXISTS                   = 18  ; Returns if file exists or not
+FROMESP_FILE_DELETE                   = 19  ; See RNBW_FILE_DELETE_xxx constants for details on returned value
+FROMESP_FILE_LIST                     = 20  ; Returns path file list (FILE_GET_LIST)
+FROMESP_FILE_DATA                     = 21  ; Returns file data (FILE_READ)
+FROMESP_FILE_COUNT                    = 22  ; Returns file count in a specific path
+FROMESP_FILE_ID                       = 23  ; Returns a free file ID (FILE_GET_FREE_ID)
+FROMESP_FILE_INFO                     = 24  ; Returns file info (size + CRC32) (FILE_GET_INFO)
+FROMESP_FILE_DOWNLOAD                 = 25  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
 
 ; WiFi status
 RNBW_WIFI_NO_SHIELD = 255

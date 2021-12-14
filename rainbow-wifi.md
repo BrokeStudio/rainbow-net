@@ -25,11 +25,10 @@ Thanks to :
   - [What is Rainbow?](#what-is-rainbow)
   - [Why 'Rainbow'?](#why-rainbow)
   - [Mapper registers](#mapper-registers)
-  - [Rainbow registers](#rainbow-registers)
-    - [UART (\$5000 - R/W)](#uart-5000---rw)
-    - [Status (\$5001 - R/W)](#status-5001---rw)
-  - [Buffers](#buffers)
-  - [Messages format](#messages-format)
+  - [Message format](#message-format)
+  - [Code example](#code-example)
+    - [Configuration](#configuration)
+    - [Send and receive data](#send-and-receive-data)
   - [Commands overview](#commands-overview)
     - [Commands to the ESP](#commands-to-the-esp)
     - [Commands from the ESP](#commands-from-the-esp)
@@ -109,107 +108,79 @@ Second reason is because Kevin Hanley from KHAN games is working on a game calle
 First Rainbow prototypes were based on UNROM-512 mapper to make the development easier.  
 Now the board uses its own mapper. Detailed documentation of the mapper can be found here: [rainbow-mapper.md](rainbow-mapper.md).  
 
-## Rainbow registers
+## Message format
 
-\$5000-5001 registers can be read and written to in order to communicate with the ESP.
+A message is what is send to or received from the ESP and always have the same format, following these rules:  
 
-### UART (\$5000 - R/W)
-
-Read register $5000 to get next byte from the ESP.  
-
-```
-  ; this is how to read an incomming message
-  ; and store it in a buffer
-
-  lda $5000         ; dummy read
-  nop               ; let it breathe
-  lda $5000         ; read first byte (message length)...
-  sta buffer+0      ; ... and store it
-  
-  ; get the rest of the message
-
-  ldx #0            ; set X to 0
-:
-  lda $5000         ; read next byte...
-  sta buffer+1,x    ; ... and store it
-  inx               ; increment X
-  cpx buffer+0      ; compare X to message length
-  bne :-            ; loop if not equal
-```
-
-**Note:** because of the mapper buffer, the first read of a new message will always return a dummy byte, so a dummy read is required in this case.  
-
-Write to register $5000 to send byte to the ESP.  
-
-```
-  ; this is how to send a message from a buffer
-
-  ldx #0            ; set X to 0
-  lda buffer+0      ; get message length...
-  sta $5000         ; ... and send it
-:
-  lda buffer+1,x    ; get next message byte...
-  sta $5000         ; ... and send it
-  inx               ; increment X
-  cpx buffer+0      ; compare X to message length
-  bne :-            ; loop if not equal
-
-  ; this is how to send a short message or fixed values message
-
-  lda #3                      ; message length
-  sta $5000
-  lda #TO_ESP::FILE_DELETE    ; command
-  sta $5000
-  lda #FILE_PATHS::ROMS       ; parameter (path id)
-  sta $5000
-  lda #0                      ; parameter (file id)
-  sta $5000
-
-  ; this is possible too
-
-  lda #2
-  ldx #TO_ESP::FILE_GET_LIST
-  ldy #FILE_PATHS::ROMS
-  sta $5000
-  stx $5000
-  sty $5000
-```
-
-**Note:** after you send the first byte of a new message, you have one second to send the rest of the message before the RX buffer is reset. This is to prevent the ESP to get stuck, waiting for a message that could never come.  
-
-### Status (\$5001 - R/W)
-
-```
-7  bit  0
----- ----
-DI.. ...E
-||      |
-||      + ESP enable ( 0 : disable | 1 : enable ) R/W
-|+------- IRQ enable ( 0 : disable | 1 : enable ) R/W
-+-------- Data ready ( 0 : disable | 1 : enable ) R
-          this flag is set to 1 when the ESP has data to transmit to the NES
-          if the I flag is set, NES IRQ will be triggered
-```
-
-Note : the D flag won't be set to 0 immediately once the NES read the last byte from the ESP.
-Therefore, it's recommended to process the data immediately after receiving it if you use the IRQ feature.
-
-## Buffers
-
-The ESP has 2 FIFO buffers :  
-
-- **TX:** data from the ESP to the NES buffer  
-- **RX:** data from the NES to the ESP buffer  
-
-Both buffers can store up to 20 messages.
-
-## Messages format
-
-A message always have the same format and follows these rules:  
-
-- First byte is the message length (number of bytes following this first byte, can't be 0, minimum is 1).
-- Second byte is the command (see [Commands to the ESP](#Commands-to-the-ESP)).
+- First byte is the message length (number of bytes following this first byte, minimum is 1, maximum is 256, *can't be 0*).
+- Second byte is the command (see [Commands to the ESP](#Commands-to-the-ESP) and [Commands from the ESP](#Commands-from-the-ESP)).
 - Following bytes are the parameters/data for the command.
+
+## Code example
+
+### Configuration
+
+First we need to configure Rainbow registers.  
+```
+  ; received data will be stored in FPGA RAM at $4800
+  ; data to be sent must be written to FPGA RAM at $4900
+  lda #$48
+  sta $4103 ; RX hi
+  lda #$49
+  sta $4105 ; TX hi
+  lda #$00
+  sta $4104 ; RX lo
+  sta $4106 ; TX lo
+
+  ; Enable ESP communication
+  lda #1
+  sta $4100
+```
+
+### Send and receive data
+
+Here's an example on how to send and receive data.  
+
+```
+  ; to send data we first need to write our message to RAM at $4900 since that's what we configured above
+  ; let's ask the ESP for a random 16 bits number between 0x0010 and 0x2000...
+  lda #$05                ; message length
+  sta $4900
+  lda #RND_GET_WORD_RANGE ; command
+  sta $4901
+  lda #$00                ; minimum value hi byte
+  sta $4902
+  lda #$10                ; minimum value lo byte
+  sta $4903
+  lda #$20                ; maximum value hi byte
+  sta $4904
+  lda #$00                ; maximum value lo byte
+  sta $4905
+  sta $4101               ; send the message
+
+  ; now we check if the message has been sent
+:
+  bit $4101               ; check TX register bit 7, should be 1 when message is sent
+  bpl :-
+
+  ; now we wait for an answer
+:
+  bit $4102               ; check RX register bit 7, should be 1 when a message is received
+  bpl :-
+
+  ; let's copy the received value to zeropage
+  ; $4800 should be the received message length
+  ; $4801 should be the received message command (RND_WORD here)
+  lda $4802               ; received value hi byte
+  sta $00                 
+  lda $4803               ; received value lo byte
+  sta $01
+
+  ; we can now acknowledge the received message
+  ; this will tell the FPGA that he can store a new message if a new message is available
+  sta $4102
+  
+```
 
 ## Commands overview
 
@@ -392,14 +363,14 @@ Note: serial/network logs are not recommended when lots of messages are exchange
 ### DEBUG_LOG
 
 This command logs data on the serial port of the ESP.  
-Can be read using a UART/USB adapter, RX to pin 5 of the ESP board edge connector, GND to pin 6.  
-Bit 1 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)).  
+Can be read using a UART/USB adapter, RX to pin 5 of the ESP board edge connector, GND to pin 6. (v1.1 and v1.3)  
+Bit 0 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)).  
 
 | Byte | Description                                 | Example     |
 | ---- | ------------------------------------------- | ----------- |
 | 0    | Length of the message (excluding this byte) | `4`         |
 | 1    | Command ID (see commands to ESP)            | `DEBUG_LOG` |
-| 2    | Data length                                 | `2`         |
+| 2    | Data                                        | `0x2F`      |
 | 3    | Data                                        | `0x41`      |
 | 4    | Data                                        | `0xAC`      |
 
@@ -412,7 +383,7 @@ Bit 1 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL
 This command clears TX/RX buffers.  
 Should be used on startup to make sure that we start with a clean setup.  
 
-**Important** do NOT send another message right after sending a BUFFER_CLEAR_RX_TX command. The new message would arrive before the buffers are cleared and would then be lost. However, you can send ESP_GET_STATUS until you get a response, and then read $5000 until $5001.7 is 0.
+**Important** do NOT send another message right after sending a BUFFER_CLEAR_RX_TX command. The new message would arrive before the buffers are cleared and would then be lost. However, you can send ESP_GET_STATUS until you get a response, and then read $4100 until $4101.7 is 0.
 
 **Note:** sending a BUFFER_CLEAR_RX_TX at the ROM startup is HIGLY recommended to avoid undefined behaviour if resetting the console in the middle of communication between the NES and the ESP.  
 

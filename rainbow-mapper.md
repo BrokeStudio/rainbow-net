@@ -9,7 +9,8 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - WiFi capabilities to allow online gaming, cartridge update, downloadable content... (optional)
 - 2 PRG ROM banking modes
 - 4 CHR ROM banking modes
-- Up to 32KB of WRAM, mappable at \$6000-\$7FFF but also within \$8000-\$DFFF
+- 8K of FPGA WRAM
+- 32K of WRAM
 - Scanline IRQ (identical to the one used in the MMC3 mapper)
 - Three extra sound channels (2 pulse channels and 1 sawtooth channel, identical to those in the VRC6 mapper)
 - Self-flashable PRG-ROM / CHR-ROM
@@ -22,47 +23,49 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 
 ### PRG mode 0 - 16K+8K+8K fixed
 
-- CPU \$8000-\$BFFF: 16 KB switchable PRG ROM/RAM bank
-- CPU \$C000-\$DFFF: 8 KB switchable PRG ROM/RAM bank
-- CPU \$E000-\$FFFF: 8 KB PRG ROM bank, fixed to the last bank
+- CPU \$8000-\$BFFF: 16K switchable PRG ROM/RAM bank
+- CPU \$C000-\$DFFF: 8K switchable PRG ROM/RAM bank
+- CPU \$E000-\$FFFF: 8K PRG ROM bank, fixed to the last bank
 
 ### PRG mode 1 - 8K+8K+8K+8K fixed
 
-- CPU \$8000-\$9FFF: 8 KB switchable PRG ROM/RAM bank
-- CPU \$A000-\$BFFF: 8 KB switchable PRG ROM/RAM bank
-- CPU \$C000-\$DFFF: 8 KB switchable PRG ROM/RAM bank
-- CPU \$E000-\$FFFF: 8 KB PRG ROM bank, fixed to the last bank
+- CPU \$8000-\$9FFF: 8K switchable PRG ROM/RAM bank
+- CPU \$A000-\$BFFF: 8K switchable PRG ROM/RAM bank
+- CPU \$C000-\$DFFF: 8K switchable PRG ROM/RAM bank
+- CPU \$E000-\$FFFF: 8K PRG ROM bank, fixed to the last bank
 
 ### WRAM
 
-- CPU \$6000-\$7FFF: 8 KB switchable PRG-RAM/ROM bank
+- CPU \$6000-\$7FFF: 8K switchable PRG-RAM/ROM bank
+- CPU \$5000-\$5FFF: 4K switchable FPGA RAM bank
+- CPU \$4800-\$4FFF: 2K fixed FPGA RAM (first 2K of the total 8K)
 
 ### CHR mode 0 - 1K mode
 
-- PPU \$0000-\$03FF: 1 KB switchable CHR bank
-- PPU \$0400-\$07FF: 1 KB switchable CHR bank
-- PPU \$0800-\$0BFF: 1 KB switchable CHR bank
-- PPU \$0C00-\$0FFF: 1 KB switchable CHR bank
-- PPU \$1000-\$13FF: 1 KB switchable CHR bank
-- PPU \$1400-\$17FF: 1 KB switchable CHR bank
-- PPU \$1800-\$1BFF: 1 KB switchable CHR bank
-- PPU \$1C00-\$1FFF: 1 KB switchable CHR bank
+- PPU \$0000-\$03FF: 1K switchable CHR bank
+- PPU \$0400-\$07FF: 1K switchable CHR bank
+- PPU \$0800-\$0BFF: 1K switchable CHR bank
+- PPU \$0C00-\$0FFF: 1K switchable CHR bank
+- PPU \$1000-\$13FF: 1K switchable CHR bank
+- PPU \$1400-\$17FF: 1K switchable CHR bank
+- PPU \$1800-\$1BFF: 1K switchable CHR bank
+- PPU \$1C00-\$1FFF: 1K switchable CHR bank
 
 ### CHR mode 1 - 2K mode
 
-- PPU \$0000-\$07FF: 2 KB switchable CHR bank
-- PPU \$0800-\$0FFF: 2 KB switchable CHR bank
-- PPU \$1000-\$17FF: 2 KB switchable CHR bank
-- PPU \$1800-\$1FFF: 2 KB switchable CHR bank
+- PPU \$0000-\$07FF: 2K switchable CHR bank
+- PPU \$0800-\$0FFF: 2K switchable CHR bank
+- PPU \$1000-\$17FF: 2K switchable CHR bank
+- PPU \$1800-\$1FFF: 2K switchable CHR bank
 
 ### CHR mode 2 - 4K mode
 
-- PPU \$0000-\$0FFF: 4 KB switchable CHR bank
-- PPU \$1000-\$1FFF: 4 KB switchable CHR bank
+- PPU \$0000-\$0FFF: 4K switchable CHR bank
+- PPU \$1000-\$1FFF: 4K switchable CHR bank
 
 ### CHR mode 3 - 8K mode
 
-- PPU \$0000-\$1FFF: 8 KB switchable CHR bank
+- PPU \$0000-\$1FFF: 8K switchable CHR bank
 
 ## Registers
 
@@ -150,14 +153,14 @@ c.BB BBbb
 
 Register \$4120:
 
-- when chip selector is 0, \$8000-\$BFFF is mapped to PRG-ROM and 'BBBbb' is used to select the 16K bank
-- when chip selector is 1, \$8000-\$9FFF is mapped to WRAM and 'bb' is used to select the 8K bank
-                           \$A000-\$BFFF is mapped to WRAM and ('bb' + 1) & 3 is used to select the 8K bank
+- when chip selector is 0, \$8000-\$BFFF is mapped to PRG-ROM and `BBBbb` is used to select the 16K bank
+- when chip selector is 1, \$8000-\$9FFF is mapped to WRAM and `bb` is used to select the 8K bank
+                           \$A000-\$BFFF is mapped to WRAM and (`bb` + 1) & 3 is used to select the 8K bank
 
 Register \$4122:
 
-- when chip selector is 0, \$C000-\$DFFF is mapped to PRG-ROM and 'BBBBbb' is used to select the 8K bank
-- when chip selector is 1, \$C000-\$DFFF is mapped to WRAM and 'bb' is used to select the 8K bank
+- when chip selector is 0, \$C000-\$DFFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
+- when chip selector is 1, \$C000-\$DFFF is mapped to WRAM and `bb` is used to select the 8K bank
 
 #### PRG mode 1 (8K+8K+8K+8K fixed)
 
@@ -167,18 +170,18 @@ Register \$4122:
 
 Register \$4120:
 
-- when chip selector is 0, \$8000-\$9FFF is mapped to PRG-ROM and 'BBBBbb' is used to select the 8K bank
-- when chip selector is 1, \$8000-\$9FFF is mapped to WRAM and 'bb' is used to select the 8K bank
+- when chip selector is 0, \$8000-\$9FFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
+- when chip selector is 1, \$8000-\$9FFF is mapped to WRAM and `bb` is used to select the 8K bank
 
 Register \$4121:
 
-- when chip selector is 0, \$A000-\$BFFF is mapped to PRG-ROM and 'BBBBbb' is used to select the 8K bank
-- when chip selector is 1, \$A000-\$BFFF is mapped to WRAM and 'bb' is used to select the 8K bank
+- when chip selector is 0, \$A000-\$BFFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
+- when chip selector is 1, \$A000-\$BFFF is mapped to WRAM and `bb` is used to select the 8K bank
 
 Register \$4122:
 
-- when chip selector is 0, \$C000-\$DFFF is mapped to PRG-ROM and 'BBBBbb' is used to select the 8K bank
-- when chip selector is 1, \$C000-\$DFFF is mapped to WRAM and 'bb' is used to select the 8K bank
+- when chip selector is 0, \$C000-\$DFFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
+- when chip selector is 1, \$C000-\$DFFF is mapped to WRAM and `bb` is used to select the 8K bank
 
 ### FPGA WRAM banking (\$4123) Write-only
 
@@ -192,7 +195,7 @@ Register \$4122:
 
 Register \$4123:
 
-- bit 'b' is used to select FPGA WRAM 4K page to map at \$5000-\$5FFF
+- bit `b` is used to select FPGA WRAM 4K page to map at \$5000-\$5FFF
 
 ### WRAM banking (\$4124) Write-only
 
@@ -210,9 +213,9 @@ ccBB BBbb
 
 Register \$4124:
 
-- when chip selector is 0, \$6000-\$7FFF is mapped to WRAM and 'bb' is used to select the 8K bank
-- when chip selector is 1, \$6000-\$7FFF is mapped to FPGA WRAM which is 8K so other bits are ignored
-- when chip selector is 2 or 3, \$6000-\$7FFF is mapped to PRG-ROM and 'BBBBbb' is used to select the 8K bank
+- when chip selector is 0, \$6000-\$7FFF is mapped to WRAM and `bb` is used to select the 8K bank
+- when chip selector is 1, \$6000-\$7FFF is mapped to FPGA WRAM (8K), other bits are ignored
+- when chip selector is 2 or 3, \$6000-\$7FFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
 
 ### CHR banking (\$4130-\$4138) Write-only
 
@@ -363,43 +366,113 @@ E... FFFF
 +--------- enable (0: channel disabled)
 ```
 
-### WiFi (\$4100, \$4101)
+### WiFi (\$4100-\$4106)
 
-#### Data transfer (\$4100) R/W
+#### Configuration (\$4100) R/W
 
-Read or write a byte to communicate with the ESP.  
 This register is readable and writable.  
 
 ```
 7  bit  0
 ---- ----
-DDDD DDDD
+.... ..IE
+       ||
+       |+ ESP enable ( 0 : disable | 1 : enable ) R/W
+       +- IRQ enable ( 0 : disable | 1 : enable ) R/W
+```
+
+#### RX - Reception (\$4101) R/W
+
+Writing any value to this registrer acknowledge the last received message and set the bit 7 of the register to 0.  
+The bit 7 will be to 1 again when a new message if available.  
+
+Reading:
+
+```
+7  bit  0
+---- ----
+D... ....
+|
++-------- Data ready ( 0 : FPGA can receive a new message | 1 : a new message is ready ) R
+          this flag is set to 1 when the FPGA has received a new message
+          if the I flag of the ESP_CONFIG register is set, NES IRQ will be triggered
+```
+
+#### TX - Transimission (\$4102) R/W
+
+Writing any value to this register sends the message currently stored in FPGA RAM (see registersand sets the bit 7 of the register to 0.  
+The bit 7 will be set to 1 again when the message is sent.  
+
+Reading:
+
+```
+7  bit  0
+---- ----
+D... ....
+|
++-------- Data sent ( 0 : sending data | 1 : data sent ) R
+          this flag is set to 1 when the FPGA has sent a message
+```
+
+#### RX RAM destination address (\$4103-\$4104) R/W
+
+The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
+Only the first 2K of the total 8K of the FPGA RAM can be used for this.  
+Those 2K are permanently mapped at \$4800-\$4FFF.  
+
+- \$4103
+```
+7  bit  0
+---- ----
+.... .aaa
+      |||
+      +++ Destination RAM address hi bits
+```
+
+- \$4104
+```
+7  bit  0
+---- ----
+aaaa aaaa
 |||| ||||
-++++-++++- byte to write (W) or read (R)
+++++-++++ Destination RAM address lo bits
 ```
 
-#### Configuration (\$4101) R/W
+#### TX RAM source address (\$4105-\$4106) R/W
 
-This register is readable and writable.  
+The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
+Only the first 2K of the total 8K of the FPGA RAM can be used for this.  
+Those 2K are permanently mapped at \$4800-\$4FFF.  
 
+- \$4105
 ```
 7  bit  0
 ---- ----
-di.. ...e
-||      |
-||      +- ESP enable (0: disable, 1: enable) R/W
-|+-------- IRQ enable (0: disable, 1: enable) R/W
-+--------- data ready (0: false, 1:true) R
-            'd' flag is set to 1 when the ESP has data to transmit to the NES
-            if both 'd' and 'i' flags are set, then NES IRQ will be triggered
+.... .aaa
+      |||
+      +++ Source RAM address hi bits
+```
+
+- \$4106
+```
+7  bit  0
+---- ----
+aaaa aaaa
+|||| ||||
+++++-++++ Source RAM address lo bits
 ```
 
 ## Recap / Cheat sheet
 
-### ESP / WiFi
+### WiFi
 
-- \$4100  (R/W) data transfer  
-- \$4101  (R/W) configuration  
+- \$4100  (R/W) configuration
+- \$4101  (R/W) RX data ready / acknowledge
+- \$4102  (R/W) TX data sent / send data
+- \$4103  (W) RX RAM destination address lo bits
+- \$4104  (W) RX RAM destination address hi bits  
+- \$4105  (W) TX RAM source address lo bits
+- \$4106  (W) TX RAM source address hi bits  
 
 ### Mapper configuration
 

@@ -391,9 +391,10 @@ Reading:
 ```
 7  bit  0
 ---- ----
-D... ....
-|
-+-------- Data ready ( 0 : FPGA can receive a new message | 1 : a new message is ready ) R
+DR.. ....
+||
+|+------- Data ready, this flag is set to 1 if a message is waiting to be sent on the ESP side
++-------- Data received ( 0 : FPGA can receive a new message | 1 : a new message is ready )
           this flag is set to 1 when the FPGA has received a new message
           if the I flag of the ESP_CONFIG register is set, NES IRQ will be triggered
 ```

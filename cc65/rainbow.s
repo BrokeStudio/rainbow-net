@@ -17,6 +17,7 @@
   disableIRQ          = RNBW_disableIRQ
   sendData            = RNBW_sendData
   waitReady           = RNBW_waitReady
+  copyRXtoTX          = RNBW_copyRXtoTX
   debugA              = RNBW_debug_A
   debug_A             = RNBW_debug_A
   debugX              = RNBW_debug_X
@@ -41,20 +42,20 @@
 ; ################################################################################
 ; MACROS
 
-  .if .not .definedmacro(RNBW_waitResponse)
-    .macro RNBW_waitResponse
-      ; wait for response
+  .if .not .definedmacro(RNBW_waitRX)
+    .macro RNBW_waitRX
+      ; wait for message to be received
     :
       bit ::RNBW::RX
       bpl :-
     .endmacro
   .endif
 
-  .if .not .definedmacro(RNBW_waitAnswer)
-    .macro RNBW_waitAnswer
-      ; wait for response
+  .if .not .definedmacro(RNBW_waitTX)
+    .macro RNBW_waitTX
+      ; wait for message to be sent
     :
-      bit ::RNBW::RX
+      bit ::RNBW::TX
       bpl :-
     .endmacro
   .endif
@@ -117,7 +118,7 @@
 
     ; ask for ESP status
     lda #1
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::ESP_GET_STATUS
     sta BUF_OUT+1
     sta ::RNBW::TX
@@ -140,12 +141,27 @@
 
   .endproc
 
+  .proc RNBW_copyRXtoTX
+
+    ; copy RX buffer to TX buffer
+    ldx RNBW::BUF_IN+0
+    inx
+  :
+    lda RNBW::BUF_IN-1,x
+    sta RNBW::BUF_OUT-1,x
+    dex
+    bne :-
+
+    rts
+
+  .endproc
+
   .proc RNBW_debug_A
     
     ; data to debug in A
     pha
     lda #2
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::DEBUG_LOG
     sta BUF_OUT+1
     pla
@@ -166,7 +182,7 @@
 
     ; data to debug in X
     lda #2
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::DEBUG_LOG
     sta BUF_OUT+1
     stx BUF_OUT+2
@@ -186,7 +202,7 @@
   
     ; data to debug in Y
     lda #2
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::DEBUG_LOG
     sta BUF_OUT+1
     sty BUF_OUT+2
@@ -206,7 +222,7 @@
 
     ; ask for wifi status
     lda #1
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::WIFI_GET_STATUS
     sta BUF_OUT+1
     sta ::RNBW::TX
@@ -236,7 +252,7 @@
 
     ; ask for server status
     lda #1
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::SERVER_GET_STATUS
     sta BUF_OUT+1
     sta ::RNBW::TX
@@ -265,7 +281,7 @@
   .proc RNBW_getRandomByte
 
     lda #1
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::RND_GET_BYTE
     sta BUF_OUT+1
     sta ::RNBW::TX
@@ -296,7 +312,7 @@
     ; Y: max
 
     lda #3
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::RND_GET_BYTE_RANGE
     sta BUF_OUT+1
     stx BUF_OUT+2
@@ -327,7 +343,7 @@
   .proc RNBW_getRandomWord
 
     lda #1
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::RND_GET_WORD
     sta BUF_OUT+1
     sta ::RNBW::TX    
@@ -360,7 +376,7 @@
     ; Y: max
 
     lda #3
-    sta BUF_OUT
+    sta BUF_OUT+0
     lda #TO_ESP::RND_GET_WORD_RANGE
     sta BUF_OUT+1
     stx BUF_OUT+2

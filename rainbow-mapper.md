@@ -7,10 +7,10 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 ## Overview
 
 - WiFi capabilities to allow online gaming, cartridge update, downloadable content... (optional)
-- 2 PRG ROM banking modes
+- 2 PRG-ROM banking modes
 - 4 CHR ROM banking modes
-- 8K of FPGA WRAM
-- 32K of WRAM
+- 8K of FPGA-RAM
+- 32K of PRG-RAM
 - Scanline IRQ (identical to the one used in the MMC3 mapper)
 - Three extra sound channels (2 pulse channels and 1 sawtooth channel, identical to those in the VRC6 mapper)
 - Self-flashable PRG-ROM / CHR-ROM
@@ -23,22 +23,22 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 
 ### PRG mode 0 - 16K+8K+8K fixed
 
-- CPU \$8000-\$BFFF: 16K switchable PRG ROM/RAM bank
-- CPU \$C000-\$DFFF: 8K switchable PRG ROM/RAM bank
-- CPU \$E000-\$FFFF: 8K PRG ROM bank, fixed to the last bank
+- CPU \$8000-\$BFFF: 16K switchable PRG-ROM/PRG-RAM bank
+- CPU \$C000-\$DFFF: 8K switchable PRG-ROM/PRG-RAM bank
+- CPU \$E000-\$FFFF: 8K PRG-ROM bank, fixed to the last bank
 
 ### PRG mode 1 - 8K+8K+8K+8K fixed
 
-- CPU \$8000-\$9FFF: 8K switchable PRG ROM/RAM bank
-- CPU \$A000-\$BFFF: 8K switchable PRG ROM/RAM bank
-- CPU \$C000-\$DFFF: 8K switchable PRG ROM/RAM bank
-- CPU \$E000-\$FFFF: 8K PRG ROM bank, fixed to the last bank
+- CPU \$8000-\$9FFF: 8K switchable PRG-ROM/PRG-RAM bank
+- CPU \$A000-\$BFFF: 8K switchable PRG-ROM/PRG-RAM bank
+- CPU \$C000-\$DFFF: 8K switchable PRG-ROM/PRG-RAM bank
+- CPU \$E000-\$FFFF: 8K PRG-ROM bank, fixed to the last bank
 
 ### WRAM
 
-- CPU \$6000-\$7FFF: 8K switchable PRG-RAM/ROM bank
-- CPU \$5000-\$5FFF: 4K switchable FPGA RAM bank
-- CPU \$4800-\$4FFF: 2K fixed FPGA RAM (first 2K of the total 8K)
+- CPU \$6000-\$7FFF: 8K switchable PRG-RAM/FPGA-RAM/PRG-ROM bank
+- CPU \$5000-\$5FFF: 4K switchable FPGA-RAM bank
+- CPU \$4800-\$4FFF: 2K fixed FPGA-RAM (first 2K of the total 8K)
 
 ### CHR mode 0 - 1K mode
 
@@ -133,7 +133,7 @@ PPPv vvvv
 | 1               | v1.1 (second proto board) | n/a     | n/a     |
 | 2               | v1.3 (third proto board)  | v1.1    | n/a     |
 
-### PRG / WRAM banking (\$4120-\$4124) Write-only
+### PRG-ROM / PRG-RAM banking (\$4120-\$4124) Write-only
 
 ```
 7  bit  0
@@ -143,7 +143,7 @@ c.BB BBbb
 | ++-++++- bank index
 +--------- chip selector
               0: PRG-ROM
-              1: WRAM
+              1: PRG-RAM
 ```
 
 #### PRG mode 0 (16K+8K+8K fixed)
@@ -154,13 +154,13 @@ c.BB BBbb
 Register \$4120:
 
 - when chip selector is 0, \$8000-\$BFFF is mapped to PRG-ROM and `BBBbb` is used to select the 16K bank
-- when chip selector is 1, \$8000-\$9FFF is mapped to WRAM and `bb` is used to select the 8K bank
-                           \$A000-\$BFFF is mapped to WRAM and (`bb` + 1) & 3 is used to select the 8K bank
+- when chip selector is 1, \$8000-\$9FFF is mapped to PRG-RAM and `bb` is used to select the 8K bank
+                           \$A000-\$BFFF is mapped to PRG-RAM and (`bb` + 1) & 3 is used to select the 8K bank
 
 Register \$4122:
 
 - when chip selector is 0, \$C000-\$DFFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
-- when chip selector is 1, \$C000-\$DFFF is mapped to WRAM and `bb` is used to select the 8K bank
+- when chip selector is 1, \$C000-\$DFFF is mapped to PRG-RAM and `bb` is used to select the 8K bank
 
 #### PRG mode 1 (8K+8K+8K+8K fixed)
 
@@ -171,19 +171,21 @@ Register \$4122:
 Register \$4120:
 
 - when chip selector is 0, \$8000-\$9FFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
-- when chip selector is 1, \$8000-\$9FFF is mapped to WRAM and `bb` is used to select the 8K bank
+- when chip selector is 1, \$8000-\$9FFF is mapped to PRG-RAM and `bb` is used to select the 8K bank
 
 Register \$4121:
 
 - when chip selector is 0, \$A000-\$BFFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
-- when chip selector is 1, \$A000-\$BFFF is mapped to WRAM and `bb` is used to select the 8K bank
+- when chip selector is 1, \$A000-\$BFFF is mapped to PRG-RAM and `bb` is used to select the 8K bank
 
 Register \$4122:
 
 - when chip selector is 0, \$C000-\$DFFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
-- when chip selector is 1, \$C000-\$DFFF is mapped to WRAM and `bb` is used to select the 8K bank
+- when chip selector is 1, \$C000-\$DFFF is mapped to PRG-RAM and `bb` is used to select the 8K bank
 
-### FPGA WRAM banking (\$4123) Write-only
+### FPGA-RAM banking (\$4123) Write-only
+
+- Register \$4123 controls 4K bank @ \$5000-\$5FFF
 
 ```
 7  bit  0
@@ -199,6 +201,8 @@ Register \$4123:
 
 ### WRAM banking (\$4124) Write-only
 
+- Register \$4124 controls 8K bank @ \$6000-\$7FFF
+
 ```
 7  bit  0
 ---- ----
@@ -206,15 +210,15 @@ ccBB BBbb
 |||| ||||
 ||++-++++- bank index
 ++-------- chip selector
-              0: WRAM
-              1: FPGA WRAM
+              0: PRG-RAM
+              1: FPGA-RAM
               2/3: PRG-ROM
 ```
 
 Register \$4124:
 
-- when chip selector is 0, \$6000-\$7FFF is mapped to WRAM and `bb` is used to select the 8K bank
-- when chip selector is 1, \$6000-\$7FFF is mapped to FPGA WRAM (8K), other bits are ignored
+- when chip selector is 0, \$6000-\$7FFF is mapped to PRG-RAM and `bb` is used to select the 8K bank
+- when chip selector is 1, \$6000-\$7FFF is mapped to FPGA-RAM (8K), other bits are ignored
 - when chip selector is 2 or 3, \$6000-\$7FFF is mapped to PRG-ROM and `BBBBbb` is used to select the 8K bank
 
 ### CHR banking (\$4130-\$4138) Write-only
@@ -401,7 +405,7 @@ DR.. ....
 
 #### TX - Transimission (\$4102) R/W
 
-Writing any value to this register sends the message currently stored in FPGA RAM (see registersand sets the bit 7 of the register to 0.  
+Writing any value to this register sends the message currently stored in FPGA-RAM (see registersand sets the bit 7 of the register to 0.  
 The bit 7 will be set to 1 again when the message is sent.  
 
 Reading:
@@ -418,7 +422,7 @@ D... ....
 #### RX RAM destination address (\$4103-\$4104) R/W
 
 The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
-Only the first 2K of the total 8K of the FPGA RAM can be used for this.  
+Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
 
 - \$4103
@@ -442,7 +446,7 @@ aaaa aaaa
 #### TX RAM source address (\$4105-\$4106) R/W
 
 The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
-Only the first 2K of the total 8K of the FPGA RAM can be used for this.  
+Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
 
 - \$4105

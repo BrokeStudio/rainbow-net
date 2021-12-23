@@ -112,7 +112,7 @@ Now the board uses its own mapper. Detailed documentation of the mapper can be f
 
 A message is what is send to or received from the ESP and always have the same format, following these rules:  
 
-- First byte is the message length (number of bytes following this first byte, minimum is 1, maximum is 256, *can't be 0*).
+- First byte is the message length (number of bytes following this first byte, minimum is 1, maximum is 255, *can't be 0*).
 - Second byte is the command (see [Commands to the ESP](#Commands-to-the-ESP) and [Commands from the ESP](#Commands-from-the-ESP)).
 - Following bytes are the parameters/data for the command.
 

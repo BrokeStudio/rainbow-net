@@ -419,13 +419,13 @@ D... ....
           this flag is set to 1 when the FPGA has sent a message
 ```
 
-#### RX RAM destination address (\$4103-\$4104) R/W
+#### RX RAM destination address (\$4103) W
 
 The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
 Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
+This register allows you to specify an offset of $100 bytes from $4800.  
 
-- \$4103
 ```
 7  bit  0
 ---- ----
@@ -434,37 +434,19 @@ Those 2K are permanently mapped at \$4800-\$4FFF.
       +++ Destination RAM address hi bits
 ```
 
-- \$4104
-```
-7  bit  0
----- ----
-aaaa aaaa
-|||| ||||
-++++-++++ Destination RAM address lo bits
-```
-
-#### TX RAM source address (\$4105-\$4106) R/W
+#### TX RAM source address (\$4104) W
 
 The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
 Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
+This register allows you to specify an offset of $100 bytes from $4800.  
 
-- \$4105
 ```
 7  bit  0
 ---- ----
 .... .aaa
       |||
       +++ Source RAM address hi bits
-```
-
-- \$4106
-```
-7  bit  0
----- ----
-aaaa aaaa
-|||| ||||
-++++-++++ Source RAM address lo bits
 ```
 
 ## Recap / Cheat sheet
@@ -474,10 +456,8 @@ aaaa aaaa
 - \$4100  (R/W) configuration
 - \$4101  (R/W) RX data ready / acknowledge
 - \$4102  (R/W) TX data sent / send data
-- \$4103  (W) RX RAM destination address lo bits
-- \$4104  (W) RX RAM destination address hi bits  
-- \$4105  (W) TX RAM source address lo bits
-- \$4106  (W) TX RAM source address hi bits  
+- \$4103  (W) RX RAM destination address hi bits  
+- \$4104  (W) TX RAM source address hi bits  
 
 ### Mapper configuration
 

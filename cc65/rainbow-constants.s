@@ -5,10 +5,8 @@
 CONFIG    = $4100
 RX        = $4101
 TX        = $4102
-RX_HI_ADD = $4103
-RX_LO_ADD = $4104
-TX_HI_ADD = $4105
-TX_LO_ADD = $4106
+RX_ADD    = $4103
+TX_ADD    = $4104
 
 ; commands to ESP
 .enum TO_ESP

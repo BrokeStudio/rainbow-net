@@ -370,7 +370,7 @@ E... FFFF
 +--------- enable (0: channel disabled)
 ```
 
-### WiFi (\$4100-\$4106)
+### WiFi (\$4100-\$4104)
 
 #### Configuration (\$4100) R/W
 
@@ -405,7 +405,7 @@ DR.. ....
 
 #### TX - Transimission (\$4102) R/W
 
-Writing any value to this register sends the message currently stored in FPGA-RAM (see registersand sets the bit 7 of the register to 0.  
+Writing any value to this register sends the message currently stored in FPGA-RAM and sets the bit 7 of the register to 0.  
 The bit 7 will be set to 1 again when the message is sent.  
 
 Reading:

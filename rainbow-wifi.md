@@ -124,13 +124,10 @@ First we need to configure Rainbow registers.
 ```
   ; received data will be stored in FPGA RAM at $4800
   ; data to be sent must be written to FPGA RAM at $4900
-  lda #$48
+  lda #$00  ; $48 works too if you want it to be clearer
   sta $4103 ; RX hi
-  lda #$49
-  sta $4105 ; TX hi
-  lda #$00
-  sta $4104 ; RX lo
-  sta $4106 ; TX lo
+  lda #$01  ; $49 works too if you want it to be clearer
+  sta $4104 ; TX hi
 
   ; Enable ESP communication
   lda #1

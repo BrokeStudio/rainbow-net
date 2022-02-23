@@ -1,6 +1,6 @@
 # Rainbow
 
-Here you'll find the Rainbow documentation, and 6502 library for cc65 and nesasm.  
+Here you'll find the Rainbow documentation, and 6502 library for cc65 and asm6.  
 
 | File                                                                 | Description                                 |
 | -------------------------------------------------------------------- | ------------------------------------------- |

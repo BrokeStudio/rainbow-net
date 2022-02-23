@@ -2,8 +2,11 @@
 ; RAINBOW CONSTANTS
 
 ; mapper registers
-ESP_DATA   = $4100
-ESP_CONFIG = $4101
+CONFIG    = $4100
+RX        = $4101
+TX        = $4102
+RX_ADD    = $4103
+TX_ADD    = $4104
 
 ; commands to ESP
 .enum TO_ESP
@@ -26,6 +29,8 @@ ESP_CONFIG = $4101
 ; ACESS POINT CMDS
   AP_GET_SSID                     ; Get Access Point network SSID
   AP_GET_IP                       ; Get Access Point IP address
+  AP_GET_CONFIG                   ; Get Access Point config
+  AP_SET_CONFIG                   ; Set Access Point config
 
 ; RND CMDS
   RND_GET_BYTE                    ; Get random byte
@@ -84,6 +89,7 @@ ESP_CONFIG = $4101
   WIFI_STATUS                     ; Returns WiFi connection status
   SSID                            ; Returns WiFi / AP SSID
   IP                              ; Returns WiFi / AP IP address
+  AP_CONFIG                       ; Returns AP config
 
 ; RND CMDS
   RND_BYTE                        ; Returns random byte value
@@ -200,3 +206,7 @@ NUM_FILES = 64
   STREAM_WRITE = -10
   READ_TIMEOUT = -11
 .endenum
+
+; Rainbow registers
+RNBW_DATA = $5000
+RNBW_FLAGS = $5001

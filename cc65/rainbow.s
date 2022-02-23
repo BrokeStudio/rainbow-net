@@ -46,7 +46,7 @@
     .macro RNBW_waitRX
       ; wait for message to be received
     :
-      bit RNBW::RX
+      bit RX
       bpl :-
     .endmacro
   .endif
@@ -55,7 +55,7 @@
     .macro RNBW_waitTX
       ; wait for message to be sent
     :
-      bit RNBW::TX
+      bit TX
       bpl :-
     .endmacro
   .endif
@@ -66,9 +66,9 @@
   .proc RNBW_disableIRQ
 
     ; disable ESP IRQ
-    lda RNBW::CONFIG
+    lda CONFIG
     and #$fd
-    sta RNBW::CONFIG
+    sta CONFIG
 
     ; return
     rts
@@ -78,9 +78,9 @@
   .proc RNBW_enableIRQ
 
     ; enable ESP IRQ
-    lda RNBW::CONFIG
+    lda CONFIG
     ora #$02
-    sta RNBW::CONFIG
+    sta CONFIG
 
     ; return
     rts
@@ -104,10 +104,10 @@
     iny
     dex
     bne :-
-    sta RNBW::TX
+    sta TX
 
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; return
@@ -121,20 +121,20 @@
     sta BUF_OUT+0
     lda #TO_ESP::ESP_GET_STATUS
     sta BUF_OUT+1
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; acknowledge answer
-    sta RNBW::RX
+    sta RX
 
     ; return
     rts
@@ -144,13 +144,13 @@
   .proc RNBW_copyRXtoTX
 
     ; copy RX buffer to TX buffer
-    ldx RNBW::BUF_IN+0
-    stx RNBW::BUF_OUT+0
+    ldx BUF_IN+0
+    stx BUF_OUT+0
   :
-    lda RNBW::BUF_IN,x
-    sta RNBW::BUF_OUT,x
+    lda BUF_IN,x
+    sta BUF_OUT,x
     dex
-    bne :+
+    bne :-
 
     ; return
     rts
@@ -167,11 +167,11 @@
     sta BUF_OUT+1
     pla
     sta BUF_OUT+2
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; return
@@ -187,11 +187,11 @@
     lda #TO_ESP::DEBUG_LOG
     sta BUF_OUT+1
     stx BUF_OUT+2
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; return
@@ -207,11 +207,11 @@
     lda #TO_ESP::DEBUG_LOG
     sta BUF_OUT+1
     sty BUF_OUT+2
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; return
@@ -226,23 +226,23 @@
     sta BUF_OUT+0
     lda #TO_ESP::WIFI_GET_STATUS
     sta BUF_OUT+1
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; return wifi status in A
     lda BUF_IN+2
 
     ; acknowledge answer
-    sta RNBW::RX
+    sta RX
 
     ; return
     rts
@@ -256,23 +256,23 @@
     sta BUF_OUT+0
     lda #TO_ESP::SERVER_GET_STATUS
     sta BUF_OUT+1
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; return server status in A
     lda BUF_IN+2
 
     ; acknowledge answer
-    sta RNBW::RX
+    sta RX
 
     ; return
     rts
@@ -285,23 +285,23 @@
     sta BUF_OUT+0
     lda #TO_ESP::RND_GET_BYTE
     sta BUF_OUT+1
-    sta RNBW::TX
+    sta TX
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; return random byte in A
     lda BUF_IN+2
 
     ; acknowledge answer
-    sta RNBW::RX
+    sta RX
 
     ; return
     rts
@@ -318,23 +318,23 @@
     sta BUF_OUT+1
     stx BUF_OUT+2
     sty BUF_OUT+3
-    sta RNBW::TX    
+    sta TX    
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; return random byte in A
     lda BUF_IN+2
 
     ; acknowledge answer
-    sta RNBW::RX
+    sta RX
 
     ; return
     rts
@@ -347,16 +347,16 @@
     sta BUF_OUT+0
     lda #TO_ESP::RND_GET_WORD
     sta BUF_OUT+1
-    sta RNBW::TX    
+    sta TX    
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; return random word in A (hi) and X (lo)
@@ -364,7 +364,7 @@
     ldx BUF_IN+3
 
     ; acknowledge answer
-    sta RNBW::RX
+    sta RX
 
     ; return
     rts
@@ -382,16 +382,16 @@
     sta BUF_OUT+1
     stx BUF_OUT+2
     sty BUF_OUT+3
-    sta RNBW::TX    
+    sta TX    
 
     ; wait for message to be sent
   :
-    bit RNBW::TX
+    bit TX
     bpl :-
 
     ; wait for answer
   :
-    bit RNBW::RX
+    bit RX
     bpl :-
 
     ; return

@@ -44,6 +44,8 @@ Thanks to :
     - [WIFI_GET_STATUS](#wifi_get_status)
     - [WIFI_GET_SSID](#wifi_get_ssid)
     - [WIFI_GET_IP](#wifi_get_ip)
+    - [WIFI_GET_CONFIG](#wifi_get_config)
+    - [WIFI_SET_CONFIG](#wifi_set_config)
     - [AP_GET_SSID](#ap_get_ssid)
     - [AP_GET_IP](#ap_get_ip)
     - [AP_GET_CONFIG](#ap_get_config)
@@ -486,12 +488,13 @@ This command asks the WiFi status.
 | ----- | --------------- | ---------------------- |
 | 255   | NO_SHIELD       | -                      |
 | 0     | IDLE_STATUS     | -                      |
-| 1     | NO_SSID_AVAIL   | -                      |
+| 1     | NO_SSID_AVAIL   | SSID cannot be reached |
 | 2     | SCAN_COMPLETED  | Network scan completed |
 | 3     | CONNECTED       | WiFi connected         |
 | 4     | CONNECT_FAILED  | WiFi connection failed |
 | 5     | CONNECTION_LOST | WiFi connection lost   |
-| 6     | DISCONNECTED    | WiFi disconnected      |
+| 6     | WRONG_PASSWORD  | Password incorrect     |
+| 7     | DISCONNECTED    | WiFi disconnected      |
 
 [Back to command list](#Commands-overview)
 
@@ -499,7 +502,7 @@ This command asks the WiFi status.
 
 ### WIFI_GET_SSID
 
-This command asks the WiFi SSID (if connected).
+This command returns the WiFi SSID (if connected).
 
 | Byte | Description                                 | Example         |
 | ---- | ------------------------------------------- | --------------- |
@@ -555,6 +558,43 @@ This command asks the WiFi IP address (if connected).
 | 12   | ...                                                    | `.`                            |
 | 13   | ...                                                    | `2`                            |
 | 14   | ...                                                    | `0`                            |
+
+[Back to command list](#Commands-overview)
+
+### WIFI_GET_CONFIG
+
+This command returns the WiFi station status.  
+
+| Byte | Description                                 | Example           |
+| ---- | ------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte) | `1`               |
+| 1    | Command ID (see commands to ESP)            | `WIFI_GET_CONFIG` |
+
+**Returns:**
+
+| Byte | Description                                     | Example       |
+| ---- | ----------------------------------------------- | ------------- |
+| 0    | Length of the message (excluding this byte)     | `2`           |
+| 1    | Command ID (see commands from ESP)              | `WIFI_CONFIG` |
+| 2    | Access Point Config                             | `%zzzzzzzs`   |
+|      | s: WiFi station status (0: disable / 1: enable) |               |
+|      | z: reserved for future use, must be set to zero |               |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### WIFI_SET_CONFIG
+
+This command sets the WiFi station status.  
+
+| Byte | Description                                     | Example           |
+| ---- | ----------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte)     | `2`               |
+| 1    | Command ID (see commands to ESP)                | `WIFI_SET_CONFIG` |
+| 2    | Access Point Config                             | `%zzzzzzzs`       |
+|      | s: WiFi station status (0: disable / 1: enable) |                   |
+|      | z: reserved for future use, must be set to zero |                   |
 
 [Back to command list](#Commands-overview)
 
@@ -619,6 +659,8 @@ This command asks the acess point IP address.
 
 [Back to command list](#Commands-overview)
 
+---
+
 ### AP_GET_CONFIG
 
 This command returns the Access Point status.  
@@ -645,7 +687,7 @@ This command returns the Access Point status.
 
 ### AP_SET_CONFIG
 
-This command returns the Access Point status.  
+This command sets the Access Point status.  
 
 | Byte | Description                                     | Example         |
 | ---- | ----------------------------------------------- | --------------- |

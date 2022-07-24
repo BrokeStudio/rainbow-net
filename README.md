@@ -1,21 +1,12 @@
 # Rainbow
 
-Here you'll find the Rainbow documentation, and 6502 library for cc65 and asm6.  
+Here you'll find the Rainbow documentation.
 
-| File                                                                 | Description                                 |
-| -------------------------------------------------------------------- | ------------------------------------------- |
-| [rainbow-wifi.md](rainbow-wifi.md)                                   | Rainbow WiFi documentation                  |
-| [rainbow-mapper.md](rainbow-mapper.md)                               | Rainbow Mapper documentation                |
-| [rainbow-prg-rom-self-flashing.md](rainbow-prg-rom-self-flashing.md) | Rainbow PRG-ROM self-flashing documentation |
-| [rainbow-chr-rom-self-flashing.md](rainbow-chr-rom-self-flashing.md) | Rainbow CHR-ROM self-flashing documentation |
-
-# Try it yourself
-
-If you want to try this mapper, here's what you'll need:
-- a [custom version of FCEUX](https://brokestudio.fr/rainbow/fceux) supporting the Rainbow mapper
-- a [rainbow NES boiler plate](https://github.com/BrokeStudio/rainbow-nes-boiler-plate) (using cc65)
-- the documentation above
-- there's also a [chat demo](https://github.com/BrokeStudio/rainbow-chat) available
+| File                                      | Description                                               |
+| ----------------------------------------- | --------------------------------------------------------- |
+| [rainbow-wifi.md](rainbow-wifi.md)        | Rainbow WiFi / protocol documentation                     |
+| [NES](NES)                                | Rainbow mapper documentation for the NES                  |
+| [Mega Drive / Genesis](MEGADRIVE-GENESIS) | Rainbow mapper documentation for the Mega Drive / Genesis |
 
 # Contact
 

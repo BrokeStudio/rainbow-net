@@ -11,7 +11,8 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - 4 CHR ROM banking modes
 - 8K of FPGA-RAM
 - 32K of PRG-RAM
-- Scanline IRQ (identical to the one used in the MMC3 mapper)
+- Scanline IRQ generator (identical to the one used in the MMC3 mapper)
+- CPU Cycle IRQ generator
 - Three extra sound channels (2 pulse channels and 1 sawtooth channel, identical to those in the VRC6 mapper)
 - Self-flashable PRG-ROM / CHR-ROM
 - Possibility to use CHR-ROM for pattern tables and CHR-RAM for name/attribute tables
@@ -291,7 +292,7 @@ Writing any value to this register reloads the IRQ counter at the NEXT rising ed
 ```
 7  bit  0
 ---- ----
-xxxx xxxx
+.... ....
 ```
 
 #### IRQ disable (\$4142) Write-only
@@ -300,7 +301,7 @@ Writing any value to this register will disable interrupts AND acknowledge any p
 ```
 7  bit  0
 ---- ----
-xxxx xxxx
+.... ....
 ```
 
 #### IRQ enable (\$4143) Write-only
@@ -310,6 +311,68 @@ Writing any value to this register will enable interrupts.
 7  bit  0
 ---- ----
 xxxx xxxx
+```
+
+### CPU Cycle IRQ (\$4144-\$4147)
+
+This IRQ feature is a CPU cycle counting IRQ generator.  
+When enabled, the 16-bit IRQ counter is decremented once per CPU cycle.  
+When the IRQ counter reaches $0000, an IRQ is generated and IRQ counter is reloaded with latched value.  
+The IRQ line is held low until it is acknowledged.
+
+#### How to Use the IRQ Generator
+
+* Set the counter to the desired number of cycles.
+* Enable the IRQ generator by turning on both the IRQ Enable and IRQ Counter Enable flags of the IRQ Control command.
+* Within the IRQ handler, write to the IRQ Control command to acknowledge the IRQ.
+* Optional: Go back to Step 1 for the next IRQ.
+
+#### IRQ latch/counter low byte (\$4144) Write-only
+
+This register specifies the IRQ latch value low byte.  
+The IRQ counter is updated at the same time.  
+```
+7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- The low eight bits of the IRQ latch
+```
+
+#### IRQ latch/counter high byte (\$4145) Write-only
+
+This register specifies the IRQ latch value high byte.  
+The IRQ counter is updated at the same time.  
+```
+7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- The low eight bits of the IRQ counter
+```
+
+#### IRQ control (\$4146) Write-only
+
+Writing zero to this register will disable interrupts.  
+Writing any other value to this register will enable interrupts.  
+```
+7  bit  0
+---------
+.... ..EA
+       ||
+       |+- IRQ enable after acknowledgement (see IRQ acknowledge)
+       +-- IRQ enable (1 = enabled), this flag will be reset to 0 when IRQ counter reaches $0000.
+```
+
+#### IRQ acknowledge (\$4147) Write-only
+
+Writing any value to this register will acknowledge the pending IRQ.  
+In addition, the 'A' control bit moves to the 'E' control bit, enabling or disabling IRQs.  
+Writes to this register do not affect the current state of the IRQ counter.
+```
+7  bit  0
+---- ----
+.... ....
 ```
 
 ### Sound / Audio Expansion (\$4150-\$4158)
@@ -429,7 +492,7 @@ This register allows you to specify an offset of $100 bytes from $4800.
 ```
 7  bit  0
 ---- ----
-.... .aaa
+.... .AAA
       |||
       +++ Destination RAM address hi bits
 ```
@@ -444,7 +507,7 @@ This register allows you to specify an offset of $100 bytes from $4800.
 ```
 7  bit  0
 ---- ----
-.... .aaa
+.... .AAA
       |||
       +++ Source RAM address hi bits
 ```
@@ -518,6 +581,13 @@ This register allows you to specify an offset of $100 bytes from $4800.
 \$4141  (W) reload  
 \$4142  (W) disable  
 \$4143  (W) enable  
+
+### CPU Cycle IRQ
+
+\$4144  (W) latch low byte  
+\$4145  (W) latch high byte  
+\$4146  (W) control
+\$4147  (W) acknowledge  
 
 ### Audio expansion
 

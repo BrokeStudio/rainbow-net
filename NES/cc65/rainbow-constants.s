@@ -25,14 +25,12 @@ TX_ADD    = $4104
   WIFI_GET_STATUS                 ; Get WiFi connection status
   WIFI_GET_SSID                   ; Get WiFi network SSID
   WIFI_GET_IP                     ; Get WiFi IP address
-  WIFI_GET_CONFIG                 ; Get WiFi station config
-  WIFI_SET_CONFIG                 ; Set WiFi station config
+  WIFI_GET_CONFIG                 ; Get WiFi station / Access Point / Web Server config
+  WIFI_SET_CONFIG                 ; Set WiFi station / Access Point / Web Server config
 
 ; ACESS POINT CMDS
   AP_GET_SSID                     ; Get Access Point network SSID
   AP_GET_IP                       ; Get Access Point IP address
-  AP_GET_CONFIG                   ; Get Access Point config
-  AP_SET_CONFIG                   ; Set Access Point config
 
 ; RND CMDS
   RND_GET_BYTE                    ; Get random byte
@@ -92,8 +90,7 @@ TX_ADD    = $4104
   WIFI_STATUS                     ; Returns WiFi connection status
   SSID                            ; Returns WiFi / Access Point SSID
   IP                              ; Returns WiFi / Access Point IP address
-  WIFI_CONFIG                     ; Returns WiFi config
-  AP_CONFIG                       ; Returns Access Point config
+  WIFI_CONFIG                     ; Returns WiFi station / Access Point / Web Server
 
 ; RND CMDS
   RND_BYTE                        ; Returns random byte value
@@ -155,12 +152,8 @@ TX_ADD    = $4104
 ; WiFi config flags
 .enum WIFI_CONFIG_FLAGS
   WIFI_STATION_ENABLE = 1
-.endenum
-
-; Access Point config flags
-.enum AP_CONFIG_FLAGS
-  ACCESS_POINT_ENABLE = 1
-  WEB_SERVER_ENABLE = 2
+  ACCESS_POINT_ENABLE = 2
+  WEB_SERVER_ENABLE = 4
 .endenum
 
 ; File paths

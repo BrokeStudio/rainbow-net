@@ -46,7 +46,7 @@
     .macro RNBW_waitRX
       ; wait for message to be received
     :
-      bit RX
+      bit ::RNBW::RX
       bpl :-
     .endmacro
   .endif
@@ -55,7 +55,7 @@
     .macro RNBW_waitTX
       ; wait for message to be sent
     :
-      bit TX
+      bit ::RNBW::TX
       bpl :-
     .endmacro
   .endif

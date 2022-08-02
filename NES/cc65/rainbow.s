@@ -158,7 +158,7 @@
   .endproc
 
   .proc RNBW_debug_A
-    
+
     ; data to debug in A
     pha
     lda #2
@@ -318,7 +318,7 @@
     sta BUF_OUT+1
     stx BUF_OUT+2
     sty BUF_OUT+3
-    sta TX    
+    sta TX
 
     ; wait for message to be sent
   :
@@ -347,7 +347,7 @@
     sta BUF_OUT+0
     lda #TO_ESP::RND_GET_WORD
     sta BUF_OUT+1
-    sta TX    
+    sta TX
 
     ; wait for message to be sent
   :
@@ -382,7 +382,7 @@
     sta BUF_OUT+1
     stx BUF_OUT+2
     sty BUF_OUT+3
-    sta TX    
+    sta TX
 
     ; wait for message to be sent
   :

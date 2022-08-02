@@ -48,8 +48,6 @@
     ; return
     rts
 
-  
-
   RNBW_enableIRQ:
 
     ; enable ESP IRQ
@@ -59,8 +57,6 @@
 
     ; return
     rts
-
-  
 
   RNBW_sendData:
     ; A: message pointer lo byte
@@ -87,8 +83,6 @@
 
     ; return
     rts
-  
-
   RNBW_waitReady:
 
     ; ask for ESP status
@@ -114,8 +108,6 @@
     ; return
     rts
 
-  
-
   RNBW_copyRXtoTX:
 
     ; copy RX buffer to TX buffer
@@ -130,10 +122,8 @@
     ; return
     rts
 
-  
-
   RNBW_debug_A:
-    
+
     ; data to debug in A
     pha
     lda #2
@@ -151,8 +141,6 @@
 
     ; return
     rts
-
-  
 
   RNBW_debug_X:
 
@@ -172,10 +160,8 @@
     ; return
     rts
 
-  
-
   RNBW_debug_Y:
-  
+
     ; data to debug in Y
     lda #2
     sta RNBW_BUF_OUT+0
@@ -191,8 +177,6 @@
 
     ; return
     rts
-
-  
 
   RNBW_getWifiStatus:
 
@@ -222,8 +206,6 @@
     ; return
     rts
 
-  
-
   RNBW_getServerStatus:
 
     ; ask for server status
@@ -252,8 +234,6 @@
     ; return
     rts
 
-  
-
   RNBW_getRandomByte:
 
     lda #1
@@ -281,8 +261,6 @@
     ; return
     rts
 
-  
-
   RNBW_getRandomByteRange:
     ; X: min
     ; Y: max
@@ -293,7 +271,7 @@
     sta RNBW_BUF_OUT+1
     stx RNBW_BUF_OUT+2
     sty RNBW_BUF_OUT+3
-    sta RNBW_TX    
+    sta RNBW_TX
 
     ; wait for message to be sent
   -
@@ -314,15 +292,13 @@
     ; return
     rts
 
-  
-
   RNBW_getRandomWord:
 
     lda #1
     sta RNBW_BUF_OUT+0
     lda #TOESP_RND_GET_WORD
     sta RNBW_BUF_OUT+1
-    sta RNBW_TX    
+    sta RNBW_TX
 
     ; wait for message to be sent
   -
@@ -343,5 +319,3 @@
 
     ; return
     rts
-
-  

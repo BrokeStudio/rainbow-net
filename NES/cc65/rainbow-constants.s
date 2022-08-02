@@ -59,6 +59,7 @@ TX_ADD    = $4104
   NETWORK_GET_REGISTERED_DETAILS  ; Get registered network SSID
   NETWORK_REGISTER                ; Register network
   NETWORK_UNREGISTER              ; Unregister network
+  NETWORK_SET_ACTIVE              ; Set active network
 
 ; FILE COMMANDS
   FILE_OPEN                       ; Open working file
@@ -125,12 +126,12 @@ TX_ADD    = $4104
 
 ; WiFi status
 .enum WIFI_STATUS
-  NO_SHIELD = 255
+  TIMEOUT = 255
   IDLE_STATUS = 0
   NO_SSID_AVAIL
   SCAN_COMPLETED
   CONNECTED
-  CONNECT_FAILED
+  CONNECTION_FAILED
   CONNECTION_LOST
   WRONG_PASSWORD
   DISCONNECTED

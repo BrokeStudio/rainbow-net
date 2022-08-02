@@ -58,23 +58,24 @@ TOESP_NETWORK_GET_REGISTERED          EQU 33  ; Get registered networks status
 TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 34  ; Get registered network SSID
 TOESP_NETWORK_REGISTER                EQU 35  ; Register network
 TOESP_NETWORK_UNREGISTER              EQU 36  ; Unregister network
+TOESP_NETWORK_SET_ACTIVE              EQU 37  ; Set active network
 
 ; FILE COMMANDS
-TOESP_FILE_OPEN                       EQU 37  ; Open working file
-TOESP_FILE_CLOSE                      EQU 38  ; Close working file
-TOESP_FILE_STATUS                     EQU 39  ; Get working file status
-TOESP_FILE_EXISTS                     EQU 40  ; Check if file exists
-TOESP_FILE_DELETE                     EQU 41  ; Delete a file
-TOESP_FILE_SET_CUR                    EQU 42  ; Set working file cursor position a file
-TOESP_FILE_READ                       EQU 43  ; Read working file (at specific position)
-TOESP_FILE_WRITE                      EQU 44  ; Write working file (at specific position)
-TOESP_FILE_APPEND                     EQU 45  ; Append data to working file
-TOESP_FILE_COUNT                      EQU 46  ; Count files in a specific path
-TOESP_FILE_GET_LIST                   EQU 47  ; Get list of existing files in a path
-TOESP_FILE_GET_FREE_ID                EQU 48  ; Get an unexisting file ID in a specific path
-TOESP_FILE_GET_INFO                   EQU 49  ; Get file info (size + crc32)
-TOESP_FILE_DOWNLOAD                   EQU 50  ; Download a file
-TOESP_FILE_FORMAT                     EQU 51  ; Format file system and save current config
+TOESP_FILE_OPEN                       EQU 38  ; Open working file
+TOESP_FILE_CLOSE                      EQU 39  ; Close working file
+TOESP_FILE_STATUS                     EQU 40  ; Get working file status
+TOESP_FILE_EXISTS                     EQU 41  ; Check if file exists
+TOESP_FILE_DELETE                     EQU 42  ; Delete a file
+TOESP_FILE_SET_CUR                    EQU 43  ; Set working file cursor position a file
+TOESP_FILE_READ                       EQU 44  ; Read working file (at specific position)
+TOESP_FILE_WRITE                      EQU 45  ; Write working file (at specific position)
+TOESP_FILE_APPEND                     EQU 46  ; Append data to working file
+TOESP_FILE_COUNT                      EQU 47  ; Count files in a specific path
+TOESP_FILE_GET_LIST                   EQU 48  ; Get list of existing files in a path
+TOESP_FILE_GET_FREE_ID                EQU 49  ; Get an unexisting file ID in a specific path
+TOESP_FILE_GET_INFO                   EQU 50  ; Get file info (size + crc32)
+TOESP_FILE_DOWNLOAD                   EQU 51  ; Download a file
+TOESP_FILE_FORMAT                     EQU 52  ; Format file system and save current config
 
 ; commands from ESP
 
@@ -95,8 +96,8 @@ FROMESP_RND_BYTE                      EQU 8   ; Returns random byte value
 FROMESP_RND_WORD                      EQU 9   ; Returns random word value
 
 ; SERVER CMDS
-FROMESP_SERVER_STATUS                 EQU 10   ; Returns server connection status
-FROMESP_SERVER_PING                   EQU 11   ; Returns min, max and average round-trip time and number of lost packets
+FROMESP_SERVER_STATUS                 EQU 10  ; Returns server connection status
+FROMESP_SERVER_PING                   EQU 11  ; Returns min, max and average round-trip time and number of lost packets
 FROMESP_SERVER_SETTINGS               EQU 12  ; Returns server settings (host name + port)
 FROMESP_MESSAGE_FROM_SERVER           EQU 13  ; Message from server
 
@@ -118,12 +119,12 @@ FROMESP_FILE_INFO                     EQU 25  ; Returns file info (size + CRC32)
 FROMESP_FILE_DOWNLOAD                 EQU 26  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
 
 ; WiFi status
-RNBW_WIFI_NO_SHIELD EQU 255
+RNBW_WIFI_TIMEOUT EQU 255
 RNBW_WIFI_IDLE_STATUS EQU 0
 RNBW_WIFI_NO_SSID_AVAIL EQU 1
 RNBW_WIFI_SCAN_COMPLETED EQU 2
 RNBW_WIFI_CONNECTED EQU 3
-RNBW_WIFI_CONNECT_FAILED EQU 4
+RNBW_WIFI_CONNECTION_FAILED EQU 4
 RNBW_WIFI_CONNECTION_LOST EQU 5
 RNBW_WIFI_WRONG_PASSWORD 6
 RNBW_WIFI_DISCONNECTED EQU 7

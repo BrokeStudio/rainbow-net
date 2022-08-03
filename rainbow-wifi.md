@@ -1114,15 +1114,25 @@ This command returns the SSID of the requested configuration network.
 
 **Returns:**
 
-| Byte | Description                                 | Example                      |
-| ---- | ------------------------------------------- | ---------------------------- |
-| 0    | Length of the message (excluding this byte) | `6`                          |
-| 1    | Command ID (see commands from ESP)          | `NETWORK_REGISTERED_DETAILS` |
-| 2    | SSID string length                          | `4`                          |
-| 3    | SSID string                                 | `S`                          |
-| 4    | ...                                         | `S`                          |
-| 5    | ...                                         | `I`                          |
-| 6    | ...                                         | `D`                          |
+| Byte | Description                                 | Example                        |
+| ---- | ------------------------------------------- | ------------------------------ |
+| 0    | Length of the message (excluding this byte) | `16`                           |
+| 1    | Command ID (see commands from ESP)          | `NETWORK_REGISTERED_DETAILS`   |
+| 2    | Network active flag                         | `0` (0: inactive / 1: active)) |
+| 3    | SSID string length                          | `4`                            |
+| 4    | SSID string                                 | `S`                            |
+| 5    | ...                                         | `S`                            |
+| 6    | ...                                         | `I`                            |
+| 7    | ...                                         | `D`                            |
+| 8    | PASSWORD string length                      | `8`                            |
+| 9    | PASSWORD string                             | `P`                            |
+| 10   | ...                                         | `A`                            |
+| 11   | ...                                         | `S`                            |
+| 12   | ...                                         | `S`                            |
+| 13   | ...                                         | `W`                            |
+| 14   | ...                                         | `O`                            |
+| 15   | ...                                         | `R`                            |
+| 16   | ...                                         | `D`                            |
 
 [Back to command list](#Commands-overview)
 
@@ -1158,7 +1168,7 @@ Only one network can be active at a time.
 | 17   | ...                                         | `D`                            |
 
 **Notes:**
-- Strings can only use ASCII characters between 0x20 to 0x7E.  
+- Strings can only use ASCII characters between 0x20 to 0x7E.
 - SSID is 32 characters max.
 - Password is 64 characters max.
 

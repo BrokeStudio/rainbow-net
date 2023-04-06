@@ -79,7 +79,7 @@ ssmm rccp
 |||| ||||
 |||| |||+-  p - PRG banking mode
 |||| |||          0: 16K switchable + 8K switchable + 8K fixed
-|||| |||          1: 8K switchable + 8K switchable + 8K switchable + 8K fixed
+|||| |||          1:  8K switchable + 8K switchable + 8K switchable + 8K fixed
 |||| |++--  cc - CHR banking mode
 |||| |            00: 1K chr mode (chr bank 0 to 7 are used) - see note below
 |||| |            01: 2K chr mode (chr bank 0 to 3 are used)
@@ -519,84 +519,84 @@ This register allows you to specify an offset of $100 bytes from $4800.
 - \$4100  (R/W) configuration
 - \$4101  (R/W) RX data ready / acknowledge
 - \$4102  (R/W) TX data sent / send data
-- \$4103  (W) RX RAM destination address hi bits  
-- \$4104  (W) TX RAM source address hi bits  
+- \$4103  (W) RX RAM destination address hi bits
+- \$4104  (W) TX RAM source address hi bits
 
 ### Mapper configuration
 
-- \$4110  (W/R) %ssmm rccp  
-  - ss - 1-screen selector  
-  - mm - mirroring mode  
-  - r - CHR chip selector for pattern tables  
-  - cc - CHR banking mode  
-  - p - PRG banking mode  
+- \$4110  (W/R) %ssmm rccp
+  - ss - 1-screen selector
+  - mm - mirroring mode
+  - r - CHR chip selector for pattern tables
+  - cc - CHR banking mode
+  - p - PRG banking mode
 
 ### PRG-ROM / WRAM banking
 
-**Note:** \$E000-\$FFFF is fixed to last 8K bank  
+**Note:** \$E000-\$FFFF is fixed to last 8K bank
 
 - \$4120  (W)
-  - 16K @ \$8000-\$BFFF (mode 0)  
-  -  8K @ \$C000-\$DFFF (mode 1)  
+  - 16K @ \$8000-\$BFFF (mode 0)
+  -  8K @ \$C000-\$DFFF (mode 1)
 - \$4121  (W)
-  -  8K @ \$A000-\$BFFF(mode 1)  
+  -  8K @ \$A000-\$BFFF(mode 1)
 - \$4122  (W)
-  -  8K @ \$C000-\$DFFF(mode 0/1)  
+  -  8K @ \$C000-\$DFFF(mode 0/1)
 - \$4123  (W)
   -  4K @ \$5000-\$5FFF
 - \$4124  (W)
-  -  8K @ \$6000-\$7FFF  
+  -  8K @ \$6000-\$7FFF
 
 ### CHR-ROM / CHR-RAM banking
 
 - \$4138  (W)
   - 1K upper CHR bank bit (mode 0)
 - \$4130  (W)
-  - 1K @ \$0000-\$03FF (mode 0)  
-  - 2k @ \$0000-\$07FF (mode 1)  
-  - 4k @ \$0000-\$0FFF (mode 2)  
-  - 8k @ \$0000-\$07FF (mode 3)  
+  - 1K @ \$0000-\$03FF (mode 0)
+  - 2k @ \$0000-\$07FF (mode 1)
+  - 4k @ \$0000-\$0FFF (mode 2)
+  - 8k @ \$0000-\$07FF (mode 3)
 - \$4131  (W)
-  - 1K @ \$0400-\$07FF (mode 0)  
-  - 2k @ \$0800-\$0FFF (mode 1)  
-  - 4k @ \$1000-\$1FFF (mode 2)  
+  - 1K @ \$0400-\$07FF (mode 0)
+  - 2k @ \$0800-\$0FFF (mode 1)
+  - 4k @ \$1000-\$1FFF (mode 2)
 - \$4132  (W)
-  - 1K @ \$0800-\$0BFF (mode 0)  
-  - 2k @ \$1000-\$17FF (mode 1)  
+  - 1K @ \$0800-\$0BFF (mode 0)
+  - 2k @ \$1000-\$17FF (mode 1)
 - \$4133  (W)
-  - 1K @ \$0C00-\$0FFF (mode 0)  
-  - 2k @ \$1800-\$1FFF (mode 1)  
+  - 1K @ \$0C00-\$0FFF (mode 0)
+  - 2k @ \$1800-\$1FFF (mode 1)
 - \$4134  (W)
-  - 1K @ \$1000-\$13FF (mode 0)  
+  - 1K @ \$1000-\$13FF (mode 0)
 - \$4135  (W)
-  - 1K @ \$1400-\$17FF (mode 0)  
+  - 1K @ \$1400-\$17FF (mode 0)
 - \$4136  (W)
-  - 1K @ \$1800-\$1BFF (mode 0)  
+  - 1K @ \$1800-\$1BFF (mode 0)
 - \$4137  (W)
-  - 1K @ \$1C00-\$1FFF (mode 0)  
+  - 1K @ \$1C00-\$1FFF (mode 0)
 
 ### Scanline IRQ
 
-\$4140  (W) latch  
-\$4141  (W) reload  
-\$4142  (W) disable  
-\$4143  (W) enable  
+- \$4140  (W) latch
+- \$4141  (W) reload
+- \$4142  (W) disable
+- \$4143  (W) enable
 
 ### CPU Cycle IRQ
 
-\$4144  (W) latch low byte  
-\$4145  (W) latch high byte  
-\$4146  (W) control
-\$4147  (W) acknowledge  
+- \$4144  (W) latch low byte
+- \$4145  (W) latch high byte
+- \$4146  (W) control
+- \$4147  (W) acknowledge
 
 ### Audio expansion
 
-\$4150  (W) pusle 1 control  
-\$4151  (W) pulse 1 low freq  
-\$4152  (W) pulse 1 high freq  
-\$4153  (W) pusle 2 control  
-\$4154  (W) pulse 2 low freq  
-\$4155  (W) pulse 2 high freq  
-\$4156  (W) saw accumulator rate  
-\$4157  (W) saw low freq  
-\$4158  (W) saw high freq  
+- \$4150  (W) pusle 1 control
+- \$4151  (W) pulse 1 low freq
+- \$4152  (W) pulse 1 high freq
+- \$4153  (W) pusle 2 control
+- \$4154  (W) pulse 2 low freq
+- \$4155  (W) pulse 2 high freq
+- \$4156  (W) saw accumulator rate
+- \$4157  (W) saw low freq
+- \$4158  (W) saw high freq

@@ -154,16 +154,16 @@ Here's an example on how to send and receive data.
   sta $4904
   lda #$00                ; maximum value lo byte
   sta $4905
-  sta $4101               ; send the message
+  sta $4102               ; send the message
 
   ; now we check if the message has been sent
 :
-  bit $4101               ; check TX register bit 7, should be 1 when message is sent
+  bit $4102               ; check TX register bit 7, should be 1 when message is sent
   bpl :-
 
   ; now we wait for an answer
 :
-  bit $4102               ; check RX register bit 7, should be 1 when a message is received
+  bit $4101               ; check RX register bit 7, should be 1 when a message is received
   bpl :-
 
   ; let's copy the received value to zeropage

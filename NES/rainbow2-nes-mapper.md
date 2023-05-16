@@ -15,8 +15,8 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - 8K of FPGA-RAM
   - first 4K shared between CPU and PPU so it can be updated during rendering and used as nametables or pattern tables or extended tiles/attributes tables
   - last 2K are used to communicate with the WiFi chip but can also be used as general purpose PRG-RAM
-- Up to 8Mib PRG-ROM
-- Up to 8Mib CHR-ROM
+- Up to 8MiB PRG-ROM
+- Up to 8MiB CHR-ROM
 - 32K or 128K of PRG-RAM
 - 32K or 128K of CHR-RAM
 - Self-flashable PRG-ROM/CHR-ROM

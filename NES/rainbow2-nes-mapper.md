@@ -7,7 +7,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 # Overview
 
 - WiFi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional)
-- Embedded bootloader to dump/flash the cart using the WiFi chip (optional, needs the WiFi chip to work)
+- Embedded bootrom to dump/flash the cart using the WiFi chip (optional, needs the WiFi chip to work)
 - On board micro SD card support (optional, needs the WiFi chip to work)
 - 5 PRG-ROM banking modes
 - 2 PRG-RAM banking modes
@@ -534,12 +534,12 @@ BBBB BBBB
 ++++-++++- Bank index upper bits (\$413x) or lower bits (\$414x)
 ```
 
-## Scanline IRQ (\$4150-\$4151)
+## Scanline/PPU IRQ (\$4150-\$4151)
 
 Scanline IRQ is very close to MMC5's.  
 For more informations: https://www.nesdev.org/wiki/MMC5#Scanline_Detection_and_Scanline_IRQ.
 
-### IRQ latch (\$4150, write-only)
+### PPU IRQ latch (\$4150, write-only)
 
 **from MMC5 wiki page, need to test**  
 All eight bits specify the target scanline number at which to generate a scanline IRQ. Value $00 is a special case that will not produce IRQ pending conditions, though it is possible to get an IRQ while this is set to $00 (due to the pending flag being set already.) You will need to take additional measures to fully suppress the IRQ. See the detailed discussion.
@@ -552,7 +552,7 @@ LLLL LLLL
 ++++-++++- IRQ latch value
 ```
 
-### IRQ control (\$4151, read-write)
+### PPU IRQ control (\$4151, read-write)
 
 Write
 
@@ -581,7 +581,7 @@ The "In Frame" flag is set when the PPU is rendering a frame and cleared during 
 
 Any time this register is read, the Scanline IRQ Pending flag is cleared (acknowledging the IRQ).
 
-### IRQ offset (\$4152, write-only)
+### PPU IRQ offset (\$4152, write-only)
 
 The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.  
 You may need to trigger it early on a scanline to update a palette during HBlank for example.
@@ -612,7 +612,7 @@ The IRQ line is held low until it is acknowledged.
 - Within the IRQ handler, write to the IRQ Control command to acknowledge the IRQ.
 - Optional: Go back to Step 1 for the next IRQ.
 
-### IRQ latch/counter low byte (\$4158, write-only)
+### CPU IRQ latch/counter low byte (\$4158, write-only)
 
 This register specifies the IRQ latch value low byte.  
 The IRQ counter is updated at the same time.
@@ -625,7 +625,7 @@ LLLL LLLL
 ++++-++++- The low eight bits of the IRQ latch
 ```
 
-### IRQ latch/counter high byte (\$4159, write-only)
+### CPU IRQ latch/counter high byte (\$4159, write-only)
 
 This register specifies the IRQ latch value high byte.  
 The IRQ counter is updated at the same time.
@@ -638,7 +638,7 @@ HHHH HHHH
 ++++-++++- The high eight bits of the IRQ counter
 ```
 
-### IRQ control (\$415A, write-only)
+### CPU IRQ control (\$415A, write-only)
 
 Writing zero to this register will disable interrupts.
 
@@ -651,7 +651,7 @@ Writing zero to this register will disable interrupts.
        +-- IRQ enable (0: disabled, 1: enabled), this flag will be reset to 0 when IRQ counter reaches $0000.
 ```
 
-### IRQ acknowledge (\$415B, write-only)
+### CPU IRQ acknowledge (\$415B, write-only)
 
 Writing any value to this register will acknowledge the pending IRQ.  
 In addition, the 'A' control bit moves to the 'E' control bit, enabling or disabling IRQs.  
@@ -682,11 +682,9 @@ PPPV VVVV
 | 1              | Emulator     |
 | 2              | Web emulator |
 
-| Version (VVVVV) | PCB (0)                   | EMU (1) | WEB (2) |
-| --------------- | ------------------------- | ------- | ------- |
-| 0               | v1.0 (first proto board)  | v1.0    | v1.0    |
-| 1               | v1.1 (second proto board) | n/a     | n/a     |
-| 2               | v1.3 (third proto board)  | v1.1    | n/a     |
+| Version (VVVVV) | Description |
+| --------------- | ----------- |
+| 0               | v1.0        |
 
 ## Sound / Audio Expansion (\$41A0-\$41AF)
 
@@ -777,8 +775,8 @@ This register is readable and writable.
 
 ### RX - Reception (\$4171, read/write)
 
-Writing any value to this registrer acknowledge the last received message and set the bit 7 of the register to 0.  
-The bit 7 will be to 1 again when a new message if available.
+Writing any value to this register acknowledge the last received message and set the bit 7 of the register to 0.  
+The bit 7 will be set to 1 again when a new message if available.
 
 Reading:
 
@@ -789,8 +787,8 @@ DR.. ....
 ||
 |+------- Data ready, this flag is set to 1 if a message is waiting to be sent on the ESP side
 +-------- Data received ( 0 : FPGA can receive a new message | 1 : a new message is ready )
-          this flag is set to 1 when the FPGA has received a new message
-          if the I flag of the ESP_CONFIG register is set, NES IRQ will be triggered
+          This flag is set to 1 when the FPGA has received a new message
+          If the I flag of the ESP configuration register ($4170) is set, then the NES IRQ will be triggered
 ```
 
 ### TX - Transimission (\$4172, read/write)
@@ -805,16 +803,16 @@ Reading:
 ---- ----
 D... ....
 |
-+-------- Data sent ( 0 : sending data | 1 : data sent ) R
-          this flag is set to 1 when the FPGA has sent a message
++-------- Data sent ( 0 : sending data | 1 : data sent )
+          This flag is set to 1 when the FPGA has sent a message
 ```
 
 ### RX RAM destination address (\$4173, write-only)
 
-The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
+The FPGA uses its internal RAM to store messages received from the ESP.  
 Only the last 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
-This register allows you to specify an offset of \$100 bytes from \$4800.
+This register allows you to specify a \$100 bytes page from \$4800 to be used for newly received messages.
 
 ```
 7  bit  0
@@ -826,10 +824,10 @@ This register allows you to specify an offset of \$100 bytes from \$4800.
 
 ### TX RAM source address (\$4174, write-only)
 
-The FPGA uses its internal RAM to store new messages from the ESP or send messages to the ESP.  
+The FPGA uses its internal RAM to store messages to be sent to the ESP.  
 Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
-This register allows you to specify an offset of \$100 bytes from \$4800.
+This register allows you to specify a \$100 bytes page from \$4800 to be used for ready to be sent messages.
 
 ```
 7  bit  0

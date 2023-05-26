@@ -19,6 +19,7 @@ TX_ADD    = $4174
   BUFFER_CLEAR_RX_TX              ; Clear RX/TX buffers
   BUFFER_DROP_FROM_ESP            ; Drop messages from ESP buffer (TX)
   ESP_GET_FIRMWARE_VERSION        ; Get ESP/Rainbow firmware version
+  ESP_FACTORY_RESET               ; Reset ESP to factory settings
   ESP_RESTART                     ; Restart ESP
 
 ; WIFI CMDS
@@ -83,42 +84,51 @@ TX_ADD    = $4174
 
 ; ESP CMDS
   READY                           ; ESP is ready
-  DEBUG_LEVEL                     ; Returns debug configuration
-  ESP_FIRMWARE_VERSION            ; Returns ESP/Rainbow firmware version
+  DEBUG_LEVEL                     ; Return debug configuration
+  ESP_FIRMWARE_VERSION            ; Return ESP/Rainbow firmware version
+  ESP_FACTORY_RESET               ; See ESP_FACTORY_RESET_RES enum for details on returned
 
 ; WIFI / ACCESS POINT CMDS
-  WIFI_STATUS                     ; Returns WiFi connection status
-  SSID                            ; Returns WiFi / Access Point SSID
-  IP                              ; Returns WiFi / Access Point IP address
-  WIFI_CONFIG                     ; Returns WiFi station / Access Point / Web Server
+  WIFI_STATUS                     ; Return WiFi connection status
+  SSID                            ; Return WiFi / Access Point SSID
+  IP                              ; Return WiFi / Access Point IP address
+  WIFI_CONFIG                     ; Return WiFi station / Access Point / Web Server
 
 ; RND CMDS
-  RND_BYTE                        ; Returns random byte value
-  RND_WORD                        ; Returns random word value
+  RND_BYTE                        ; Return random byte value
+  RND_WORD                        ; Return random word value
 
 ; SERVER CMDS
-  SERVER_STATUS                   ; Returns server connection status
-  SERVER_PING                     ; Returns min, max and average round-trip time and number of lost packets
-  SERVER_SETTINGS                 ; Returns server settings (host name + port)
+  SERVER_STATUS                   ; Return server connection status
+  SERVER_PING                     ; Return min, max and average round-trip time and number of lost packets
+  SERVER_SETTINGS                 ; Return server settings (host name + port)
   MESSAGE_FROM_SERVER             ; Message from server
 
 ; NETWORK CMDS
-  NETWORK_COUNT                   ; Returns number of networks found
-  NETWORK_SCANNED_DETAILS         ; Returns details for a scanned network
-  NETWORK_REGISTERED_DETAILS      ; Returns SSID for a registered network
-  NETWORK_REGISTERED              ; Returns registered networks status
+  NETWORK_COUNT                   ; Return number of networks found
+  NETWORK_SCANNED_DETAILS         ; Return details for a scanned network
+  NETWORK_REGISTERED_DETAILS      ; Return SSID for a registered network
+  NETWORK_REGISTERED              ; Return registered networks status
 
 ; FILE CMDS
-  FILE_STATUS                     ; Returns working file status
-  FILE_EXISTS                     ; Returns if file exists or not
+  FILE_STATUS                     ; Return working file status
+  FILE_EXISTS                     ; Return if file exists or not
   FILE_DELETE                     ; See FILE_DELETE_RES enum for details on returned value
-  FILE_LIST                       ; Returns path file list (FILE_GET_LIST)
-  FILE_DATA                       ; Returns file data (FILE_READ)
-  FILE_COUNT                      ; Returns file count in a specific path
-  FILE_ID                         ; Returns a free file ID (FILE_GET_FREE_ID)
-  FILE_INFO                       ; Returns file info (size + CRC32) (FILE_GET_INFO)
+  FILE_LIST                       ; Return path file list (FILE_GET_LIST)
+  FILE_DATA                       ; Return file data (FILE_READ)
+  FILE_COUNT                      ; Return file count in a specific path
+  FILE_ID                         ; Return a free file ID (FILE_GET_FREE_ID)
+  FILE_INFO                       ; Return file info (size + CRC32) (FILE_GET_INFO)
   FILE_DOWNLOAD                   ; See FILE_DOWNLOAD_RES enum for details on returned value
 
+.endenum
+
+; ESP factory reset result codes
+.enum ESP_FACTORY_RESET_RES
+  SUCCESS
+  ERROR_WHILE_RESETTING_CONFIG
+  ERROR_WHILE_DELETING_TWEB
+  ERROR_WHILE_DELETING_WEB
 .endenum
 
 ; WiFi status
@@ -132,6 +142,16 @@ TX_ADD    = $4174
   CONNECTION_LOST
   WRONG_PASSWORD
   DISCONNECTED
+.endenum
+
+; WiFi error
+.enum WIFI_ERROR
+  UNKNOWN = 255
+  NO_ERROR = 0
+  NO_SSID_AVAIL = 1
+  CONNECTION_FAILED = 4
+  CONNECTION_LOST = 5
+  WRONG_PASSWORD = 6
 .endenum
 
 ; Server protocols

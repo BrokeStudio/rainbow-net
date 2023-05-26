@@ -1,21 +1,22 @@
 # Rainbow WiFi documentation
 
-> **Disclaimer**  
->  
+> **Disclaimer**
+>
 > This document and the project are still WIP and are subject to modifications.  
-> &nbsp;  
+> &nbsp;
 
 ## Credits
 
-The Rainbow project is developed by [Antoine Gohin / Broke Studio](https://twitter.com/Broke_Studio).  
+The Rainbow project is developed by [Antoine Gohin / Broke Studio](https://twitter.com/Broke_Studio).
 
 Thanks to :
 
-- [Paul](https://twitter.com/InfiniteNesLive) / [InfiniteNesLives](http://www.infiniteneslives.com) for taking time to explain me lots of hardware stuff
-- Christian Gohin, my father, who helped me designing the first prototype board
-- [Sylvain Gadrat](https://sgadrat.itch.io/super-tilt-bro) aka [RogerBidon](https://twitter.com/RogerBidon) for helping me update [FCEUX](http://www.fceux.com) to emulate the Rainbow mapper ❤
+- [Paul](https://twitter.com/InfiniteNesLive) / [InfiniteNesLives](http://www.infiniteneslives.com) for taking time to explain me lots of NES specific hardware stuff
+- Christian Gohin, my father, who helped me designing the first prototype board and fixing hardware issues
+- [Sylvain Gadrat](https://sgadrat.itch.io/super-tilt-bro) aka [RogerBidon](https://twitter.com/RogerBidon) for helping me update [FCEUX](http://www.fceux.com) to emulate the Rainbow mapper
 - The NES WiFi Club (cheers guys 😊)
 - [NESdev](http://www.nesdev.com) community
+- Ludy, my wife, for the endless support ❤
 
 ## Table of content
 
@@ -40,6 +41,7 @@ Thanks to :
     - [BUFFER_CLEAR_RX_TX](#buffer_clear_rx_tx)
     - [BUFFER_DROP_FROM_ESP](#buffer_drop_from_esp)
     - [ESP_GET_FIRMWARE_VERSION](#esp_get_firmware_version)
+    - [ESP_FACTORY_RESET](#esp_factory_reset)
     - [ESP_RESTART](#esp_restart)
     - [WIFI_GET_STATUS](#wifi_get_status)
     - [WIFI_GET_SSID](#wifi_get_ssid)
@@ -86,7 +88,7 @@ Thanks to :
     - [FILE_GET_INFO](#file_get_info)
     - [FILE_DOWNLOAD](#file_download)
     - [FILE_FORMAT](#file_format)
-  - [Bootloader](#bootloader)
+  - [Bootrom](#bootrom)
   - [TODO](#todo)
 
 ---
@@ -98,22 +100,22 @@ It uses a WiFi chip (**ESP8266**, called **ESP** in this doc) embedded on the ca
 
 ## Why 'Rainbow'?
 
-There are two reasons for this name.  
+There are two reasons for this name.
 
-The first one is because when I was learning Verilog and was playing with my CPLD dev board, I wired it with a lot of colored floating wires as you can see in this [Tweet](https://twitter.com/Broke_Studio/status/1031836021976170497), and it looked a lot like a rainbow.  
+The first one is because when I was learning Verilog and was playing with my CPLD dev board, I wired it with a lot of colored floating wires as you can see in this [Tweet](https://twitter.com/Broke_Studio/status/1031836021976170497), and it looked a lot like a rainbow.
 
 Second reason is because Kevin Hanley from KHAN games is working on a game called Unicorn, which is based on an old BBS game called Legend of the Red Dragon, and therefore needs a connection to the outside world to be played online. This project would be a great oppurtunity to help him, and as everyone knows, Unicorns love Rainbows :)
 
 ## Mapper registers
 
 First Rainbow prototypes were based on UNROM-512 mapper to make the development easier.  
-Now the board uses its own mapper. Detailed documentation of the mapper can be found here: [rainbow-mapper.md](rainbow-mapper.md).  
+Now the board uses its own mapper. Detailed documentation of the mapper can be found here: [rainbow-mapper.md](rainbow-mapper.md).
 
 ## Message format
 
-A message is what is send to or received from the ESP and always have the same format, following these rules:  
+A message is what is send to or received from the ESP and always have the same format, following these rules:
 
-- First byte is the message length (number of bytes following this first byte, minimum is 1, maximum is 255, *can't be 0*).
+- First byte is the message length (number of bytes following this first byte, minimum is 1, maximum is 255, _can't be 0_).
 - Second byte is the command (see [Commands to the ESP](#Commands-to-the-ESP) and [Commands from the ESP](#Commands-from-the-ESP)).
 - Following bytes are the parameters/data for the command.
 
@@ -121,14 +123,15 @@ A message is what is send to or received from the ESP and always have the same f
 
 ### Configuration
 
-First we need to configure Rainbow registers.  
+First we need to configure Rainbow registers.
+
 ```
   ; received data will be stored in FPGA RAM at $4800
   ; data to be sent must be written to FPGA RAM at $4900
   lda #$00  ; $48 works too if you want it to be clearer
-  sta $4103 ; RX hi
+  sta $4103 ; RX high
   lda #$01  ; $49 works too if you want it to be clearer
-  sta $4104 ; TX hi
+  sta $4104 ; TX high
 
   ; Enable ESP communication
   lda #1
@@ -137,7 +140,7 @@ First we need to configure Rainbow registers.
 
 ### Send and receive data
 
-Here's an example on how to send and receive data.  
+Here's an example on how to send and receive data.
 
 ```
   ; to send data we first need to write our message to RAM at $4900 since that's what we configured above
@@ -146,13 +149,13 @@ Here's an example on how to send and receive data.
   sta $4900
   lda #RND_GET_WORD_RANGE ; command
   sta $4901
-  lda #$00                ; minimum value hi byte
+  lda #$00                ; minimum value high byte
   sta $4902
-  lda #$10                ; minimum value lo byte
+  lda #$10                ; minimum value low byte
   sta $4903
-  lda #$20                ; maximum value hi byte
+  lda #$20                ; maximum value high byte
   sta $4904
-  lda #$00                ; maximum value lo byte
+  lda #$00                ; maximum value low byte
   sta $4905
   sta $4102               ; send the message
 
@@ -169,9 +172,9 @@ Here's an example on how to send and receive data.
   ; let's copy the received value to zeropage
   ; $4800 should be the received message length
   ; $4801 should be the received message command (RND_WORD here)
-  lda $4802               ; received value hi byte
+  lda $4802               ; received value high byte
   sta $00
-  lda $4803               ; received value lo byte
+  lda $4803               ; received value low byte
   sta $01
 
   ; we can now acknowledge the received message
@@ -193,100 +196,102 @@ Here's an example on how to send and receive data.
 | 4     | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                       |
 | 5     | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->NES) buffer                                   |
 | 6     | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                              |
-| 7     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                           |
+| 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                             |
+| 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                           |
 |       |                                                                   | **WIFI CMDS**                                                             |
-| 8     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get WiFi connection status                                                |
-| 9     | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get WiFi network SSID                                                     |
-| 10    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get WiFi IP address                                                       |
-| 11    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get WiFi / Access Point / Web Server config                               |
-| 12    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set WiFi / Access Point / Web Server config                               |
+| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get WiFi connection status                                                |
+| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get WiFi network SSID                                                     |
+| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get WiFi IP address                                                       |
+| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get WiFi / Access Point / Web Server config                               |
+| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set WiFi / Access Point / Web Server config                               |
 |       |                                                                   | **ACCESS POINT CMDS**                                                     |
-| 13    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                             |
-| 14    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                               |
+| 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                             |
+| 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                               |
 |       |                                                                   | **RND CMDS**                                                              |
-| 15    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                           |
-| 16    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                    |
-| 17    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                           |
-| 18    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                    |
+| 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                           |
+| 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                    |
+| 18    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                           |
+| 19    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                    |
 |       |                                                                   | **SERVER CMDS**                                                           |
-| 19    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                              |
-| 20    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                           |
-| 21    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                       |
-| 22    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                     |
-| 23    | [SERVER_GET_CONFIG_SETTINGS](#SERVER_GET_CONFIG_SETTINGS)         | Get server host name and port defined in the Rainbow config file          |
-| 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                     |
-| 25    | [SERVER_RESTORE_SETTINGS](#SERVER_RESTORE_SETTINGS)               | Restore server host name and port to values defined in the Rainbow config |
-| 26    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                         |
-| 27    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                    |
-| 28    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                    |
+| 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                              |
+| 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                           |
+| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                       |
+| 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                     |
+| 24    | [SERVER_GET_CONFIG_SETTINGS](#SERVER_GET_CONFIG_SETTINGS)         | Get server host name and port defined in the Rainbow config file          |
+| 25    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                     |
+| 26    | [SERVER_RESTORE_SETTINGS](#SERVER_RESTORE_SETTINGS)               | Restore server host name and port to values defined in the Rainbow config |
+| 27    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                         |
+| 28    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                    |
+| 29    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                    |
 |       |                                                                   | **NETWORK CMDS**                                                          |
-| 29    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks around and return count                                     |
-| 30    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                          |
-| 31    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                            |
-| 32    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                               |
-| 33    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                          |
-| 34    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                        |
-| 35    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                        |
+| 30    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks around and return count                                     |
+| 31    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                          |
+| 32    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                            |
+| 33    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                               |
+| 34    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                          |
+| 35    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                        |
+| 36    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                        |
 |       |                                                                   | **FILE CMDS**                                                             |
-| 36    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                         |
-| 37    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                        |
-| 38    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                   |
-| 39    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                      |
-| 40    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                             |
-| 41    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                   |
-| 42    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                  |
-| 43    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                 |
-| 44    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                               |
-| 45    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                    |
-| 46    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path                             |
-| 47    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path.                             |
-| 48    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                              |
-| 49    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
-| 50    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
+| 37    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                         |
+| 38    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                        |
+| 39    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                   |
+| 40    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                      |
+| 41    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                             |
+| 42    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                   |
+| 43    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                  |
+| 44    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                 |
+| 45    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                               |
+| 46    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                    |
+| 47    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)       |
+| 48    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)        |
+| 49    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                              |
+| 50    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
+| 51    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
 
 ### Commands from the ESP
 
-| Value | Command                                                           | Description      |
-| ----- | ----------------------------------------------------------------- | ---------------- |
-|       |                                                                   | **ESP CMDS**     |
-| 0     | [READY](#ESP_GET_STATUS)                                          |                  |
-| 1     | [DEBUG_LEVEL](#DEBUG_GET_LEVEL)                                   |                  |
-| 2     | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                 |                  |
-|       |                                                                   | **WIFI CMDS**    |
-| 3     | [WIFI_STATUS](#WIFI_GET_STATUS)                                   |                  |
-| 4     | [SSID (WIFI)](#WIFI_GET_SSID) / [SSID (AP)](#AP_GET_SSID)         |                  |
-| 5     | [IP_ADDRESS (WIFI)](#WIFI_GET_IP) / [IP_ADDRESS (AP)](#AP_GET_IP) |                  |
-| 6     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                   |                  |
-|       |                                                                   | **RND CMDS**     |
-| 7     | [RND_BYTE](#RND_GET_BYTE)                                         |                  |
-| 8     | [RND_WORD](#RND_GET_WORD)                                         |                  |
-|       |                                                                   | **SERVER CMDS**  |
-| 9     | [SERVER_STATUS](#SERVER_GET_STATUS)                               |                  |
-| 10    | [SERVER_PING](#SERVER_GET_PING)                                   |                  |
-| 11    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                           |                  |
-| 12    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                   |                  |
-|       |                                                                   | **NETWORK CMDS** |
-| 13    | [NETWORK_COUNT](#NETWORK_SCAN)                                    |                  |
-| 14    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)           |                  |
-| 15    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)     |                  |
-| 16    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                     |                  |
-|       |                                                                   | **FILE CMDS**    |
-| 17    | [FILE_STATUS](#FILE_STATUS)                                       |                  |
-| 18    | [FILE_EXISTS](#FILE_EXISTS)                                       |                  |
-| 19    | [FILE_DELETE](#FILE_DELETE)                                       |                  |
-| 20    | [FILE_LIST](#FILE_GET_LIST)                                       |                  |
-| 21    | [FILE_DATA](#FILE_READ)                                           |                  |
-| 22    | [FILE_COUNT](#FILE_COUNT)                                         |                  |
-| 23    | [FILE_ID](#FILE_GET_FREE_ID)                                      |                  |
-| 24    | [FILE_INFO](#FILE_GET_INFO)                                       |                  |
-| 25    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   |                  |
+| Value | Command                                                           | Description                                                            |
+| ----- | ----------------------------------------------------------------- | ---------------------------------------------------------------------- |
+|       |                                                                   | **ESP CMDS**                                                           |
+| 0     | [READY](#ESP_GET_STATUS)                                          | ESP is ready                                                           |
+| 1     | [DEBUG_LEVEL](#DEBUG_GET_LEVEL)                                   | Return debug configuration                                             |
+| 2     | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                 | Return ESP/Rainbow firmware version                                    |
+| 3     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Return result code (see command for details)                           |
+|       |                                                                   | **WIFI CMDS**                                                          |
+| 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                   | Return WiFi connection status                                          |
+| 5     | [SSID (WIFI)](#WIFI_GET_SSID) / [SSID (AP)](#AP_GET_SSID)         | Return WiFi / Access Point SSID                                        |
+| 6     | [IP_ADDRESS (WIFI)](#WIFI_GET_IP) / [IP_ADDRESS (AP)](#AP_GET_IP) | Return WiFi / Access Point IP address                                  |
+| 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                   | Return WiFi station / Access Point / Web Server                        |
+|       |                                                                   | **RND CMDS**                                                           |
+| 8     | [RND_BYTE](#RND_GET_BYTE)                                         | Return random byte value                                               |
+| 9     | [RND_WORD](#RND_GET_WORD)                                         | Return random word value                                               |
+|       |                                                                   | **SERVER CMDS**                                                        |
+| 10    | [SERVER_STATUS](#SERVER_GET_STATUS)                               | Return server connection status                                        |
+| 11    | [SERVER_PING](#SERVER_GET_PING)                                   | Return min, max and average round-trip time and number of lost packets |
+| 12    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                           | Return server settings (host name + port)                              |
+| 13    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                   | Message from server                                                    |
+|       |                                                                   | **NETWORK CMDS**                                                       |
+| 14    | [NETWORK_COUNT](#NETWORK_SCAN)                                    | Return number of networks found                                        |
+| 15    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)           | Return details for a scanned network                                   |
+| 16    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)     | Return SSID for a registered network                                   |
+| 17    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                     | Return registered networks status                                      |
+|       |                                                                   | **FILE CMDS**                                                          |
+| 18    | [FILE_STATUS](#FILE_STATUS)                                       | Return working file status                                             |
+| 19    | [FILE_EXISTS](#FILE_EXISTS)                                       | Return if file exists or not                                           |
+| 20    | [FILE_DELETE](#FILE_DELETE)                                       | Return result code (see command for details)                           |
+| 21    | [FILE_LIST](#FILE_GET_LIST)                                       | Return path file list (FILE_GET_LIST)                                  |
+| 22    | [FILE_DATA](#FILE_READ)                                           | Return file data (FILE_READ)                                           |
+| 23    | [FILE_COUNT](#FILE_COUNT)                                         | Return file count in a specific path                                   |
+| 24    | [FILE_ID](#FILE_GET_FREE_ID)                                      | Return a free file ID (FILE_GET_FREE_ID)                               |
+| 25    | [FILE_INFO](#FILE_GET_INFO)                                       | Return file info (size + CRC32) (FILE_GET_INFO)                        |
+| 26    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Return result code (see command for details)                           |
 
 ## Commands details
 
 ### ESP_GET_STATUS
 
 This command asks the WiFi module if it's ready.  
-The ESP will only answer when ready, so once you sent the message, just wait for the answer.  
+The ESP will only answer when ready, so once you sent the message, just wait for the answer.
 
 | Byte | Description                                 | Example          |
 | ---- | ------------------------------------------- | ---------------- |
@@ -306,7 +311,7 @@ The ESP will only answer when ready, so once you sent the message, just wait for
 
 ### DEBUG_GET_LEVEL
 
-This command returns the debug level. 
+This command returns the debug level.
 
 | Byte | Description                                 | Example           |
 | ---- | ------------------------------------------- | ----------------- |
@@ -329,7 +334,7 @@ See [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL) command for debug level value details
 
 ### DEBUG_SET_LEVEL
 
-This command sets the debug level. 
+This command sets the debug level.
 
 | Byte | Description                                 | Example           |
 | ---- | ------------------------------------------- | ----------------- |
@@ -362,7 +367,7 @@ Note: serial/network logs are not recommended when lots of messages are exchange
 
 This command logs data on the serial port of the ESP.  
 Can be read using a UART/USB adapter, RX to pin 5 of the ESP board edge connector, GND to pin 6. (v1.1 and v1.3)  
-Bit 0 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)).  
+Bit 0 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)).
 
 | Byte | Description                                 | Example     |
 | ---- | ------------------------------------------- | ----------- |
@@ -379,11 +384,11 @@ Bit 0 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL
 ### BUFFER_CLEAR_RX_TX
 
 This command clears TX/RX buffers.  
-Should be used on startup to make sure that we start with a clean setup.  
+Should be used on startup to make sure that we start with a clean setup.
 
 **Important** do NOT send another message right after sending a BUFFER_CLEAR_RX_TX command. The new message would arrive before the buffers are cleared and would then be lost. However, you can send ESP_GET_STATUS until you get a response, and then read $4100 until $4101.7 is 0.
 
-**Note:** sending a BUFFER_CLEAR_RX_TX at the ROM startup is HIGLY recommended to avoid undefined behaviour if resetting the console in the middle of communication between the NES and the ESP.  
+**Note:** sending a BUFFER_CLEAR_RX_TX at the ROM startup is HIGLY recommended to avoid undefined behaviour if resetting the console in the middle of communication between the NES and the ESP.
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
@@ -397,7 +402,7 @@ Should be used on startup to make sure that we start with a clean setup.
 ### BUFFER_DROP_FROM_ESP
 
 This command drops messages of a given type from TX (ESP->NES) buffer.  
-You can keep the most recent messages using the second parameter.  
+You can keep the most recent messages using the second parameter.
 
 | Byte | Description                                 | Example                |
 | ---- | ------------------------------------------- | ---------------------- |
@@ -412,7 +417,7 @@ You can keep the most recent messages using the second parameter.
 
 ### ESP_GET_FIRMWARE_VERSION
 
-This command returns the Rainbow firmware version.  
+This command returns the Rainbow firmware version.
 
 | Byte | Description                                 | Example                    |
 | ---- | ------------------------------------------- | -------------------------- |
@@ -451,9 +456,42 @@ This command returns the Rainbow firmware version.
 
 ---
 
+### ESP_FACTORY_RESET
+
+This command resets the ESP to factory settings.  
+Web application folder `/web` will be deleted and config file will be reset.  
+Other files will be preserved.  
+This won't reset the ESP firmware to a previous version.
+
+| Byte | Description                                 | Example             |
+| ---- | ------------------------------------------- | ------------------- |
+| 0    | Length of the message (excluding this byte) | `1`                 |
+| 1    | Command ID (see commands to ESP)            | `ESP_FACTORY_RESET` |
+
+**Returns:**
+
+| Byte | Description                                 | Example                  |
+| ---- | ------------------------------------------- | ------------------------ |
+| 0    | Length of the message (excluding this byte) | `2`                      |
+| 1    | Command ID (see commands from ESP)          | `ESP_FACTORY_RESET`      |
+| 2    | WiFi status (see below)                     | `WIFI_STATUS::CONNECTED` |
+
+**Result codes:**
+
+| Value | WIFI_STATUS                  | Description                          |
+| ----- | ---------------------------- | ------------------------------------ |
+| 0     | SUCCESS                      | Factory reset successfully completed |
+| 1     | ERROR_WHILE_DELETING_WEB     | Error while deleting folder `/web`   |
+| 1     | ERROR_WHILE_DELETING_TWEB    | Error while deleting folder `/tweb`  |
+| 3     | ERROR_WHILE_RESETTING_CONFIG | Error while resetting config file    |
+
+[Back to command list](#Commands-overview)
+
+---
+
 ### ESP_RESTART
 
-This command resets the ESP.  
+This command resets the ESP.
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
@@ -477,9 +515,12 @@ This command asks the WiFi status.
 
 | Byte | Description                                 | Example                  |
 | ---- | ------------------------------------------- | ------------------------ |
-| 0    | Length of the message (excluding this byte) | `2`                      |
+| 0    | Length of the message (excluding this byte) | `3`                      |
 | 1    | Command ID (see commands from ESP)          | `WIFI_STATUS`            |
 | 2    | WiFi status (see below)                     | `WIFI_STATUS::CONNECTED` |
+| 3    | WiFi error (see below)                      | `WIFI_ERROR::NO_ERROR`   |
+|      | _If the WiFi status is not CONNECTED, you_  |                          |
+|      | _can check the WiFi error._                 |                          |
 
 **WiFi status:**
 
@@ -495,6 +536,17 @@ This command asks the WiFi status.
 | 6     | WRONG_PASSWORD  | Configured password is incorrect                                       |
 | 7     | DISCONNECTED    | WiFi module disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
 |       |                 | or disconnected from network                                           |
+
+**WiFi status:**
+
+| Value | WIFI_ERROR      | Description                       |
+| ----- | --------------- | --------------------------------- |
+| 255   | UNKNOWN         | Unknown error                     |
+| 0     | NO_ERROR        | NO ERROR                          |
+| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached |
+| 4     | CONNECT_FAILED  | WiFi connection failed            |
+| 5     | CONNECTION_LOST | WiFi connection lost              |
+| 6     | WRONG_PASSWORD  | Configured password is incorrect  |
 
 [Back to command list](#Commands-overview)
 
@@ -516,7 +568,7 @@ This command returns the WiFi SSID (if connected).
 | 0    | Length of the message (excluding this byte)            | `2` or more                  |
 | 1    | Command ID (see commands from ESP)                     | `SSID`                       |
 | 2    | SSID string length                                     | `0` if not connected or more |
-|      | *the next byte are returned only if WiFi is connected* |                              |
+|      | _the next byte are returned only if WiFi is connected_ |                              |
 | 3    | SSID string                                            | `M`                          |
 | 4    | ...                                                    | `Y`                          |
 | 5    | ...                                                    | `_`                          |
@@ -545,7 +597,7 @@ This command asks the WiFi IP address (if connected).
 | 0    | Length of the message (excluding this byte)            | `2` or more                  |
 | 1    | Command ID (see commands from ESP)                     | `IP_ADDRESS`                 |
 | 2    | IP address string length                               | `0` if not connected or more |
-|      | *the next byte are returned only if WiFi is connected* |                              |
+|      | _the next byte are returned only if WiFi is connected_ |                              |
 | 3    | IP address string                                      | `1`                          |
 | 4    | ...                                                    | `9`                          |
 | 5    | ...                                                    | `2`                          |
@@ -563,7 +615,7 @@ This command asks the WiFi IP address (if connected).
 
 ### WIFI_GET_CONFIG
 
-This command returns the WiFi station status.  
+This command returns the WiFi station status.
 
 | Byte | Description                                 | Example           |
 | ---- | ------------------------------------------- | ----------------- |
@@ -588,7 +640,7 @@ This command returns the WiFi station status.
 
 ### WIFI_SET_CONFIG
 
-This command sets the WiFi station, Access Point and Web Server configuration / status.  
+This command sets the WiFi station, Access Point and Web Server configuration / status.
 
 | Byte | Description                                     | Example           |
 | ---- | ----------------------------------------------- | ----------------- |
@@ -688,7 +740,7 @@ This command returns a random byte between 0 and 255.
 
 ### RND_GET_BYTE_RANGE
 
-This command returns a random byte between custom min and max values.  
+This command returns a random byte between custom min and max values.
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
@@ -790,15 +842,15 @@ This command asks the server status.
 This command pings the server and returns the min, max and average round-trip time and number of lost packets.  
 If another ping is already in progress, the command will be ignored.  
 Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.  
-If no number of pings is passed, the default value will be 4.  
+If no number of pings is passed, the default value will be 4.
 
 | Byte | Description                                                            | Example           |
 | ---- | ---------------------------------------------------------------------- | ----------------- |
 | 0    | Length of the message (excluding this byte)                            | `1` or `2`        |
 | 1    | Command ID (see commands to ESP)                                       | `SERVER_GET_PING` |
-|      | *the next byte is required if you want to specify the number of pings* |                   |
+|      | _the next byte is required if you want to specify the number of pings_ |                   |
 | 2    | Number of pings                                                        | `4`               |
-|      | *if 0 is passed, this will perform 4 pings by default*                 |                   |
+|      | _if 0 is passed, this will perform 4 pings by default_                 |                   |
 
 **Returns:**
 
@@ -850,7 +902,7 @@ This command sets the protocol to be use when talking to game server.
 
 ### SERVER_GET_SETTINGS
 
-This command returns the current server settings (hostname and port).  
+This command returns the current server settings (hostname and port).
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
@@ -889,7 +941,7 @@ This command returns the current server settings (hostname and port).
 
 ### SERVER_GET_CONFIG_SETTINGS
 
-This command returns the server settings (hostname and port) from the Rainbow config file.  
+This command returns the server settings (hostname and port) from the Rainbow config file.
 
 | Byte | Description                                 | Example                      |
 | ---- | ------------------------------------------- | ---------------------------- |
@@ -929,7 +981,7 @@ This command returns the server settings (hostname and port) from the Rainbow co
 ### SERVER_SET_SETTINGS
 
 This command sets the current server settings (hostname and port).  
-It doesn't overwrite values set in the Rainbow config file.  
+It doesn't overwrite values set in the Rainbow config file.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
@@ -970,7 +1022,7 @@ This command sets the current server settings (hostname and port) to what is def
 
 When using WS protocol, this command connects to the server.  
 When using TCP protocol, this command conects to the server.  
-When using UDP protocol, this command starts the UDP server on the ESP side using a random port between 49152 and 65535.  
+When using UDP protocol, this command starts the UDP server on the ESP side using a random port between 49152 and 65535.
 
 | Byte | Description                                 | Example          |
 | ---- | ------------------------------------------- | ---------------- |
@@ -985,7 +1037,7 @@ When using UDP protocol, this command starts the UDP server on the ESP side usin
 
 When using WS protocol, this command disconnects from server.  
 When using TCP protocol, this command disconnects from server.  
-When using UDP protocol, this command stops the UDP server on the ESP side.  
+When using UDP protocol, this command stops the UDP server on the ESP side.
 
 | Byte | Description                                 | Example             |
 | ---- | ------------------------------------------- | ------------------- |
@@ -998,7 +1050,7 @@ When using UDP protocol, this command stops the UDP server on the ESP side.
 
 ### SERVER_SEND_MESSAGE
 
-This command sends a message to the server.  
+This command sends a message to the server.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
@@ -1014,7 +1066,7 @@ This command sends a message to the server.
 
 ### NETWORK_SCAN
 
-This command scans the networks around and returns the number of networks found.  
+This command scans the networks around and returns the number of networks found.
 
 | Byte | Description                                 | Example        |
 | ---- | ------------------------------------------- | -------------- |
@@ -1035,7 +1087,7 @@ This command scans the networks around and returns the number of networks found.
 
 ### NETWORK_GET_DETAILS
 
-This command returns the network SSID of a scanned network referenced by the passed ID.  
+This command returns the network SSID of a scanned network referenced by the passed ID.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
@@ -1080,7 +1132,7 @@ This command returns the network SSID of a scanned network referenced by the pas
 ### NETWORK_GET_REGISTERED
 
 The Rainbow configuration can hold up to 3 network settings.  
-This command returns 1 or 0 if an SSID/password is registered or not for each network.  
+This command returns 1 or 0 if an SSID/password is registered or not for each network.
 
 | Byte | Description                                 | Example                  |
 | ---- | ------------------------------------------- | ------------------------ |
@@ -1104,7 +1156,7 @@ This command returns 1 or 0 if an SSID/password is registered or not for each ne
 ### NETWORK_GET_REGISTERED_DETAILS
 
 The Rainbow configuration can hold up to 3 network settings.  
-This command returns the SSID of the requested configuration network.  
+This command returns the SSID of the requested configuration network.
 
 | Byte | Description                                 | Example                          |
 | ---- | ------------------------------------------- | -------------------------------- |
@@ -1144,7 +1196,7 @@ The Rainbow configuration can hold up to 3 network settings.
 This command registers a network in one of the spots.  
 Current ESP WiFi settings will be reset to take in account modification immediately.  
 If the active flag is set to `1`, it will be set to `0` for other networks.  
-Only one network can be active at a time.  
+Only one network can be active at a time.
 
 | Byte | Description                                 | Example                        |
 | ---- | ------------------------------------------- | ------------------------------ |
@@ -1168,6 +1220,7 @@ Only one network can be active at a time.
 | 17   | ...                                         | `D`                            |
 
 **Notes:**
+
 - Strings can only use ASCII characters between 0x20 to 0x7E.
 - SSID is 32 characters max.
 - Password is 64 characters max.
@@ -1180,6 +1233,7 @@ Only one network can be active at a time.
 
 The Rainbow configuration can hold up to 3 network settings.  
 This command unregister a network by:
+
 - setting its active flag to 0 (inactive)
 - setting its SSID to an empty string
 - setting its password to an empty string
@@ -1198,7 +1252,7 @@ This command unregister a network by:
 
 This command sets the active network.  
 If the active flag is set to `1`, it will be set to `0` for other networks.  
-Current ESP WiFi settings will be reset to take in account modification immediately.  
+Current ESP WiFi settings will be reset to take in account modification immediately.
 
 | Byte | Description                                 | Example                        |
 | ---- | ------------------------------------------- | ------------------------------ |
@@ -1214,15 +1268,16 @@ Current ESP WiFi settings will be reset to take in account modification immediat
 ## File commands details
 
 Files management can be a bit tricky.  
-They can be accessed in **auto mode** or in **manual mode**.  
-- **auto mode** allows you to use predefined folders and files using simple IDs  
-- **manual mode** allows you to use real path and file names  
+They can be accessed in **auto mode** or in **manual mode**.
 
-**Auto mode** is recommended since it makes messages shorter and easier to read, however **manual mode** can be useful in specific situations.  
+- **auto mode** allows you to use predefined folders and files using simple IDs
+- **manual mode** allows you to use real path and file names
+
+**Auto mode** is recommended since it makes messages shorter and easier to read, however **manual mode** can be useful in specific situations.
 
 ### File paths
 
-File paths for **auto mode** are defined as follow.  
+File paths for **auto mode** are defined as follow.
 
 | Value | FILE_PATHS | Description                                 |
 | ----- | ---------- | ------------------------------------------- |
@@ -1236,26 +1291,27 @@ This command opens a file as the working file.
 It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
 If the file does not exists, an empty one will be created.  
 If the same file is already opened, then the file cursor will be reset to 0.  
-If another file is already opened, it will be closed.  
+If another file is already opened, it will be closed.
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example     |
 | ---- | ----------------------------------------------- | ----------- |
 | 0    | Length of the message (excluding this byte)     | `4` or more |
 | 1    | Command ID (see commands to ESP)                | `FILE_OPEN` |
-| 2    | Config                                          | `%zzzzzzzm` |
+| 2    | Config                                          | `%zzzzzzdm` |
 |      | m: access mode (0: auto / 1: manual)            |             |
+|      | d: drive (0: ESP Flash / 1: SD card)            |             |
 |      | z: reserved for future use, must be set to zero |             |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 | 4    | File index                                 | `5 (0 to 63)`      |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
@@ -1280,7 +1336,7 @@ Using **manual mode**:
 
 ### FILE_CLOSE
 
-This command closes the working file.  
+This command closes the working file.
 
 | Byte | Description                                 | Example      |
 | ---- | ------------------------------------------- | ------------ |
@@ -1294,7 +1350,7 @@ This command closes the working file.
 ### FILE_STATUS
 
 This command returns the working file status.  
-It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
+It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
@@ -1303,9 +1359,9 @@ It can be used in auto mode (using predefined path index and filename index) or 
 
 **Returns:**
 
-If a file is currently opened, the returned status details will be the same as the parameters used in the **FILE_OPEN** command to open the file.  
+If a file is currently opened, the returned status details will be the same as the parameters used in the **FILE_OPEN** command to open the file.
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                                     | Example       |
 | ---- | --------------------------------------------------------------- | ------------- |
@@ -1313,18 +1369,19 @@ Message first bytes:
 | 1    | Command ID (see commands from ESP)                              | `FILE_STATUS` |
 | 2    | File status (0: no file opened / 1: a file is currently opened) | `0` or `1`    |
 |      | **_next bytes are sent only if a file is currently opened_**    |               |
-| 3    | Config                                                          | `%zzzzzzzm`   |
+| 3    | Config                                                          | `%zzzzzzdm`   |
 |      | m: access mode (0: auto / 1: manual)                            |               |
+|      | d: drive (0: ESP Flash / 1: SD card)                            |               |
 |      | z: reserved for future use, must be set to zero                 |               |
 
-If file is opened in **auto mode**:  
+If file is opened in **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 4    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 | 5    | File index                                 | `5 (0 to 63)`      |
 
-If file is opened in **manual mode**:  
+If file is opened in **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
@@ -1351,26 +1408,27 @@ If file is opened in **manual mode**:
 
 This command checks if a file exists.  
 It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
-It returns 1 if the file exists, or 0 if it doesn't.  
+It returns 1 if the file exists, or 0 if it doesn't.
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example       |
 | ---- | ----------------------------------------------- | ------------- |
 | 0    | Length of the message (excluding this byte)     | `4` or more   |
 | 1    | Command ID (see commands to ESP)                | `FILE_EXISTS` |
-| 2    | Config                                          | `%zzzzzzzm`   |
+| 2    | Config                                          | `%zzzzzzdm`   |
 |      | m: access mode (0: auto / 1: manual)            |               |
+|      | d: drive (0: ESP Flash / 1: SD card)            |               |
 |      | z: reserved for future use, must be set to zero |               |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 | 4    | File index                                 | `5 (0 to 63)`      |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
@@ -1404,26 +1462,27 @@ Using **manual mode**:
 ### FILE_DELETE
 
 This command deletes (if exists) the file corresponding of the passed index.  
-It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
+It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example       |
 | ---- | ----------------------------------------------- | ------------- |
 | 0    | Length of the message (excluding this byte)     | `4` or more   |
 | 1    | Command ID (see commands to ESP)                | `FILE_DELETE` |
-| 2    | Config                                          | `%zzzzzzzm`   |
+| 2    | Config                                          | `%zzzzzzdm`   |
 |      | m: access mode (0: auto / 1: manual)            |               |
+|      | d: drive (0: ESP Flash / 1: SD card)            |               |
 |      | z: reserved for future use, must be set to zero |               |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 | 4    | File index                                 | `5 (0 to 63)`      |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
@@ -1466,7 +1525,7 @@ Using **manual mode**:
 ### FILE_SET_CUR
 
 This command sets the position of the working file cursor.  
-If the file is smaller than the passed offset, it'll be filled with 0x00.  
+If the file is smaller than the passed offset, it'll be filled with 0x00.
 
 | Byte    | Description                                 | Example        |
 | ------- | ------------------------------------------- | -------------- |
@@ -1504,7 +1563,7 @@ If there is no working file currently open, number of bytes will be 0.
 | 4    | Data                                        | `0xDA`      |
 | 5    | Data                                        | `0x4C`      |
 
-**Note:** number of bytes returned can be less than the number of bytes requested depending on the file size and the file cursor position.  
+**Note:** number of bytes returned can be less than the number of bytes requested depending on the file size and the file cursor position.
 
 [Back to command list](#Commands-overview)
 
@@ -1513,6 +1572,7 @@ If there is no working file currently open, number of bytes will be 0.
 ### FILE_WRITE
 
 This command writes data to the working file.  
+If there is no working file currently open, nothing will happen, but nothing is returned.
 
 | Byte | Description                                 | Example      |
 | ---- | ------------------------------------------- | ------------ |
@@ -1530,6 +1590,7 @@ This command writes data to the working file.
 
 This command appends data to the working file.  
 The current cursor position is not affected.  
+If there is no working file currently open, nothing will happen, but nothing is returned.
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
@@ -1546,25 +1607,26 @@ The current cursor position is not affected.
 ### FILE_COUNT
 
 This command sends the number of files in a specific path.  
-It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
+It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example      |
 | ---- | ----------------------------------------------- | ------------ |
 | 0    | Length of the message (excluding this byte)     | `4` or more  |
 | 1    | Command ID (see commands to ESP)                | `FILE_COUNT` |
-| 2    | Config                                          | `%zzzzzzzm`  |
+| 2    | Config                                          | `%zzzzzzdm`  |
 |      | m: access mode (0: auto / 1: manual)            |              |
+|      | d: drive (0: ESP Flash / 1: SD card)            |              |
 |      | z: reserved for future use, must be set to zero |              |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
@@ -1589,19 +1651,20 @@ Using **manual mode**:
 ### FILE_GET_LIST
 
 Get list of existing files in a specific path.  
-It can be used in auto mode (using predefined path index) or in manual mode (using path string).  
+It can be used in auto mode (using predefined path index) or in manual mode (using path string).
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example         |
 | ---- | ----------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte)     | `3` or more     |
 | 1    | Command ID (see commands to ESP)                | `FILE_GET_LIST` |
-| 2    | Config                                          | `%zzzzzzzm`     |
+| 2    | Config                                          | `%zzzzzzdm`     |
 |      | m: access mode (0: auto / 1: manual)            |                 |
+|      | d: drive (0: ESP Flash / 1: SD card)            |                 |
 |      | z: reserved for future use, must be set to zero |                 |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                                          | Example            |
 | ---- | -------------------------------------------------------------------- | ------------------ |
@@ -1610,7 +1673,7 @@ Using **auto mode**:
 | 4    | Page size (number of files per page)                                 | `9`                |
 | 5    | Current page (0 indexed)                                             | `1`                |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description                                                          | Example |
 | ---- | -------------------------------------------------------------------- | ------- |
@@ -1623,15 +1686,14 @@ Using **manual mode**:
 |      | **_next bytes are required if you want to use a pagination system_** |         |
 | 9    | Page size (number of files per page)                                 | `9`     |
 | 10   | Current page (0 indexed)                                             | `1`     |
-  
+
 **Notes:**
-- First *path string* byte can be `/` or empty for root  
-- Leading `/` is not required for a folder in root
-- Trailing `/` is not mandatory  
+
+- _path string_ leading and trailing `/` are not mandatory
 
 **Returns:**
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                      | Example     |
 | ---- | ------------------------------------------------ | ----------- |
@@ -1640,7 +1702,7 @@ Message first bytes:
 | 2    | Number of files                                  | `3`         |
 |      | **_next bytes are returned if files are found_** |             |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description | Example |
 | ---- | ----------- | ------- |
@@ -1648,7 +1710,7 @@ Using **auto mode**:
 | 4    | File index  | `5`     |
 | 5    | File index  | `10`    |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description        | Example      |
 | ---- | ------------------ | ------------ |
@@ -1672,8 +1734,9 @@ Using **manual mode**:
 | 20   | ...                | `h`          |
 
 **Notes:**
-- If bit 7 of the item string length is set, then it's a folder.  
-- The maximum number of returned items is 19 because of the message length limitation.  
+
+- If bit 7 of the item string length is set, then it's a folder.
+- The maximum number of returned items is 19 because of the message length limitation.
 
 [Back to command list](#Commands-overview)
 
@@ -1681,13 +1744,14 @@ Using **manual mode**:
 
 ### FILE_GET_FREE_ID
 
-Get first free file ID in a specific predefined path.  
+Get first free file ID in a specific predefined path.
 
 | Byte | Description                                 | Example            |
 | ---- | ------------------------------------------- | ------------------ |
 | 0    | Length of the message (excluding this byte) | `2`                |
 | 1    | Command ID (see commands to ESP)            | `FILE_GET_FREE_ID` |
-| 2    | Path index (see [FILE_PATHS](#File-paths))  | `FILE_PATHS::SAVE` |
+| 2    | Desination (0: ESP Flash / 1: SD card)      | `0`                |
+| 3    | Path index (see [FILE_PATHS](#File-paths))  | `FILE_PATHS::SAVE` |
 
 **Returns:**
 
@@ -1705,26 +1769,27 @@ Get first free file ID in a specific predefined path.
 ### FILE_GET_INFO
 
 This command returns file info (size in bytes and crc32).  
-It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
+It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example         |
 | ---- | ----------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte)     | `4` or more     |
 | 1    | Command ID (see commands to ESP)                | `FILE_GET_INFO` |
-| 2    | Config                                          | `%zzzzzzzm`     |
+| 2    | Config                                          | `%zzzzzzdm`     |
 |      | m: access mode (0: auto / 1: manual)            |                 |
+|      | d: drive (0: ESP Flash / 1: SD card)            |                 |
 |      | z: reserved for future use, must be set to zero |                 |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 | 4    | File index                                 | `5 (0 to 63)`      |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
@@ -1770,16 +1835,17 @@ Using **manual mode**:
 This command downloads a file from a specific URL to a specific path index / file index.  
 It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
 If the destination file exists, it'll be deleted.  
-The URL **must** use HTTP or HTTPS protocol.  
+The URL **must** use HTTP or HTTPS protocol.
 
-Message first bytes:  
+Message first bytes:
 
 | Byte | Description                                     | Example         |
 | ---- | ----------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte)     | `27`            |
 | 1    | Command ID (see commands to ESP)                | `FILE_DOWNLOAD` |
-| 2    | Config                                          | `%zzzzzzzm`     |
+| 2    | Config                                          | `%zzzzzzdm`     |
 |      | m: access mode (0: auto / 1: manual)            |                 |
+|      | d: drive (0: ESP Flash / 1: SD card)            |                 |
 |      | z: reserved for future use, must be set to zero |                 |
 | 3    | URL String length                               | `22`            |
 | 4    | URL String (source)                             | `h`             |
@@ -1805,14 +1871,14 @@ Message first bytes:
 | 24   | ...                                             | `x`             |
 | 25   | ...                                             | `t`             |
 
-Using **auto mode**:  
+Using **auto mode**:
 
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 26   | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
 | 27   | File ID                                    | `3`                |
 
-Using **manual mode**:  
+Using **manual mode**:
 
 | Byte | Description               | Example |
 | ---- | ------------------------- | ------- |
@@ -1869,10 +1935,11 @@ Using **manual mode**:
 | -11   | Read timeout        |
 
 **Notes:**
-- Only HTTP and HTTPS protocols are supported for now.  
-- HTTP status in the returned message is valid only if result code is 0 or 5.  
-- If result code is 5, the body of the message is wrote on destination (as if the code was 0).  
-- If result code is 4, fourth byte of the returned message contained the network error code.  
+
+- Only HTTP and HTTPS protocols are supported.
+- HTTP status in the returned message is valid only if result code is 0 or 5.
+- If result code is 5, the body of the message is wrote on destination (as if the code was 0).
+- If result code is 4, fourth byte of the returned message contained the network error code.
 
 [Back to command list](#Commands-overview)
 
@@ -1881,27 +1948,30 @@ Using **manual mode**:
 ### FILE_FORMAT
 
 This command formats the file system.  
-Current ESP configuration will be saved afterwards.  
+Current ESP configuration will be saved afterwards.
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
-| 0    | Length of the message (excluding this byte) | `1`           |
+| 0    | Length of the message (excluding this byte) | `2`           |
 | 1    | Command ID (see commands to ESP)            | `FILE_FORMAT` |
+| 2    | Desination (0: ESP Flash / 1: SD card)      | `0`           |
 
 [Back to command list](#Commands-overview)
 
 ---
 
-## Bootloader
+## Bootrom
 
-A bootloader is provided directly on the cartridge, embedded in the FPGA Flash Memory.  
+A bootrom is provided directly on the cartridge, embedded in the FPGA Flash Memory.  
 To access it, simply press `SELECT` and `START` on controller 1 or 2 while powering on the console.  
-The bootloader allows you to perform some low level actions like:
+The bootrom allows you to perform some low level actions like:
+
 - configure WiFi networks without the need to connect to the cartridge's WiFi module access point from another device
-- manage files on the WiFi module Flash Memory
-- backup/dump game ROM to a file on the WiFi module Flash Memory
-- program game ROM from a file on the WiFi module Flash Memory
+- manage files on the WiFi module Flash Memory / SD Card
+- backup/dump ROM to a file on the WiFi module Flash Memory / SD Card
+- program ROM from a file on the WiFi module Flash Memory / SD Card
 - display the current status of the WiFi module
+- reset the ESP to factory settings
 
 ---
 

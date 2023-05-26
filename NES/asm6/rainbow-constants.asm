@@ -18,62 +18,63 @@ TOESP_DEBUG_LOG                       EQU 3   ; Debug / Log data
 TOESP_CLEAR_BUFFERS                   EQU 4   ; Clear RX/TX buffers
 TOESP_FROMESP_BUFFER_DROP_FROM_ESP    EQU 5   ; Drop messages from ESP buffer (TX)
 TOESP_ESP_GET_FIRMWARE_VERSION        EQU 6   ; Get ESP/Rainbow firmware version
-TOESP_ESP_RESTART                     EQU 7   ; Restart ESP
+TOESP_ESP_FACTORY_RESET               EQU 7   ; Reset ESP to factory settings
+TOESP_ESP_RESTART                     EQU 8   ; Restart ESP
 
 ; WIFI CMDS
-TOESP_WIFI_GET_STATUS                 EQU 8   ; Get WiFi connection status
-TOESP_WIFI_GET_SSID                   EQU 9   ; Get WiFi network SSID
-TOESP_WIFI_GET_IP                     EQU 10  ; Get WiFi IP address
-TOESP_WIFI_GET_CONFIG                 EQU 11  ; Get WiFi station / Access Point / Web Server config
-TOESP_WIFI_SET_CONFIG                 EQU 12  ; Set WiFi station / Access Point / Web Server config
+TOESP_WIFI_GET_STATUS                 EQU 9   ; Get WiFi connection status
+TOESP_WIFI_GET_SSID                   EQU 10  ; Get WiFi network SSID
+TOESP_WIFI_GET_IP                     EQU 11  ; Get WiFi IP address
+TOESP_WIFI_GET_CONFIG                 EQU 12  ; Get WiFi station / Access Point / Web Server config
+TOESP_WIFI_SET_CONFIG                 EQU 13  ; Set WiFi station / Access Point / Web Server config
 
 ; ACESS POINT CMDS
-TOESP_AP_GET_SSID                     EQU 13  ; Get Access Point network SSID
-TOESP_AP_GET_IP                       EQU 14  ; Get Access Point IP address
+TOESP_AP_GET_SSID                     EQU 14  ; Get Access Point network SSID
+TOESP_AP_GET_IP                       EQU 15  ; Get Access Point IP address
 
 ; RND CMDS
-TOESP_RND_GET_BYTE                    EQU 15  ; Get random byte
-TOESP_RND_GET_BYTE_RANGE              EQU 16  ; Get random byte between custom min/max
-TOESP_RND_GET_WORD                    EQU 17  ; Get random word
-TOESP_RND_GET_WORD_RANGE              EQU 18  ; Get random word between custom min/max
+TOESP_RND_GET_BYTE                    EQU 16  ; Get random byte
+TOESP_RND_GET_BYTE_RANGE              EQU 17  ; Get random byte between custom min/max
+TOESP_RND_GET_WORD                    EQU 18  ; Get random word
+TOESP_RND_GET_WORD_RANGE              EQU 19  ; Get random word between custom min/max
 
 ; SERVER CMDS
-TOESP_SERVER_GET_STATUS               EQU 19  ; Get server connection status
-TOESP_SERVER_PING                     EQU 20  ; Get ping between ESP and server
-TOESP_SERVER_SET_PROTOCOL             EQU 21  ; Set protocol to be used to communicate (WS/UDP/TCP)
-TOESP_SERVER_GET_SETTINGS             EQU 22  ; Get current server host name and port
-TOESP_SERVER_GET_CONFIG_SETTINGS      EQU 23  ; Get server host name and port defined in the Rainbow config file
-TOESP_SERVER_SET_SETTINGS             EQU 24  ; Set current server host name and port
-TOESP_SERVER_RESTORE_SETTINGS         EQU 25  ; Restore server host name and port to values defined in the Rainbow config
-TOESP_SERVER_CONNECT                  EQU 26  ; Connect to server
-TOESP_SERVER_DISCONNECT               EQU 27  ; Disconnect from server
-TOESP_SERVER_SEND_MSG                 EQU 28  ; Send message to rainbow server
+TOESP_SERVER_GET_STATUS               EQU 20  ; Get server connection status
+TOESP_SERVER_PING                     EQU 21  ; Get ping between ESP and server
+TOESP_SERVER_SET_PROTOCOL             EQU 22  ; Set protocol to be used to communicate (WS/UDP/TCP)
+TOESP_SERVER_GET_SETTINGS             EQU 23  ; Get current server host name and port
+TOESP_SERVER_GET_CONFIG_SETTINGS      EQU 24  ; Get server host name and port defined in the Rainbow config file
+TOESP_SERVER_SET_SETTINGS             EQU 25  ; Set current server host name and port
+TOESP_SERVER_RESTORE_SETTINGS         EQU 26  ; Restore server host name and port to values defined in the Rainbow config
+TOESP_SERVER_CONNECT                  EQU 27  ; Connect to server
+TOESP_SERVER_DISCONNECT               EQU 28  ; Disconnect from server
+TOESP_SERVER_SEND_MSG                 EQU 29  ; Send message to rainbow server
 
 ; NETWORK CMDS
-TOESP_NETWORK_SCAN                    EQU 29  ; Scan networks around and return count
-TOESP_NETWORK_GET_SCANNED_DETAILS     EQU 30  ; Get scanned network details
-TOESP_NETWORK_GET_REGISTERED          EQU 31  ; Get registered networks status
-TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 32  ; Get registered network SSID
-TOESP_NETWORK_REGISTER                EQU 33  ; Register network
-TOESP_NETWORK_UNREGISTER              EQU 34  ; Unregister network
-TOESP_NETWORK_SET_ACTIVE              EQU 35  ; Set active network
+TOESP_NETWORK_SCAN                    EQU 30  ; Scan networks around and return count
+TOESP_NETWORK_GET_SCANNED_DETAILS     EQU 31  ; Get scanned network details
+TOESP_NETWORK_GET_REGISTERED          EQU 32  ; Get registered networks status
+TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 33  ; Get registered network SSID
+TOESP_NETWORK_REGISTER                EQU 34  ; Register network
+TOESP_NETWORK_UNREGISTER              EQU 35  ; Unregister network
+TOESP_NETWORK_SET_ACTIVE              EQU 36  ; Set active network
 
 ; FILE COMMANDS
-TOESP_FILE_OPEN                       EQU 36  ; Open working file
-TOESP_FILE_CLOSE                      EQU 37  ; Close working file
-TOESP_FILE_STATUS                     EQU 38  ; Get working file status
-TOESP_FILE_EXISTS                     EQU 39  ; Check if file exists
-TOESP_FILE_DELETE                     EQU 40  ; Delete a file
-TOESP_FILE_SET_CUR                    EQU 41  ; Set working file cursor position a file
-TOESP_FILE_READ                       EQU 42  ; Read working file (at specific position)
-TOESP_FILE_WRITE                      EQU 43  ; Write working file (at specific position)
-TOESP_FILE_APPEND                     EQU 44  ; Append data to working file
-TOESP_FILE_COUNT                      EQU 45  ; Count files in a specific path
-TOESP_FILE_GET_LIST                   EQU 46  ; Get list of existing files in a path
-TOESP_FILE_GET_FREE_ID                EQU 47  ; Get an unexisting file ID in a specific path
-TOESP_FILE_GET_INFO                   EQU 48  ; Get file info (size + crc32)
-TOESP_FILE_DOWNLOAD                   EQU 49  ; Download a file
-TOESP_FILE_FORMAT                     EQU 50  ; Format file system and save current config
+TOESP_FILE_OPEN                       EQU 37  ; Open working file
+TOESP_FILE_CLOSE                      EQU 38  ; Close working file
+TOESP_FILE_STATUS                     EQU 39  ; Get working file status
+TOESP_FILE_EXISTS                     EQU 40  ; Check if file exists
+TOESP_FILE_DELETE                     EQU 41  ; Delete a file
+TOESP_FILE_SET_CUR                    EQU 42  ; Set working file cursor position a file
+TOESP_FILE_READ                       EQU 43  ; Read working file (at specific position)
+TOESP_FILE_WRITE                      EQU 44  ; Write working file (at specific position)
+TOESP_FILE_APPEND                     EQU 45  ; Append data to working file
+TOESP_FILE_COUNT                      EQU 46  ; Count files in a specific path
+TOESP_FILE_GET_LIST                   EQU 47  ; Get list of existing files in a path
+TOESP_FILE_GET_FREE_ID                EQU 48  ; Get an unexisting file ID in a specific path
+TOESP_FILE_GET_INFO                   EQU 49  ; Get file info (size + crc32)
+TOESP_FILE_DOWNLOAD                   EQU 50  ; Download a file
+TOESP_FILE_FORMAT                     EQU 51  ; Format file system and save current config
 
 ; commands from ESP
 
@@ -115,6 +116,12 @@ FROMESP_FILE_ID                       EQU 23  ; Returns a free file ID (FILE_GET
 FROMESP_FILE_INFO                     EQU 24  ; Returns file info (size + CRC32) (FILE_GET_INFO)
 FROMESP_FILE_DOWNLOAD                 EQU 25  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
 
+; ESP factory reset result codes
+RNBW_CONFIG_FACTORY_RESET_SUCCESS EQU 0
+RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_RESETTING_CONFIG EQU 1
+RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_DELETING_TWEB EQU 2
+RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_DELETING_WEB EQU 3
+
 ; WiFi status
 RNBW_WIFI_TIMEOUT EQU 255
 RNBW_WIFI_IDLE_STATUS EQU 0
@@ -125,6 +132,15 @@ RNBW_WIFI_CONNECTION_FAILED EQU 4
 RNBW_WIFI_CONNECTION_LOST EQU 5
 RNBW_WIFI_WRONG_PASSWORD 6
 RNBW_WIFI_DISCONNECTED EQU 7
+
+
+; WiFi error
+RNBW_WIFI_ERROR_UNKNOWN EQU 255
+RNBW_WIFI_ERROR_NO_ERROR EQU 0
+RNBW_WIFI_ERROR_NO_SSID_AVAIL EQU 1
+RNBW_WIFI_ERROR_CONNECTION_FAILED EQU 4
+RNBW_WIFI_ERROR_CONNECTION_LOST EQU 5
+RNBW_WIFI_ERROR_WRONG_PASSWORD EQU 6
 
 ; Server protocols
 RNBW_PROTOCOL_WEBSOCKET EQU 0

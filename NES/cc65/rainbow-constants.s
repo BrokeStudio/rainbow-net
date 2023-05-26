@@ -2,11 +2,11 @@
 ; RAINBOW CONSTANTS
 
 ; mapper registers
-CONFIG    = $4100
-RX        = $4101
-TX        = $4102
-RX_ADD    = $4103
-TX_ADD    = $4104
+CONFIG    = $4170
+RX        = $4171
+TX        = $4172
+RX_ADD    = $4173
+TX_ADD    = $4174
 
 ; commands to ESP
 .enum TO_ESP

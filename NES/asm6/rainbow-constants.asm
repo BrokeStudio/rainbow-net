@@ -72,9 +72,10 @@ TOESP_FILE_APPEND                     EQU 45  ; Append data to working file
 TOESP_FILE_COUNT                      EQU 46  ; Count files in a specific path
 TOESP_FILE_GET_LIST                   EQU 47  ; Get list of existing files in a path
 TOESP_FILE_GET_FREE_ID                EQU 48  ; Get an unexisting file ID in a specific path
-TOESP_FILE_GET_INFO                   EQU 49  ; Get file info (size + crc32)
-TOESP_FILE_DOWNLOAD                   EQU 50  ; Download a file
-TOESP_FILE_FORMAT                     EQU 51  ; Format file system and save current config
+TOESP_FILE_GET_FS_INFO                EQU 49  ; Get file system details (ESP flash or SD card)
+TOESP_FILE_GET_INFO                   EQU 50  ; Get file info (size + crc32)
+TOESP_FILE_DOWNLOAD                   EQU 51  ; Download a file
+TOESP_FILE_FORMAT                     EQU 52  ; Format file system and save current config
 
 ; commands from ESP
 
@@ -113,8 +114,9 @@ FROMESP_FILE_LIST                     EQU 20  ; Returns path file list (FILE_GET
 FROMESP_FILE_DATA                     EQU 21  ; Returns file data (FILE_READ)
 FROMESP_FILE_COUNT                    EQU 22  ; Returns file count in a specific path
 FROMESP_FILE_ID                       EQU 23  ; Returns a free file ID (FILE_GET_FREE_ID)
-FROMESP_FILE_INFO                     EQU 24  ; Returns file info (size + CRC32) (FILE_GET_INFO)
-FROMESP_FILE_DOWNLOAD                 EQU 25  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
+FROMESP_FILE_FS_INFO                  EQU 24  ; Returns file system info (FILE_GET_FS_INFO)
+FROMESP_FILE_INFO                     EQU 25  ; Returns file info (size + CRC32) (FILE_GET_INFO)
+FROMESP_FILE_DOWNLOAD                 EQU 26  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
 
 ; ESP factory reset result codes
 RNBW_CONFIG_FACTORY_RESET_SUCCESS EQU 0

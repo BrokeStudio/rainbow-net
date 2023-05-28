@@ -85,6 +85,7 @@ Thanks to :
     - [FILE_COUNT](#file_count)
     - [FILE_GET_LIST](#file_get_list)
     - [FILE_GET_FREE_ID](#file_get_free_id)
+    - [FILE_GET_FS_INFO](#file_get_fs_info)
     - [FILE_GET_INFO](#file_get_info)
     - [FILE_DOWNLOAD](#file_download)
     - [FILE_FORMAT](#file_format)
@@ -245,8 +246,9 @@ Here's an example on how to send and receive data.
 | 47    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)       |
 | 48    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)        |
 | 49    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                              |
-| 50    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
-| 51    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
+| 50    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                            |
+| 51    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
+| 52    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
 
 ### Commands from the ESP
 
@@ -283,8 +285,9 @@ Here's an example on how to send and receive data.
 | 22    | [FILE_DATA](#FILE_READ)                                           | Return file data (FILE_READ)                                           |
 | 23    | [FILE_COUNT](#FILE_COUNT)                                         | Return file count in a specific path                                   |
 | 24    | [FILE_ID](#FILE_GET_FREE_ID)                                      | Return a free file ID (FILE_GET_FREE_ID)                               |
-| 25    | [FILE_INFO](#FILE_GET_INFO)                                       | Return file info (size + CRC32) (FILE_GET_INFO)                        |
-| 26    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Return result code (see command for details)                           |
+| 25    | [FILE_FS_INFO](#FILE_GET_INFO)                                    | Return file system info (FILE_GET_FS_INFO)                             |
+| 26    | [FILE_INFO](#FILE_GET_INFO)                                       | Return file info (size + CRC32) (FILE_GET_INFO)                        |
+| 27    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Return result code (see command for details)                           |
 
 ## Commands details
 
@@ -1761,6 +1764,59 @@ Get first free file ID in a specific predefined path.
 | 1    | Command ID (see commands from ESP)                     | `FILE_ID`  |
 |      | **_next byte is returned if a free file ID is found_** |            |
 | 2    | File ID                                                | `3`        |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### FILE_GET_FS_INFO
+
+This command returns file system info.
+
+Message first bytes:
+
+| Byte | Description                                         | Example            |
+| ---- | --------------------------------------------------- | ------------------ |
+| 0    | Length of the message (excluding this byte)         | `2`                |
+| 1    | Command ID (see commands to ESP)                    | `FILE_GET_FS_INFO` |
+| 2    | Config                                              | `%zzzzzzdm`        |
+|      | m: access mode (0: auto / 1: manual) - ignored here |                    |
+|      | d: drive (0: ESP Flash / 1: SD card)                |                    |
+|      | z: reserved for future use, must be set to zero     |                    |
+
+**Returns:**
+
+| Byte | Description                                           | Example                    |
+| ---- | ----------------------------------------------------- | -------------------------- |
+| 0    | Length of the message (excluding this byte)           | `27`                       |
+| 1    | Command ID (see commands from ESP)                    | `FILE_FS_INFO`             |
+|      | **_next bytes are returned if file system is ready_** |                            |
+| 2    | Total space MSB                                       | `0x00`                     |
+| 3    | Total space                                           | `0x00`                     |
+| 4    | Total space                                           | `0x00`                     |
+| 5    | Total space                                           | `0x00`                     |
+| 6    | Total space                                           | `0x00`                     |
+| 7    | Total space                                           | `0x1F`                     |
+| 8    | Total space                                           | `0xA0`                     |
+| 9    | Total space LSB                                       | `0x00`                     |
+| 10   | Free space MSB                                        | `0x00`                     |
+| 11   | Free space                                            | `0x00`                     |
+| 12   | Free space                                            | `0x00`                     |
+| 13   | Free space                                            | `0x00`                     |
+| 14   | Free space                                            | `0x00`                     |
+| 15   | Free space                                            | `0x1A`                     |
+| 16   | Free space                                            | `0x40`                     |
+| 17   | Free space LSB                                        | `0x00`                     |
+| 18   | Free space percentage                                 | `0x53` (max is 100 - 0x64) |
+| 19   | Used space MSB                                        | `0x00`                     |
+| 20   | Used space                                            | `0x00`                     |
+| 21   | Used space                                            | `0x00`                     |
+| 22   | Used space                                            | `0x00`                     |
+| 23   | Used space                                            | `0x00`                     |
+| 24   | Used space                                            | `0x56`                     |
+| 25   | Used space                                            | `0x00`                     |
+| 26   | Used space LSB                                        | `0x00`                     |
+| 27   | Used space percentage                                 | `0x10` (max is 100 - 0x64) |
 
 [Back to command list](#Commands-overview)
 

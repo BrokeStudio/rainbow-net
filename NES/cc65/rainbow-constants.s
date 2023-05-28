@@ -73,6 +73,7 @@ TX_ADD    = $4174
   FILE_COUNT                      ; Count files in a specific path
   FILE_GET_LIST                   ; Get list of existing files in a path
   FILE_GET_FREE_ID                ; Get an unexisting file ID in a specific path
+  FILE_GET_FS_INFO                ; Get file system details (ESP flash or SD card)
   FILE_GET_INFO                   ; Get file info (size + crc32)
   FILE_DOWNLOAD                   ; Download a file
   FILE_FORMAT                     ; Format file system and save current config
@@ -118,6 +119,7 @@ TX_ADD    = $4174
   FILE_DATA                       ; Return file data (FILE_READ)
   FILE_COUNT                      ; Return file count in a specific path
   FILE_ID                         ; Return a free file ID (FILE_GET_FREE_ID)
+  FILE_FS_INFO                    ; Returns file system info (FILE_GET_FS_INFO)
   FILE_INFO                       ; Return file info (size + CRC32) (FILE_GET_INFO)
   FILE_DOWNLOAD                   ; See FILE_DOWNLOAD_RES enum for details on returned value
 

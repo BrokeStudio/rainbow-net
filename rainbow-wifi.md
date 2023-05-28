@@ -1096,7 +1096,7 @@ This command returns the network SSID of a scanned network referenced by the pas
 | ---- | ------------------------------------------- | --------------------- |
 | 0    | Length of the message (excluding this byte) | `2`                   |
 | 1    | Command ID (see commands to ESP)            | `NETWORK_GET_DETAILS` |
-| 2    | Network ID                                  | `0x01`                |
+| 2    | Network ID                                  | `1`                   |
 
 **Returns:**
 
@@ -1107,11 +1107,11 @@ This command returns the network SSID of a scanned network referenced by the pas
 | 1    | Command ID (see commands from ESP)          | `NETWORK_SCANNED_DETAILS`                     |
 | 2    | Encryption type                             | `4` (see below for details)                   |
 | 3    | RSSI (absolute value)                       | `0x47` (means -70 DbM)                        |
-| 4    | Channel LSB                                 | `0x00`                                        |
+| 7    | Channel MSB                                 | `0x01`                                        |
 | 5    | Channel                                     | `0x00`                                        |
 | 6    | Channel                                     | `0x00`                                        |
-| 7    | Channel MSB                                 | `0x01`                                        |
-| 8    | Hidden?                                     | `0` (0: no / 1: yes))                         |
+| 4    | Channel LSB                                 | `0x00`                                        |
+| 8    | Hidden?                                     | `0` (0: no / 1: yes)                          |
 | 9    | SSID string length                          | `4`                                           |
 | 10   | SSID string                                 | `S`                                           |
 | 11   | ...                                         | `S`                                           |
@@ -1312,7 +1312,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5 (0 to 63)`      |
+| 4    | File index                                 | `5` (0 to 63)      |
 
 Using **manual mode**:
 
@@ -1382,7 +1382,7 @@ If file is opened in **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 4    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 5    | File index                                 | `5 (0 to 63)`      |
+| 5    | File index                                 | `5` (0 to 63)      |
 
 If file is opened in **manual mode**:
 
@@ -1429,7 +1429,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5 (0 to 63)`      |
+| 4    | File index                                 | `5` (0 to 63)      |
 
 Using **manual mode**:
 
@@ -1483,7 +1483,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5 (0 to 63)`      |
+| 4    | File index                                 | `5` (0 to 63)      |
 
 Using **manual mode**:
 
@@ -1561,7 +1561,7 @@ If there is no working file currently open, number of bytes will be 0.
 | ---- | ------------------------------------------- | ----------- |
 | 0    | Length of the message (excluding this byte) | `5`         |
 | 1    | Command ID (see commands from ESP)          | `FILE_DATA` |
-| 2    | Number of bytes returned                    | `03`        |
+| 2    | Number of bytes returned                    | `3`         |
 | 3    | Data                                        | `0x12`      |
 | 4    | Data                                        | `0xDA`      |
 | 5    | Data                                        | `0x4C`      |
@@ -1715,26 +1715,26 @@ Using **auto mode**:
 
 Using **manual mode**:
 
-| Byte | Description        | Example      |
-| ---- | ------------------ | ------------ |
-| 3    | Item string length | `9`          |
-| 4    | Item string        | `f`          |
-| 5    | ...                | `i`          |
-| 6    | ...                | `l`          |
-| 7    | ...                | `e`          |
-| 8    | ...                | `1`          |
-| 9    | ...                | `.`          |
-| 10   | ...                | `e`          |
-| 11   | ...                | `x`          |
-| 12   | ...                | `t`          |
-| 13   | Item string length | `135` (0x87) |
-| 14   | Item string        | `s`          |
-| 15   | ...                | `u`          |
-| 16   | ...                | `b`          |
-| 17   | ...                | `p`          |
-| 18   | ...                | `a`          |
-| 19   | ...                | `t`          |
-| 20   | ...                | `h`          |
+| Byte | Description        | Example |
+| ---- | ------------------ | ------- |
+| 3    | Item string length | `9`     |
+| 4    | Item string        | `f`     |
+| 5    | ...                | `i`     |
+| 6    | ...                | `l`     |
+| 7    | ...                | `e`     |
+| 8    | ...                | `1`     |
+| 9    | ...                | `.`     |
+| 10   | ...                | `e`     |
+| 11   | ...                | `x`     |
+| 12   | ...                | `t`     |
+| 13   | Item string length | `7`     |
+| 14   | Item string        | `s`     |
+| 15   | ...                | `u`     |
+| 16   | ...                | `b`     |
+| 17   | ...                | `p`     |
+| 18   | ...                | `a`     |
+| 19   | ...                | `t`     |
+| 20   | ...                | `h`     |
 
 **Notes:**
 
@@ -1843,7 +1843,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5 (0 to 63)`      |
+| 4    | File index                                 | `5` (0 to 63)      |
 
 Using **manual mode**:
 
@@ -1873,14 +1873,14 @@ Using **manual mode**:
 | 0    | Length of the message (excluding this byte)    | `1` or `9`  |
 | 1    | Command ID (see commands from ESP)             | `FILE_INFO` |
 |      | **_next bytes are returned if file is found_** |             |
-| 2    | CRC32 MSB                                      | `3B`        |
-| 3    | CRC32                                          | `84`        |
-| 4    | CRC32                                          | `E6`        |
-| 5    | CRC32 LSB                                      | `FB`        |
-| 6    | Size MSB                                       | `00`        |
-| 7    | Size                                           | `00`        |
-| 8    | Size                                           | `10`        |
-| 9    | Size LSB                                       | `00`        |
+| 2    | CRC32 MSB                                      | `0x3B`      |
+| 3    | CRC32                                          | `0x84`      |
+| 4    | CRC32                                          | `0xE6`      |
+| 5    | CRC32 LSB                                      | `0xFB`      |
+| 6    | Size MSB                                       | `0x00`      |
+| 7    | Size                                           | `0x00`      |
+| 8    | Size                                           | `0x10`      |
+| 9    | Size LSB                                       | `0x00`      |
 
 [Back to command list](#Commands-overview)
 

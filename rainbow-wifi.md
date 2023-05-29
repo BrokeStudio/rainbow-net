@@ -1788,7 +1788,7 @@ Message first bytes:
 
 | Byte | Description                                           | Example                    |
 | ---- | ----------------------------------------------------- | -------------------------- |
-| 0    | Length of the message (excluding this byte)           | `27`                       |
+| 0    | Length of the message (excluding this byte)           | `1` or `27`                |
 | 1    | Command ID (see commands from ESP)                    | `FILE_FS_INFO`             |
 |      | **_next bytes are returned if file system is ready_** |                            |
 | 2    | Total space MSB                                       | `0x00`                     |

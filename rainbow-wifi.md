@@ -673,18 +673,19 @@ This command asks the aceess point SSID.
 
 **Returns:**
 
-| Byte | Description                                 | Example |
-| ---- | ------------------------------------------- | ------- |
-| 0    | Length of the message (excluding this byte) | `9`     |
-| 1    | Command ID (see commands from ESP)          | `SSID`  |
-| 2    | SSID string length                          | `7`     |
-| 3    | SSID string                                 | `M`     |
-| 4    | ...                                         | `Y`     |
-| 5    | ...                                         | `_`     |
-| 6    | ...                                         | `S`     |
-| 7    | ...                                         | `S`     |
-| 8    | ...                                         | `I`     |
-| 9    | ...                                         | `D`     |
+| Byte | Description                                                 | Example                   |
+| ---- | ----------------------------------------------------------- | ------------------------- |
+| 0    | Length of the message (excluding this byte)                 | `2` or more               |
+| 1    | Command ID (see commands from ESP)                          | `SSID`                    |
+| 2    | SSID string length                                          | `0` if not active or more |
+|      | _**the next byte are returned only if Wi-Fi is connected**_ |                           |
+| 3    | SSID string                                                 | `M`                       |
+| 4    | ...                                                         | `Y`                       |
+| 5    | ...                                                         | `_`                       |
+| 6    | ...                                                         | `S`                       |
+| 7    | ...                                                         | `S`                       |
+| 8    | ...                                                         | `I`                       |
+| 9    | ...                                                         | `D`                       |
 
 [Back to command list](#Commands-overview)
 
@@ -701,23 +702,24 @@ This command asks the acess point IP address.
 
 **Returns:**
 
-| Byte | Description                                 | Example      |
-| ---- | ------------------------------------------- | ------------ |
-| 0    | Length of the message (excluding this byte) | `14`         |
-| 1    | Command ID (see commands from ESP)          | `IP_ADDRESS` |
-| 2    | IP address string length                    | `12`         |
-| 3    | IP address string                           | `1`          |
-| 4    | ...                                         | `9`          |
-| 5    | ...                                         | `2`          |
-| 6    | ...                                         | `.`          |
-| 7    | ...                                         | `1`          |
-| 8    | ...                                         | `6`          |
-| 9    | ...                                         | `8`          |
-| 10   | ...                                         | `.`          |
-| 11   | ...                                         | `1`          |
-| 12   | ...                                         | `.`          |
-| 13   | ...                                         | `2`          |
-| 14   | ...                                         | `0`          |
+| Byte | Description                                                 | Example                   |
+| ---- | ----------------------------------------------------------- | ------------------------- |
+| 0    | Length of the message (excluding this byte)                 | `2` or more               |
+| 1    | Command ID (see commands from ESP)                          | `IP_ADDRESS`              |
+| 2    | IP address string length                                    | `0` if not active or more |
+|      | _**the next byte are returned only if Wi-Fi is connected**_ |                           |
+| 3    | IP address string                                           | `1`                       |
+| 4    | ...                                                         | `9`                       |
+| 5    | ...                                                         | `2`                       |
+| 6    | ...                                                         | `.`                       |
+| 7    | ...                                                         | `1`                       |
+| 8    | ...                                                         | `6`                       |
+| 9    | ...                                                         | `8`                       |
+| 10   | ...                                                         | `.`                       |
+| 11   | ...                                                         | `1`                       |
+| 12   | ...                                                         | `.`                       |
+| 13   | ...                                                         | `2`                       |
+| 14   | ...                                                         | `0`                       |
 
 [Back to command list](#Commands-overview)
 

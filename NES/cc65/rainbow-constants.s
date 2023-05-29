@@ -23,11 +23,11 @@ TX_ADD    = $4174
   ESP_RESTART                     ; Restart ESP
 
 ; WIFI CMDS
-  WIFI_GET_STATUS                 ; Get WiFi connection status
-  WIFI_GET_SSID                   ; Get WiFi network SSID
-  WIFI_GET_IP                     ; Get WiFi IP address
-  WIFI_GET_CONFIG                 ; Get WiFi station / Access Point / Web Server config
-  WIFI_SET_CONFIG                 ; Set WiFi station / Access Point / Web Server config
+  WIFI_GET_STATUS                 ; Get Wi-Fi connection status
+  WIFI_GET_SSID                   ; Get Wi-Fi network SSID
+  WIFI_GET_IP                     ; Get Wi-Fi IP address
+  WIFI_GET_CONFIG                 ; Get Wi-Fi station / Access Point / Web Server config
+  WIFI_SET_CONFIG                 ; Set Wi-Fi station / Access Point / Web Server config
 
 ; ACESS POINT CMDS
   AP_GET_SSID                     ; Get Access Point network SSID
@@ -90,10 +90,10 @@ TX_ADD    = $4174
   ESP_FACTORY_RESET               ; See ESP_FACTORY_RESET_RES enum for details on returned
 
 ; WIFI / ACCESS POINT CMDS
-  WIFI_STATUS                     ; Return WiFi connection status
-  SSID                            ; Return WiFi / Access Point SSID
-  IP                              ; Return WiFi / Access Point IP address
-  WIFI_CONFIG                     ; Return WiFi station / Access Point / Web Server
+  WIFI_STATUS                     ; Return Wi-Fi connection status
+  SSID                            ; Return Wi-Fi / Access Point SSID
+  IP                              ; Return Wi-Fi / Access Point IP address
+  WIFI_CONFIG                     ; Return Wi-Fi station / Access Point / Web Server
 
 ; RND CMDS
   RND_BYTE                        ; Return random byte value
@@ -133,7 +133,7 @@ TX_ADD    = $4174
   ERROR_WHILE_DELETING_WEB
 .endenum
 
-; WiFi status
+; Wi-Fi status
 .enum WIFI_STATUS
   TIMEOUT = 255
   IDLE_STATUS = 0
@@ -146,7 +146,7 @@ TX_ADD    = $4174
   DISCONNECTED
 .endenum
 
-; WiFi error
+; Wi-Fi error
 .enum WIFI_ERROR
   UNKNOWN = 255
   NO_ERROR = 0
@@ -171,7 +171,7 @@ TX_ADD    = $4174
   CONNECTED
 .endenum
 
-; WiFi config flags
+; Wi-Fi config flags
 .enum WIFI_CONFIG_FLAGS
   WIFI_STATION_ENABLE = 1
   ACCESS_POINT_ENABLE = 2

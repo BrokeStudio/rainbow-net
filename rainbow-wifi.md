@@ -1,4 +1,4 @@
-# Rainbow WiFi documentation
+# Rainbow Wi-Fi documentation
 
 > **Disclaimer**
 >
@@ -14,13 +14,13 @@ Thanks to :
 - [Paul](https://twitter.com/InfiniteNesLive) / [InfiniteNesLives](http://www.infiniteneslives.com) for taking time to explain me lots of NES specific hardware stuff
 - Christian Gohin, my father, who helped me designing the first prototype board and fixing hardware issues
 - [Sylvain Gadrat](https://sgadrat.itch.io/super-tilt-bro) aka [RogerBidon](https://twitter.com/RogerBidon) for helping me update [FCEUX](http://www.fceux.com) to emulate the Rainbow mapper
-- The NES WiFi Club (cheers guys 😊)
+- The NES Wi-Fi Club (cheers guys 😊)
 - [NESdev](http://www.nesdev.com) community
 - Ludy, my wife, for the endless support ❤
 
 ## Table of content
 
-- [Rainbow WiFi documentation](#rainbow-wifi-documentation)
+- [Rainbow Wi-Fi documentation](#rainbow-wi-fi-documentation)
   - [Credits](#credits)
   - [Table of content](#table-of-content)
   - [What is Rainbow?](#what-is-rainbow)
@@ -97,7 +97,7 @@ Thanks to :
 ## What is Rainbow?
 
 **Rainbow** is a mapper for the **NES** that allows to connect the console to the Internet.  
-It uses a WiFi chip (**ESP8266**, called **ESP** in this doc) embedded on the cart.
+It uses a Wi-Fi chip (**ESP8266**, called **ESP** in this doc) embedded on the cart.
 
 ## Why 'Rainbow'?
 
@@ -200,11 +200,11 @@ Here's an example on how to send and receive data.
 | 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                             |
 | 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                           |
 |       |                                                                   | **WIFI CMDS**                                                             |
-| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get WiFi connection status                                                |
-| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get WiFi network SSID                                                     |
-| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get WiFi IP address                                                       |
-| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get WiFi / Access Point / Web Server config                               |
-| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set WiFi / Access Point / Web Server config                               |
+| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                               |
+| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                    |
+| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get Wi-Fi IP address                                                      |
+| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                              |
+| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                              |
 |       |                                                                   | **ACCESS POINT CMDS**                                                     |
 | 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                             |
 | 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                               |
@@ -260,10 +260,10 @@ Here's an example on how to send and receive data.
 | 2     | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                 | Return ESP/Rainbow firmware version                                    |
 | 3     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Return result code (see command for details)                           |
 |       |                                                                   | **WIFI CMDS**                                                          |
-| 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                   | Return WiFi connection status                                          |
-| 5     | [SSID (WIFI)](#WIFI_GET_SSID) / [SSID (AP)](#AP_GET_SSID)         | Return WiFi / Access Point SSID                                        |
-| 6     | [IP_ADDRESS (WIFI)](#WIFI_GET_IP) / [IP_ADDRESS (AP)](#AP_GET_IP) | Return WiFi / Access Point IP address                                  |
-| 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                   | Return WiFi station / Access Point / Web Server                        |
+| 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                   | Return Wi-Fi connection status                                         |
+| 5     | [SSID (WIFI)](#WIFI_GET_SSID) / [SSID (AP)](#AP_GET_SSID)         | Return Wi-Fi / Access Point SSID                                       |
+| 6     | [IP_ADDRESS (WIFI)](#WIFI_GET_IP) / [IP_ADDRESS (AP)](#AP_GET_IP) | Return Wi-Fi / Access Point IP address                                 |
+| 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                   | Return Wi-Fi station / Access Point / Web Server                       |
 |       |                                                                   | **RND CMDS**                                                           |
 | 8     | [RND_BYTE](#RND_GET_BYTE)                                         | Return random byte value                                               |
 | 9     | [RND_WORD](#RND_GET_WORD)                                         | Return random word value                                               |
@@ -293,7 +293,7 @@ Here's an example on how to send and receive data.
 
 ### ESP_GET_STATUS
 
-This command asks the WiFi module if it's ready.  
+This command asks the Wi-Fi module if it's ready and returns additionnal information.  
 The ESP will only answer when ready, so once you sent the message, just wait for the answer.
 
 | Byte | Description                                 | Example          |
@@ -303,10 +303,13 @@ The ESP will only answer when ready, so once you sent the message, just wait for
 
 **Returns:**
 
-| Byte | Description                                 | Example |
-| ---- | ------------------------------------------- | ------- |
-| 0    | Length of the message (excluding this byte) | `1`     |
-| 1    | Command ID (see commands from ESP)          | `READY` |
+| Byte | Description                                     | Example     |
+| ---- | ----------------------------------------------- | ----------- |
+| 0    | Length of the message (excluding this byte)     | `2`         |
+| 1    | Command ID (see commands from ESP)              | `READY`     |
+| 2    | Access Point Config                             | `%zzzzzzzs` |
+|      | s: SD card is present (0: no / 1: yes)          |             |
+|      | z: reserved for future use, must be set to zero |             |
 
 [Back to command list](#Commands-overview)
 
@@ -477,7 +480,7 @@ This won't reset the ESP firmware to a previous version.
 | ---- | ------------------------------------------- | ------------------------ |
 | 0    | Length of the message (excluding this byte) | `2`                      |
 | 1    | Command ID (see commands from ESP)          | `ESP_FACTORY_RESET`      |
-| 2    | WiFi status (see below)                     | `WIFI_STATUS::CONNECTED` |
+| 2    | Wi-Fi status (see below)                    | `WIFI_STATUS::CONNECTED` |
 
 **Result codes:**
 
@@ -507,7 +510,7 @@ This command resets the ESP.
 
 ### WIFI_GET_STATUS
 
-This command asks the WiFi status.
+This command asks the Wi-Fi status.
 
 | Byte | Description                                 | Example           |
 | ---- | ------------------------------------------- | ----------------- |
@@ -516,39 +519,39 @@ This command asks the WiFi status.
 
 **Returns:**
 
-| Byte | Description                                 | Example                  |
-| ---- | ------------------------------------------- | ------------------------ |
-| 0    | Length of the message (excluding this byte) | `3`                      |
-| 1    | Command ID (see commands from ESP)          | `WIFI_STATUS`            |
-| 2    | WiFi status (see below)                     | `WIFI_STATUS::CONNECTED` |
-| 3    | WiFi error (see below)                      | `WIFI_ERROR::NO_ERROR`   |
-|      | _If the WiFi status is not CONNECTED, you_  |                          |
-|      | _can check the WiFi error._                 |                          |
+| Byte | Description                                     | Example                  |
+| ---- | ----------------------------------------------- | ------------------------ |
+| 0    | Length of the message (excluding this byte)     | `3`                      |
+| 1    | Command ID (see commands from ESP)              | `WIFI_STATUS`            |
+| 2    | Wi-Fi status (see below)                        | `WIFI_STATUS::CONNECTED` |
+| 3    | Wi-Fi error (see below)                         | `WIFI_ERROR::NO_ERROR`   |
+|      | _**If the Wi-Fi status is not CONNECTED, you**_ |                          |
+|      | _**can check the Wi-Fi error.**_                |                          |
 
-**WiFi status:**
+**Wi-Fi status:**
 
-| Value | WIFI_STATUS     | Description                                                            |
-| ----- | --------------- | ---------------------------------------------------------------------- |
-| 255   | TIMEOUT         | Connection timeout                                                     |
-| 0     | IDLE_STATUS     | Temporary status assigned between statuses                             |
-| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached                                      |
-| 2     | SCAN_COMPLETED  | Network scan completed                                                 |
-| 3     | CONNECTED       | WiFi connected                                                         |
-| 4     | CONNECT_FAILED  | WiFi connection failed                                                 |
-| 5     | CONNECTION_LOST | WiFi connection lost                                                   |
-| 6     | WRONG_PASSWORD  | Configured password is incorrect                                       |
-| 7     | DISCONNECTED    | WiFi module disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
-|       |                 | or disconnected from network                                           |
+| Value | WIFI_STATUS     | Description                                                             |
+| ----- | --------------- | ----------------------------------------------------------------------- |
+| 255   | TIMEOUT         | Connection timeout                                                      |
+| 0     | IDLE_STATUS     | Temporary status assigned between statuses                              |
+| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached                                       |
+| 2     | SCAN_COMPLETED  | Network scan completed                                                  |
+| 3     | CONNECTED       | Wi-Fi connected                                                         |
+| 4     | CONNECT_FAILED  | Wi-Fi connection failed                                                 |
+| 5     | CONNECTION_LOST | Wi-Fi connection lost                                                   |
+| 6     | WRONG_PASSWORD  | Configured password is incorrect                                        |
+| 7     | DISCONNECTED    | Wi-Fi module disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
+|       |                 | or disconnected from network                                            |
 
-**WiFi status:**
+**Wi-Fi status:**
 
 | Value | WIFI_ERROR      | Description                       |
 | ----- | --------------- | --------------------------------- |
 | 255   | UNKNOWN         | Unknown error                     |
 | 0     | NO_ERROR        | NO ERROR                          |
 | 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached |
-| 4     | CONNECT_FAILED  | WiFi connection failed            |
-| 5     | CONNECTION_LOST | WiFi connection lost              |
+| 4     | CONNECT_FAILED  | Wi-Fi connection failed           |
+| 5     | CONNECTION_LOST | Wi-Fi connection lost             |
 | 6     | WRONG_PASSWORD  | Configured password is incorrect  |
 
 [Back to command list](#Commands-overview)
@@ -557,7 +560,7 @@ This command asks the WiFi status.
 
 ### WIFI_GET_SSID
 
-This command returns the WiFi SSID (if connected).
+This command returns the Wi-Fi SSID (if connected).
 
 | Byte | Description                                 | Example         |
 | ---- | ------------------------------------------- | --------------- |
@@ -566,19 +569,19 @@ This command returns the WiFi SSID (if connected).
 
 **Returns:**
 
-| Byte | Description                                            | Example                      |
-| ---- | ------------------------------------------------------ | ---------------------------- |
-| 0    | Length of the message (excluding this byte)            | `2` or more                  |
-| 1    | Command ID (see commands from ESP)                     | `SSID`                       |
-| 2    | SSID string length                                     | `0` if not connected or more |
-|      | _the next byte are returned only if WiFi is connected_ |                              |
-| 3    | SSID string                                            | `M`                          |
-| 4    | ...                                                    | `Y`                          |
-| 5    | ...                                                    | `_`                          |
-| 6    | ...                                                    | `S`                          |
-| 7    | ...                                                    | `S`                          |
-| 8    | ...                                                    | `I`                          |
-| 9    | ...                                                    | `D`                          |
+| Byte | Description                                                 | Example                      |
+| ---- | ----------------------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte)                 | `2` or more                  |
+| 1    | Command ID (see commands from ESP)                          | `SSID`                       |
+| 2    | SSID string length                                          | `0` if not connected or more |
+|      | _**the next byte are returned only if Wi-Fi is connected**_ |                              |
+| 3    | SSID string                                                 | `M`                          |
+| 4    | ...                                                         | `Y`                          |
+| 5    | ...                                                         | `_`                          |
+| 6    | ...                                                         | `S`                          |
+| 7    | ...                                                         | `S`                          |
+| 8    | ...                                                         | `I`                          |
+| 9    | ...                                                         | `D`                          |
 
 [Back to command list](#Commands-overview)
 
@@ -586,7 +589,7 @@ This command returns the WiFi SSID (if connected).
 
 ### WIFI_GET_IP
 
-This command asks the WiFi IP address (if connected).
+This command asks the Wi-Fi IP address (if connected).
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
@@ -595,30 +598,30 @@ This command asks the WiFi IP address (if connected).
 
 **Returns:**
 
-| Byte | Description                                            | Example                      |
-| ---- | ------------------------------------------------------ | ---------------------------- |
-| 0    | Length of the message (excluding this byte)            | `2` or more                  |
-| 1    | Command ID (see commands from ESP)                     | `IP_ADDRESS`                 |
-| 2    | IP address string length                               | `0` if not connected or more |
-|      | _the next byte are returned only if WiFi is connected_ |                              |
-| 3    | IP address string                                      | `1`                          |
-| 4    | ...                                                    | `9`                          |
-| 5    | ...                                                    | `2`                          |
-| 6    | ...                                                    | `.`                          |
-| 7    | ...                                                    | `1`                          |
-| 8    | ...                                                    | `6`                          |
-| 9    | ...                                                    | `8`                          |
-| 10   | ...                                                    | `.`                          |
-| 11   | ...                                                    | `1`                          |
-| 12   | ...                                                    | `.`                          |
-| 13   | ...                                                    | `2`                          |
-| 14   | ...                                                    | `0`                          |
+| Byte | Description                                                 | Example                      |
+| ---- | ----------------------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte)                 | `2` or more                  |
+| 1    | Command ID (see commands from ESP)                          | `IP_ADDRESS`                 |
+| 2    | IP address string length                                    | `0` if not connected or more |
+|      | _**the next byte are returned only if Wi-Fi is connected**_ |                              |
+| 3    | IP address string                                           | `1`                          |
+| 4    | ...                                                         | `9`                          |
+| 5    | ...                                                         | `2`                          |
+| 6    | ...                                                         | `.`                          |
+| 7    | ...                                                         | `1`                          |
+| 8    | ...                                                         | `6`                          |
+| 9    | ...                                                         | `8`                          |
+| 10   | ...                                                         | `.`                          |
+| 11   | ...                                                         | `1`                          |
+| 12   | ...                                                         | `.`                          |
+| 13   | ...                                                         | `2`                          |
+| 14   | ...                                                         | `0`                          |
 
 [Back to command list](#Commands-overview)
 
 ### WIFI_GET_CONFIG
 
-This command returns the WiFi station status.
+This command returns the Wi-Fi station status.
 
 | Byte | Description                                 | Example           |
 | ---- | ------------------------------------------- | ----------------- |
@@ -627,15 +630,15 @@ This command returns the WiFi station status.
 
 **Returns:**
 
-| Byte | Description                                     | Example       |
-| ---- | ----------------------------------------------- | ------------- |
-| 0    | Length of the message (excluding this byte)     | `2`           |
-| 1    | Command ID (see commands from ESP)              | `WIFI_CONFIG` |
-| 2    | Access Point Config                             | `%zzzzzsaw`   |
-|      | w: WiFi station status (0: disable / 1: enable) |               |
-|      | a: access point status (0: disable / 1: enable) |               |
-|      | s: web server status (0: disable / 1: enable)   |               |
-|      | z: reserved for future use, must be set to zero |               |
+| Byte | Description                                      | Example       |
+| ---- | ------------------------------------------------ | ------------- |
+| 0    | Length of the message (excluding this byte)      | `2`           |
+| 1    | Command ID (see commands from ESP)               | `WIFI_CONFIG` |
+| 2    | Access Point Config                              | `%zzzzzsaw`   |
+|      | w: Wi-Fi station status (0: disable / 1: enable) |               |
+|      | a: access point status (0: disable / 1: enable)  |               |
+|      | s: web server status (0: disable / 1: enable)    |               |
+|      | z: reserved for future use, must be set to zero  |               |
 
 [Back to command list](#Commands-overview)
 
@@ -643,17 +646,17 @@ This command returns the WiFi station status.
 
 ### WIFI_SET_CONFIG
 
-This command sets the WiFi station, Access Point and Web Server configuration / status.
+This command sets the Wi-Fi station, Access Point and Web Server configuration / status.
 
-| Byte | Description                                     | Example           |
-| ---- | ----------------------------------------------- | ----------------- |
-| 0    | Length of the message (excluding this byte)     | `2`               |
-| 1    | Command ID (see commands to ESP)                | `WIFI_SET_CONFIG` |
-| 2    | Access Point Config                             | `%zzzzzsaw`       |
-|      | w: WiFi station status (0: disable / 1: enable) |                   |
-|      | a: access point status (0: disable / 1: enable) |                   |
-|      | s: web server status (0: disable / 1: enable)   |                   |
-|      | z: reserved for future use, must be set to zero |                   |
+| Byte | Description                                      | Example           |
+| ---- | ------------------------------------------------ | ----------------- |
+| 0    | Length of the message (excluding this byte)      | `2`               |
+| 1    | Command ID (see commands to ESP)                 | `WIFI_SET_CONFIG` |
+| 2    | Access Point Config                              | `%zzzzzsaw`       |
+|      | w: Wi-Fi station status (0: disable / 1: enable) |                   |
+|      | a: access point status (0: disable / 1: enable)  |                   |
+|      | s: web server status (0: disable / 1: enable)    |                   |
+|      | z: reserved for future use, must be set to zero  |                   |
 
 [Back to command list](#Commands-overview)
 
@@ -847,13 +850,13 @@ If another ping is already in progress, the command will be ignored.
 Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.  
 If no number of pings is passed, the default value will be 4.
 
-| Byte | Description                                                            | Example           |
-| ---- | ---------------------------------------------------------------------- | ----------------- |
-| 0    | Length of the message (excluding this byte)                            | `1` or `2`        |
-| 1    | Command ID (see commands to ESP)                                       | `SERVER_GET_PING` |
-|      | _the next byte is required if you want to specify the number of pings_ |                   |
-| 2    | Number of pings                                                        | `4`               |
-|      | _if 0 is passed, this will perform 4 pings by default_                 |                   |
+| Byte | Description                                                                | Example           |
+| ---- | -------------------------------------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte)                                | `1` or `2`        |
+| 1    | Command ID (see commands to ESP)                                           | `SERVER_GET_PING` |
+|      | _**the next byte is required if you want to specify the number of pings**_ |                   |
+| 2    | Number of pings                                                            | `4`               |
+|      | _**if 0 is passed, this will perform 4 pings by default**_                 |                   |
 
 **Returns:**
 
@@ -1197,7 +1200,7 @@ This command returns the SSID of the requested configuration network.
 
 The Rainbow configuration can hold up to 3 network settings.  
 This command registers a network in one of the spots.  
-Current ESP WiFi settings will be reset to take in account modification immediately.  
+Current ESP Wi-Fi settings will be reset to take in account modification immediately.  
 If the active flag is set to `1`, it will be set to `0` for other networks.  
 Only one network can be active at a time.
 
@@ -1255,7 +1258,7 @@ This command unregister a network by:
 
 This command sets the active network.  
 If the active flag is set to `1`, it will be set to `0` for other networks.  
-Current ESP WiFi settings will be reset to take in account modification immediately.
+Current ESP Wi-Fi settings will be reset to take in account modification immediately.
 
 | Byte | Description                                 | Example                        |
 | ---- | ------------------------------------------- | ------------------------------ |
@@ -2022,11 +2025,11 @@ A bootrom is provided directly on the cartridge, embedded in the FPGA Flash Memo
 To access it, simply press `SELECT` and `START` on controller 1 or 2 while powering on the console.  
 The bootrom allows you to perform some low level actions like:
 
-- configure WiFi networks without the need to connect to the cartridge's WiFi module access point from another device
-- manage files on the WiFi module Flash Memory / SD Card
-- backup/dump ROM to a file on the WiFi module Flash Memory / SD Card
-- program ROM from a file on the WiFi module Flash Memory / SD Card
-- display the current status of the WiFi module
+- configure Wi-Fi networks without the need to connect to the cartridge's Wi-Fi module access point from another device
+- manage files on the Wi-Fi module Flash Memory / SD Card
+- backup/dump ROM to a file on the Wi-Fi module Flash Memory / SD Card
+- program ROM from a file on the Wi-Fi module Flash Memory / SD Card
+- display the current status of the Wi-Fi module
 - reset the ESP to factory settings
 
 ---

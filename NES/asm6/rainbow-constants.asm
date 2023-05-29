@@ -22,11 +22,11 @@ TOESP_ESP_FACTORY_RESET               EQU 7   ; Reset ESP to factory settings
 TOESP_ESP_RESTART                     EQU 8   ; Restart ESP
 
 ; WIFI CMDS
-TOESP_WIFI_GET_STATUS                 EQU 9   ; Get WiFi connection status
-TOESP_WIFI_GET_SSID                   EQU 10  ; Get WiFi network SSID
-TOESP_WIFI_GET_IP                     EQU 11  ; Get WiFi IP address
-TOESP_WIFI_GET_CONFIG                 EQU 12  ; Get WiFi station / Access Point / Web Server config
-TOESP_WIFI_SET_CONFIG                 EQU 13  ; Set WiFi station / Access Point / Web Server config
+TOESP_WIFI_GET_STATUS                 EQU 9   ; Get Wi-Fi connection status
+TOESP_WIFI_GET_SSID                   EQU 10  ; Get Wi-Fi network SSID
+TOESP_WIFI_GET_IP                     EQU 11  ; Get Wi-Fi IP address
+TOESP_WIFI_GET_CONFIG                 EQU 12  ; Get Wi-Fi station / Access Point / Web Server config
+TOESP_WIFI_SET_CONFIG                 EQU 13  ; Set Wi-Fi station / Access Point / Web Server config
 
 ; ACESS POINT CMDS
 TOESP_AP_GET_SSID                     EQU 14  ; Get Access Point network SSID
@@ -85,10 +85,10 @@ FROMESP_DEBUG_LEVEL                   EQU 1   ; Returns debug configuration
 FROMESP_ESP_FIRMWARE_VERSION          EQU 2   ; Returns ESP/Rainbow firmware version
 
 ; WIFI / ACCESS POINT CMDS
-FROMESP_WIFI_STATUS                   EQU 3   ; Returns WiFi connection status
-FROMESP_SSID                          EQU 4   ; Returns WiFi / Access Point SSID
-FROMESP_IP                            EQU 5   ; Returns WiFi / Access Point IP address
-FROMESP_WIFI_CONFIG                   EQU 6   ; Returns WiFi station / Access Point / Web Server
+FROMESP_WIFI_STATUS                   EQU 3   ; Returns Wi-Fi connection status
+FROMESP_SSID                          EQU 4   ; Returns Wi-Fi / Access Point SSID
+FROMESP_IP                            EQU 5   ; Returns Wi-Fi / Access Point IP address
+FROMESP_WIFI_CONFIG                   EQU 6   ; Returns Wi-Fi station / Access Point / Web Server
 
 ; RND CMDS
 FROMESP_RND_BYTE                      EQU 7   ; Returns random byte value
@@ -124,7 +124,7 @@ RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_RESETTING_CONFIG EQU 1
 RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_DELETING_TWEB EQU 2
 RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_DELETING_WEB EQU 3
 
-; WiFi status
+; Wi-Fi status
 RNBW_WIFI_TIMEOUT EQU 255
 RNBW_WIFI_IDLE_STATUS EQU 0
 RNBW_WIFI_NO_SSID_AVAIL EQU 1
@@ -136,7 +136,7 @@ RNBW_WIFI_WRONG_PASSWORD 6
 RNBW_WIFI_DISCONNECTED EQU 7
 
 
-; WiFi error
+; Wi-Fi error
 RNBW_WIFI_ERROR_UNKNOWN EQU 255
 RNBW_WIFI_ERROR_NO_ERROR EQU 0
 RNBW_WIFI_ERROR_NO_SSID_AVAIL EQU 1
@@ -155,7 +155,7 @@ RNBW_PROTOCOL_UDP EQU 4
 RNBW_SERVER_DISCONNECTED EQU 0
 RNBW_SERVER_CONNECTED EQU 1
 
-; WiFi config flags
+; Wi-Fi config flags
 RNBW_WIFI_CONFIG_FLAGS_WIFI_STATION_ENABLE EQU 1
 RNBW_WIFI_CONFIG_FLAGS_ACCESS_POINT_ENABLE EQU 2
 RNBW_WIFI_CONFIG_FLAGS_WEB_SERVER_ENABLE EQU 4

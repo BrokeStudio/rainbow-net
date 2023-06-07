@@ -1,7 +1,7 @@
 ; ################################################################################
 ; RAINBOW CONSTANTS
 
-; mapper registers
+; Rainbow mapper registers
 CONFIG    = $4170
 RX        = $4171
 TX        = $4172
@@ -44,8 +44,9 @@ TX_ADD    = $4174
   SERVER_PING                     ; Get ping between ESP and server
   SERVER_SET_PROTOCOL             ; Set protocol to be used to communicate (WS/UDP/TCP)
   SERVER_GET_SETTINGS             ; Get current server host name and port
-  SERVER_GET_CONFIG_SETTINGS      ; Get server host name and port defined in the Rainbow config file
   SERVER_SET_SETTINGS             ; Set current server host name and port
+  SERVER_GET_CONFIG_SETTINGS      ; Get server host name and port values saved in the Rainbow config file
+  SERVER_SET_CONFIG_SETTINGS      ; Set server host name and port values saved in the Rainbow config file
   SERVER_RESTORE_SETTINGS         ; Restore server host name and port to values defined in the Rainbow config
   SERVER_CONNECT                  ; Connect to server
   SERVER_DISCONNECT               ; Disconnect from server
@@ -240,7 +241,3 @@ NUM_FILES = 64
   STREAM_WRITE = -10
   READ_TIMEOUT = -11
 .endenum
-
-; Rainbow registers
-RNBW_DATA = $5000
-RNBW_FLAGS = $5001

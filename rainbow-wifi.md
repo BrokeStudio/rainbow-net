@@ -58,9 +58,10 @@ Thanks to :
     - [SERVER_GET_PING](#server_get_ping)
     - [SERVER_SET_PROTOCOL](#server_set_protocol)
     - [SERVER_GET_SETTINGS](#server_get_settings)
-    - [SERVER_GET_CONFIG_SETTINGS](#server_get_config_settings)
     - [SERVER_SET_SETTINGS](#server_set_settings)
-    - [SERVER_RESTORE_SETTINGS](#server_restore_settings)
+    - [SERVER_GET_SAVED_SETTINGS](#server_get_saved_settings)
+    - [SERVER_SET_SAVED_SETTINGS](#server_set_saved_settings)
+    - [SERVER_RESTORE_SAVED_SETTINGS](#server_restore_saved_settings)
     - [SERVER_CONNECT](#server_connect)
     - [SERVER_DISCONNECT](#server_disconnect)
     - [SERVER_SEND_MESSAGE](#server_send_message)
@@ -187,68 +188,69 @@ Here's an example on how to send and receive data.
 
 ### Commands to the ESP
 
-| Value | Command                                                           | Description                                                               |
-| ----- | ----------------------------------------------------------------- | ------------------------------------------------------------------------- |
-|       |                                                                   | **ESP CMDS**                                                              |
-| 0     | [ESP_GET_STATUS](#ESP_GET_STATUS)                                 | Get ESP status                                                            |
-| 1     | [DEBUG_GET_LEVEL](#DEBUG_GET_LEVEL)                               | Get debug level                                                           |
-| 2     | [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)                               | Set debug level                                                           |
-| 3     | [DEBUG_LOG](#DEBUG_LOG)                                           | Debug / Log data                                                          |
-| 4     | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                       |
-| 5     | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->NES) buffer                                   |
-| 6     | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                              |
-| 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                             |
-| 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                           |
-|       |                                                                   | **WIFI CMDS**                                                             |
-| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                               |
-| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                    |
-| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get Wi-Fi IP address                                                      |
-| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                              |
-| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                              |
-|       |                                                                   | **ACCESS POINT CMDS**                                                     |
-| 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                             |
-| 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                               |
-|       |                                                                   | **RND CMDS**                                                              |
-| 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                           |
-| 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                    |
-| 18    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                           |
-| 19    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                    |
-|       |                                                                   | **SERVER CMDS**                                                           |
-| 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                              |
-| 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                           |
-| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                       |
-| 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                     |
-| 24    | [SERVER_GET_CONFIG_SETTINGS](#SERVER_GET_CONFIG_SETTINGS)         | Get server host name and port defined in the Rainbow config file          |
-| 25    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                     |
-| 26    | [SERVER_RESTORE_SETTINGS](#SERVER_RESTORE_SETTINGS)               | Restore server host name and port to values defined in the Rainbow config |
-| 27    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                         |
-| 28    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                    |
-| 29    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                    |
-|       |                                                                   | **NETWORK CMDS**                                                          |
-| 30    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks around and return count                                     |
-| 31    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                          |
-| 32    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                            |
-| 33    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                               |
-| 34    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                          |
-| 35    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                        |
-| 36    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                        |
-|       |                                                                   | **FILE CMDS**                                                             |
-| 37    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                         |
-| 38    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                        |
-| 39    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                   |
-| 40    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                      |
-| 41    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                             |
-| 42    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                   |
-| 43    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                  |
-| 44    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                 |
-| 45    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                               |
-| 46    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                    |
-| 47    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)       |
-| 48    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)        |
-| 49    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                              |
-| 50    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                            |
-| 51    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index   |
-| 52    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                        |
+| Value | Command                                                           | Description                                                                |
+| ----- | ----------------------------------------------------------------- | -------------------------------------------------------------------------- |
+|       |                                                                   | **ESP CMDS**                                                               |
+| 0     | [ESP_GET_STATUS](#ESP_GET_STATUS)                                 | Get ESP status                                                             |
+| 1     | [DEBUG_GET_LEVEL](#DEBUG_GET_LEVEL)                               | Get debug level                                                            |
+| 2     | [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)                               | Set debug level                                                            |
+| 3     | [DEBUG_LOG](#DEBUG_LOG)                                           | Debug / Log data                                                           |
+| 4     | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                        |
+| 5     | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->NES) buffer                                    |
+| 6     | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                               |
+| 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                              |
+| 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                            |
+|       |                                                                   | **WIFI CMDS**                                                              |
+| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                                |
+| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                     |
+| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get Wi-Fi IP address                                                       |
+| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                               |
+| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                               |
+|       |                                                                   | **ACCESS POINT CMDS**                                                      |
+| 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                              |
+| 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                                |
+|       |                                                                   | **RND CMDS**                                                               |
+| 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                            |
+| 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                     |
+| 18    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                            |
+| 19    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                     |
+|       |                                                                   | **SERVER CMDS**                                                            |
+| 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                               |
+| 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                            |
+| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                        |
+| 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                      |
+| 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                      |
+| 25    | [SERVER_GET_SAVED_SETTINGS](#SERVER_GET_SAVED_SETTINGS)           | Get server host name and port values saved in the Rainbow config file      |
+| 26    | [SERVER_SET_SAVED_SETTINGS](#SERVER_SET_SAVED_SETTINGS)           | Set server host name and port values saved in the Rainbow config file      |
+| 27    | [SERVER_RESTORE_SAVED_SETTINGS](#SERVER_RESTORE_SAVED_SETTINGS)   | Restore server host name and port to saved values from Rainbow config file |
+| 28    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                          |
+| 29    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                     |
+| 30    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                     |
+|       |                                                                   | **NETWORK CMDS**                                                           |
+| 31    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks around and return count                                      |
+| 32    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                           |
+| 33    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                             |
+| 34    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                                |
+| 35    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                           |
+| 36    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                         |
+| 37    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                         |
+|       |                                                                   | **FILE CMDS**                                                              |
+| 38    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                          |
+| 39    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                         |
+| 40    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                    |
+| 41    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                       |
+| 42    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                              |
+| 43    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                    |
+| 44    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                   |
+| 45    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                  |
+| 46    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                                |
+| 47    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                     |
+| 48    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)        |
+| 49    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)         |
+| 50    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                               |
+| 51    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                             |
+| 52    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index    |
+| 53    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                         |
 
 ### Commands from the ESP
 
@@ -919,68 +921,29 @@ This command returns the current server settings (hostname and port).
 
 **Returns:**
 
-| Byte | Description                                                                                    | Example         |
-| ---- | ---------------------------------------------------------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)                                                    | `19`            |
-| 1    | Command ID (see commands from ESP)                                                             | `HOST_SETTINGS` |
-|      | _**next bytes are returned if a server hostname AND port are set in the Rainbow config file**_ |                 |
-| 2    | Port MSB                                                                                       | `0x0B`          |
-| 3    | Port LSB                                                                                       | `0xB8`          |
-| 4    | Hostname string length                                                                         | `15`            |
-| 5    | Hostname string                                                                                | `G`             |
-| 6    | ...                                                                                            | `A`             |
-| 7    | ...                                                                                            | `M`             |
-| 8    | ...                                                                                            | `E`             |
-| 9    | ...                                                                                            | `.`             |
-| 10   | ...                                                                                            | `S`             |
-| 11   | ...                                                                                            | `E`             |
-| 12   | ...                                                                                            | `R`             |
-| 13   | ...                                                                                            | `V`             |
-| 14   | ...                                                                                            | `E`             |
-| 15   | ...                                                                                            | `R`             |
-| 16   | ...                                                                                            | `.`             |
-| 17   | ...                                                                                            | `N`             |
-| 18   | ...                                                                                            | `E`             |
-| 19   | ...                                                                                            | `T`             |
-
-[Back to command list](#Commands-overview)
-
----
-
-### SERVER_GET_CONFIG_SETTINGS
-
-This command returns the server settings (hostname and port) from the Rainbow config file.
-
-| Byte | Description                                 | Example                      |
-| ---- | ------------------------------------------- | ---------------------------- |
-| 0    | Length of the message (excluding this byte) | `1`                          |
-| 1    | Command ID (see commands to ESP)            | `SERVER_GET_CONFIG_SETTINGS` |
-
-**Returns:**
-
-| Byte | Description                                                                                    | Example         |
-| ---- | ---------------------------------------------------------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)                                                    | `19`            |
-| 1    | Command ID (see commands from ESP)                                                             | `HOST_SETTINGS` |
-|      | _**next bytes are returned if a server hostname AND port are set in the Rainbow config file**_ |                 |
-| 2    | Port MSB                                                                                       | `0x0B`          |
-| 3    | Port LSB                                                                                       | `0xB8`          |
-| 4    | Hostname string length                                                                         | `15`            |
-| 5    | Hostname string                                                                                | `G`             |
-| 6    | ...                                                                                            | `A`             |
-| 7    | ...                                                                                            | `M`             |
-| 8    | ...                                                                                            | `E`             |
-| 9    | ...                                                                                            | `.`             |
-| 10   | ...                                                                                            | `S`             |
-| 11   | ...                                                                                            | `E`             |
-| 12   | ...                                                                                            | `R`             |
-| 13   | ...                                                                                            | `V`             |
-| 14   | ...                                                                                            | `E`             |
-| 15   | ...                                                                                            | `R`             |
-| 16   | ...                                                                                            | `.`             |
-| 17   | ...                                                                                            | `N`             |
-| 18   | ...                                                                                            | `E`             |
-| 19   | ...                                                                                            | `T`             |
+| Byte | Description                                                         | Example         |
+| ---- | ------------------------------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte)                         | `1` or more     |
+| 1    | Command ID (see commands from ESP)                                  | `HOST_SETTINGS` |
+|      | _**next bytes are returned if a server hostname AND port are set**_ |                 |
+| 2    | Port MSB                                                            | `0x0B`          |
+| 3    | Port LSB                                                            | `0xB8`          |
+| 4    | Hostname string length                                              | `15`            |
+| 5    | Hostname string                                                     | `G`             |
+| 6    | ...                                                                 | `A`             |
+| 7    | ...                                                                 | `M`             |
+| 8    | ...                                                                 | `E`             |
+| 9    | ...                                                                 | `.`             |
+| 10   | ...                                                                 | `S`             |
+| 11   | ...                                                                 | `E`             |
+| 12   | ...                                                                 | `R`             |
+| 13   | ...                                                                 | `V`             |
+| 14   | ...                                                                 | `E`             |
+| 15   | ...                                                                 | `R`             |
+| 16   | ...                                                                 | `.`             |
+| 17   | ...                                                                 | `N`             |
+| 18   | ...                                                                 | `E`             |
+| 19   | ...                                                                 | `T`             |
 
 [Back to command list](#Commands-overview)
 
@@ -1013,14 +976,92 @@ It doesn't overwrite values set in the Rainbow config file.
 
 ---
 
-### SERVER_RESTORE_SETTINGS
+### SERVER_GET_SAVED_SETTINGS
+
+This command returns the server settings (hostname and port) from the Rainbow config file.
+
+| Byte | Description                                 | Example                     |
+| ---- | ------------------------------------------- | --------------------------- |
+| 0    | Length of the message (excluding this byte) | `1`                         |
+| 1    | Command ID (see commands to ESP)            | `SERVER_GET_SAVED_SETTINGS` |
+
+**Returns:**
+
+| Byte | Description                                        | Example         |
+| ---- | -------------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte)        | `1` or more     |
+| 1    | Command ID (see commands from ESP)                 | `HOST_SETTINGS` |
+|      | _**next bytes are returned if a server hostname**_ |                 |
+|      | _**AND port are set in the Rainbow config file**_  |                 |
+| 2    | Port MSB                                           | `0x0B`          |
+| 3    | Port LSB                                           | `0xB8`          |
+| 4    | Hostname string length                             | `15`            |
+| 5    | Hostname string                                    | `G`             |
+| 6    | ...                                                | `A`             |
+| 7    | ...                                                | `M`             |
+| 8    | ...                                                | `E`             |
+| 9    | ...                                                | `.`             |
+| 10   | ...                                                | `S`             |
+| 11   | ...                                                | `E`             |
+| 12   | ...                                                | `R`             |
+| 13   | ...                                                | `V`             |
+| 14   | ...                                                | `E`             |
+| 15   | ...                                                | `R`             |
+| 16   | ...                                                | `.`             |
+| 17   | ...                                                | `N`             |
+| 18   | ...                                                | `E`             |
+| 19   | ...                                                | `T`             |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### SERVER_SET_SAVED_SETTINGS
+
+This command sets the server settings (hostname and port) to the Rainbow config file, and sets them as active.
+
+| Byte | Description                                 | Example                     |
+| ---- | ------------------------------------------- | --------------------------- |
+| 0    | Length of the message (excluding this byte) | `1`                         |
+| 1    | Command ID (see commands to ESP)            | `SERVER_SET_SAVED_SETTINGS` |
+
+**Returns:**
+
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `19`            |
+| 1    | Command ID (see commands from ESP)          | `HOST_SETTINGS` |
+| 2    | Port MSB                                    | `0x0B`          |
+| 3    | Port LSB                                    | `0xB8`          |
+| 4    | Hostname string length                      | `15`            |
+| 5    | Hostname string                             | `G`             |
+| 6    | ...                                         | `A`             |
+| 7    | ...                                         | `M`             |
+| 8    | ...                                         | `E`             |
+| 9    | ...                                         | `.`             |
+| 10   | ...                                         | `S`             |
+| 11   | ...                                         | `E`             |
+| 12   | ...                                         | `R`             |
+| 13   | ...                                         | `V`             |
+| 14   | ...                                         | `E`             |
+| 15   | ...                                         | `R`             |
+| 16   | ...                                         | `.`             |
+| 17   | ...                                         | `N`             |
+| 18   | ...                                         | `E`             |
+| 19   | ...                                         | `T`             |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### SERVER_RESTORE_SAVED_SETTINGS
 
 This command sets the current server settings (hostname and port) to what is defined in the Rainbow config file.
 
-| Byte | Description                                 | Example                   |
-| ---- | ------------------------------------------- | ------------------------- |
-| 0    | Length of the message (excluding this byte) | `1`                       |
-| 1    | Command ID (see commands to ESP)            | `SERVER_RESTORE_SETTINGS` |
+| Byte | Description                                 | Example                         |
+| ---- | ------------------------------------------- | ------------------------------- |
+| 0    | Length of the message (excluding this byte) | `1`                             |
+| 1    | Command ID (see commands to ESP)            | `SERVER_RESTORE_SAVED_SETTINGS` |
 
 [Back to command list](#Commands-overview)
 

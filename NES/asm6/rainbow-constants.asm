@@ -1,7 +1,7 @@
 ; ################################################################################
 ; RAINBOW CONSTANTS
 
-; mapper registers
+; Rainbow mapper registers
 RNBW_CONFIG    EQU $4170
 RNBW_RX        EQU $4171
 RNBW_TX        EQU $4172
@@ -43,39 +43,40 @@ TOESP_SERVER_GET_STATUS               EQU 20  ; Get server connection status
 TOESP_SERVER_PING                     EQU 21  ; Get ping between ESP and server
 TOESP_SERVER_SET_PROTOCOL             EQU 22  ; Set protocol to be used to communicate (WS/UDP/TCP)
 TOESP_SERVER_GET_SETTINGS             EQU 23  ; Get current server host name and port
-TOESP_SERVER_GET_CONFIG_SETTINGS      EQU 24  ; Get server host name and port defined in the Rainbow config file
-TOESP_SERVER_SET_SETTINGS             EQU 25  ; Set current server host name and port
-TOESP_SERVER_RESTORE_SETTINGS         EQU 26  ; Restore server host name and port to values defined in the Rainbow config
-TOESP_SERVER_CONNECT                  EQU 27  ; Connect to server
-TOESP_SERVER_DISCONNECT               EQU 28  ; Disconnect from server
-TOESP_SERVER_SEND_MSG                 EQU 29  ; Send message to rainbow server
+TOESP_SERVER_SET_SETTINGS             EQU 24  ; Set current server host name and port
+TOESP_SERVER_GET_SAVED_SETTINGS       EQU 25  ; Get server host name and port values saved in the Rainbow config file
+TOESP_SERVER_SET_SAVED_SETTINGS       EQU 26  ; Set server host name and port values saved in the Rainbow config file
+TOESP_SERVER_RESTORE_SETTINGS         EQU 27  ; Restore server host name and port to values defined in the Rainbow config
+TOESP_SERVER_CONNECT                  EQU 28  ; Connect to server
+TOESP_SERVER_DISCONNECT               EQU 29  ; Disconnect from server
+TOESP_SERVER_SEND_MSG                 EQU 30  ; Send message to rainbow server
 
 ; NETWORK CMDS
-TOESP_NETWORK_SCAN                    EQU 30  ; Scan networks around and return count
-TOESP_NETWORK_GET_SCANNED_DETAILS     EQU 31  ; Get scanned network details
-TOESP_NETWORK_GET_REGISTERED          EQU 32  ; Get registered networks status
-TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 33  ; Get registered network SSID
-TOESP_NETWORK_REGISTER                EQU 34  ; Register network
-TOESP_NETWORK_UNREGISTER              EQU 35  ; Unregister network
-TOESP_NETWORK_SET_ACTIVE              EQU 36  ; Set active network
+TOESP_NETWORK_SCAN                    EQU 31  ; Scan networks around and return count
+TOESP_NETWORK_GET_SCANNED_DETAILS     EQU 32  ; Get scanned network details
+TOESP_NETWORK_GET_REGISTERED          EQU 33  ; Get registered networks status
+TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 34  ; Get registered network SSID
+TOESP_NETWORK_REGISTER                EQU 35  ; Register network
+TOESP_NETWORK_UNREGISTER              EQU 36  ; Unregister network
+TOESP_NETWORK_SET_ACTIVE              EQU 37  ; Set active network
 
 ; FILE COMMANDS
-TOESP_FILE_OPEN                       EQU 37  ; Open working file
-TOESP_FILE_CLOSE                      EQU 38  ; Close working file
-TOESP_FILE_STATUS                     EQU 39  ; Get working file status
-TOESP_FILE_EXISTS                     EQU 40  ; Check if file exists
-TOESP_FILE_DELETE                     EQU 41  ; Delete a file
-TOESP_FILE_SET_CUR                    EQU 42  ; Set working file cursor position a file
-TOESP_FILE_READ                       EQU 43  ; Read working file (at specific position)
-TOESP_FILE_WRITE                      EQU 44  ; Write working file (at specific position)
-TOESP_FILE_APPEND                     EQU 45  ; Append data to working file
-TOESP_FILE_COUNT                      EQU 46  ; Count files in a specific path
-TOESP_FILE_GET_LIST                   EQU 47  ; Get list of existing files in a path
-TOESP_FILE_GET_FREE_ID                EQU 48  ; Get an unexisting file ID in a specific path
-TOESP_FILE_GET_FS_INFO                EQU 49  ; Get file system details (ESP flash or SD card)
-TOESP_FILE_GET_INFO                   EQU 50  ; Get file info (size + crc32)
-TOESP_FILE_DOWNLOAD                   EQU 51  ; Download a file
-TOESP_FILE_FORMAT                     EQU 52  ; Format file system and save current config
+TOESP_FILE_OPEN                       EQU 38  ; Open working file
+TOESP_FILE_CLOSE                      EQU 39  ; Close working file
+TOESP_FILE_STATUS                     EQU 40  ; Get working file status
+TOESP_FILE_EXISTS                     EQU 41  ; Check if file exists
+TOESP_FILE_DELETE                     EQU 42  ; Delete a file
+TOESP_FILE_SET_CUR                    EQU 43  ; Set working file cursor position a file
+TOESP_FILE_READ                       EQU 44  ; Read working file (at specific position)
+TOESP_FILE_WRITE                      EQU 45  ; Write working file (at specific position)
+TOESP_FILE_APPEND                     EQU 46  ; Append data to working file
+TOESP_FILE_COUNT                      EQU 47  ; Count files in a specific path
+TOESP_FILE_GET_LIST                   EQU 48  ; Get list of existing files in a path
+TOESP_FILE_GET_FREE_ID                EQU 49  ; Get an unexisting file ID in a specific path
+TOESP_FILE_GET_FS_INFO                EQU 50  ; Get file system details (ESP flash or SD card)
+TOESP_FILE_GET_INFO                   EQU 51  ; Get file info (size + crc32)
+TOESP_FILE_DOWNLOAD                   EQU 52  ; Download a file
+TOESP_FILE_FORMAT                     EQU 53  ; Format file system and save current config
 
 ; commands from ESP
 

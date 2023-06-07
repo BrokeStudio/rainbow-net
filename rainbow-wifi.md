@@ -560,7 +560,7 @@ This command asks the Wi-Fi status.
 
 ### WIFI_GET_SSID
 
-This command returns the Wi-Fi SSID (if connected).
+This command returns the Wi-Fi SSID (if active).
 
 | Byte | Description                                 | Example         |
 | ---- | ------------------------------------------- | --------------- |
@@ -569,19 +569,19 @@ This command returns the Wi-Fi SSID (if connected).
 
 **Returns:**
 
-| Byte | Description                                                 | Example                      |
-| ---- | ----------------------------------------------------------- | ---------------------------- |
-| 0    | Length of the message (excluding this byte)                 | `2` or more                  |
-| 1    | Command ID (see commands from ESP)                          | `SSID`                       |
-| 2    | SSID string length                                          | `0` if not connected or more |
-|      | _**the next byte are returned only if Wi-Fi is connected**_ |                              |
-| 3    | SSID string                                                 | `M`                          |
-| 4    | ...                                                         | `Y`                          |
-| 5    | ...                                                         | `_`                          |
-| 6    | ...                                                         | `S`                          |
-| 7    | ...                                                         | `S`                          |
-| 8    | ...                                                         | `I`                          |
-| 9    | ...                                                         | `D`                          |
+| Byte | Description                                                  | Example                   |
+| ---- | ------------------------------------------------------------ | ------------------------- |
+| 0    | Length of the message (excluding this byte)                  | `2` or more               |
+| 1    | Command ID (see commands from ESP)                           | `SSID`                    |
+| 2    | SSID string length                                           | `0` if not active or more |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                           |
+| 3    | SSID string                                                  | `M`                       |
+| 4    | ...                                                          | `Y`                       |
+| 5    | ...                                                          | `_`                       |
+| 6    | ...                                                          | `S`                       |
+| 7    | ...                                                          | `S`                       |
+| 8    | ...                                                          | `I`                       |
+| 9    | ...                                                          | `D`                       |
 
 [Back to command list](#Commands-overview)
 
@@ -589,7 +589,7 @@ This command returns the Wi-Fi SSID (if connected).
 
 ### WIFI_GET_IP
 
-This command asks the Wi-Fi IP address (if connected).
+This command asks the Wi-Fi IP address (if active and connected).
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
@@ -598,24 +598,24 @@ This command asks the Wi-Fi IP address (if connected).
 
 **Returns:**
 
-| Byte | Description                                                 | Example                      |
-| ---- | ----------------------------------------------------------- | ---------------------------- |
-| 0    | Length of the message (excluding this byte)                 | `2` or more                  |
-| 1    | Command ID (see commands from ESP)                          | `IP_ADDRESS`                 |
-| 2    | IP address string length                                    | `0` if not connected or more |
-|      | _**the next byte are returned only if Wi-Fi is connected**_ |                              |
-| 3    | IP address string                                           | `1`                          |
-| 4    | ...                                                         | `9`                          |
-| 5    | ...                                                         | `2`                          |
-| 6    | ...                                                         | `.`                          |
-| 7    | ...                                                         | `1`                          |
-| 8    | ...                                                         | `6`                          |
-| 9    | ...                                                         | `8`                          |
-| 10   | ...                                                         | `.`                          |
-| 11   | ...                                                         | `1`                          |
-| 12   | ...                                                         | `.`                          |
-| 13   | ...                                                         | `2`                          |
-| 14   | ...                                                         | `0`                          |
+| Byte | Description                                                  | Example                                 |
+| ---- | ------------------------------------------------------------ | --------------------------------------- |
+| 0    | Length of the message (excluding this byte)                  | `2` or more                             |
+| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS`                            |
+| 2    | IP address string length                                     | `0` if not active and connected or more |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                                         |
+| 3    | IP address string                                            | `1`                                     |
+| 4    | ...                                                          | `9`                                     |
+| 5    | ...                                                          | `2`                                     |
+| 6    | ...                                                          | `.`                                     |
+| 7    | ...                                                          | `1`                                     |
+| 8    | ...                                                          | `6`                                     |
+| 9    | ...                                                          | `8`                                     |
+| 10   | ...                                                          | `.`                                     |
+| 11   | ...                                                          | `1`                                     |
+| 12   | ...                                                          | `.`                                     |
+| 13   | ...                                                          | `2`                                     |
+| 14   | ...                                                          | `0`                                     |
 
 [Back to command list](#Commands-overview)
 
@@ -673,19 +673,19 @@ This command asks the aceess point SSID.
 
 **Returns:**
 
-| Byte | Description                                                 | Example                   |
-| ---- | ----------------------------------------------------------- | ------------------------- |
-| 0    | Length of the message (excluding this byte)                 | `2` or more               |
-| 1    | Command ID (see commands from ESP)                          | `SSID`                    |
-| 2    | SSID string length                                          | `0` if not active or more |
-|      | _**the next byte are returned only if Wi-Fi is connected**_ |                           |
-| 3    | SSID string                                                 | `M`                       |
-| 4    | ...                                                         | `Y`                       |
-| 5    | ...                                                         | `_`                       |
-| 6    | ...                                                         | `S`                       |
-| 7    | ...                                                         | `S`                       |
-| 8    | ...                                                         | `I`                       |
-| 9    | ...                                                         | `D`                       |
+| Byte | Description                                                  | Example                   |
+| ---- | ------------------------------------------------------------ | ------------------------- |
+| 0    | Length of the message (excluding this byte)                  | `2` or more               |
+| 1    | Command ID (see commands from ESP)                           | `SSID`                    |
+| 2    | SSID string length                                           | `0` if not active or more |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                           |
+| 3    | SSID string                                                  | `M`                       |
+| 4    | ...                                                          | `Y`                       |
+| 5    | ...                                                          | `_`                       |
+| 6    | ...                                                          | `S`                       |
+| 7    | ...                                                          | `S`                       |
+| 8    | ...                                                          | `I`                       |
+| 9    | ...                                                          | `D`                       |
 
 [Back to command list](#Commands-overview)
 
@@ -702,24 +702,24 @@ This command asks the acess point IP address.
 
 **Returns:**
 
-| Byte | Description                                                 | Example                   |
-| ---- | ----------------------------------------------------------- | ------------------------- |
-| 0    | Length of the message (excluding this byte)                 | `2` or more               |
-| 1    | Command ID (see commands from ESP)                          | `IP_ADDRESS`              |
-| 2    | IP address string length                                    | `0` if not active or more |
-|      | _**the next byte are returned only if Wi-Fi is connected**_ |                           |
-| 3    | IP address string                                           | `1`                       |
-| 4    | ...                                                         | `9`                       |
-| 5    | ...                                                         | `2`                       |
-| 6    | ...                                                         | `.`                       |
-| 7    | ...                                                         | `1`                       |
-| 8    | ...                                                         | `6`                       |
-| 9    | ...                                                         | `8`                       |
-| 10   | ...                                                         | `.`                       |
-| 11   | ...                                                         | `1`                       |
-| 12   | ...                                                         | `.`                       |
-| 13   | ...                                                         | `2`                       |
-| 14   | ...                                                         | `0`                       |
+| Byte | Description                                                  | Example                   |
+| ---- | ------------------------------------------------------------ | ------------------------- |
+| 0    | Length of the message (excluding this byte)                  | `2` or more               |
+| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS`              |
+| 2    | IP address string length                                     | `0` if not active or more |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                           |
+| 3    | IP address string                                            | `1`                       |
+| 4    | ...                                                          | `9`                       |
+| 5    | ...                                                          | `2`                       |
+| 6    | ...                                                          | `.`                       |
+| 7    | ...                                                          | `1`                       |
+| 8    | ...                                                          | `6`                       |
+| 9    | ...                                                          | `8`                       |
+| 10   | ...                                                          | `.`                       |
+| 11   | ...                                                          | `1`                       |
+| 12   | ...                                                          | `.`                       |
+| 13   | ...                                                          | `2`                       |
+| 14   | ...                                                          | `0`                       |
 
 [Back to command list](#Commands-overview)
 
@@ -852,13 +852,13 @@ If another ping is already in progress, the command will be ignored.
 Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.  
 If no number of pings is passed, the default value will be 4.
 
-| Byte | Description                                                                | Example           |
-| ---- | -------------------------------------------------------------------------- | ----------------- |
-| 0    | Length of the message (excluding this byte)                                | `1` or `2`        |
-| 1    | Command ID (see commands to ESP)                                           | `SERVER_GET_PING` |
-|      | _**the next byte is required if you want to specify the number of pings**_ |                   |
-| 2    | Number of pings                                                            | `4`               |
-|      | _**if 0 is passed, this will perform 4 pings by default**_                 |                   |
+| Byte    | Description                                                                | Example           |
+| ------- | -------------------------------------------------------------------------- | ----------------- |
+| 0       | Length of the message (excluding this byte)                                | `1` or `2`        |
+| 1       | Command ID (see commands to ESP)                                           | `SERVER_GET_PING` |
+|         | _**the next byte is required if you want to specify the number of pings**_ |                   |
+| 2 (opt) | Number of pings                                                            | `4`               |
+|         | _**if 0 is passed, this will perform 4 pings by default**_                 |                   |
 
 **Returns:**
 
@@ -923,7 +923,7 @@ This command returns the current server settings (hostname and port).
 | ---- | ---------------------------------------------------------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte)                                                    | `19`            |
 | 1    | Command ID (see commands from ESP)                                                             | `HOST_SETTINGS` |
-|      | **_next bytes are returned if a server hostname AND port are set in the Rainbow config file_** |                 |
+|      | _**next bytes are returned if a server hostname AND port are set in the Rainbow config file**_ |                 |
 | 2    | Port MSB                                                                                       | `0x0B`          |
 | 3    | Port LSB                                                                                       | `0xB8`          |
 | 4    | Hostname string length                                                                         | `15`            |
@@ -962,7 +962,7 @@ This command returns the server settings (hostname and port) from the Rainbow co
 | ---- | ---------------------------------------------------------------------------------------------- | --------------- |
 | 0    | Length of the message (excluding this byte)                                                    | `19`            |
 | 1    | Command ID (see commands from ESP)                                                             | `HOST_SETTINGS` |
-|      | **_next bytes are returned if a server hostname AND port are set in the Rainbow config file_** |                 |
+|      | _**next bytes are returned if a server hostname AND port are set in the Rainbow config file**_ |                 |
 | 2    | Port MSB                                                                                       | `0x0B`          |
 | 3    | Port LSB                                                                                       | `0xB8`          |
 | 4    | Hostname string length                                                                         | `15`            |
@@ -1376,7 +1376,7 @@ Message first bytes:
 | 0    | Length of the message (excluding this byte)                     | `2` or more   |
 | 1    | Command ID (see commands from ESP)                              | `FILE_STATUS` |
 | 2    | File status (0: no file opened / 1: a file is currently opened) | `0` or `1`    |
-|      | **_next bytes are sent only if a file is currently opened_**    |               |
+|      | _**next bytes are sent only if a file is currently opened**_    |               |
 | 3    | Config                                                          | `%zzzzzzdm`   |
 |      | m: access mode (0: auto / 1: manual)                            |               |
 |      | d: drive (0: ESP Flash / 1: SD card)                            |               |
@@ -1537,7 +1537,7 @@ If the file is smaller than the passed offset, it'll be filled with 0x00.
 
 | Byte    | Description                                 | Example        |
 | ------- | ------------------------------------------- | -------------- |
-| 0       | Length of the message (excluding this byte) | `2 to 5`       |
+| 0       | Length of the message (excluding this byte) | `2` to `5`     |
 | 1       | Command ID (see commands to ESP)            | `FILE_SET_CUR` |
 | 2       | Offset LSB                                  | `0x00`         |
 | 3 (opt) | Offset                                      | `0x00`         |
@@ -1677,7 +1677,7 @@ Using **auto mode**:
 | Byte | Description                                                          | Example            |
 | ---- | -------------------------------------------------------------------- | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths))                           | `FILE_PATHS::SAVE` |
-|      | **_next bytes are required if you want to use a pagination system_** |                    |
+|      | _**next bytes are required if you want to use a pagination system**_ |                    |
 | 4    | Page size (number of files per page)                                 | `9`                |
 | 5    | Current page (0 indexed)                                             | `1`                |
 
@@ -1691,7 +1691,7 @@ Using **manual mode**:
 | 6    | ...                                                                  | `a`     |
 | 7    | ...                                                                  | `t`     |
 | 8    | ...                                                                  | `h`     |
-|      | **_next bytes are required if you want to use a pagination system_** |         |
+|      | _**next bytes are required if you want to use a pagination system**_ |         |
 | 9    | Page size (number of files per page)                                 | `9`     |
 | 10   | Current page (0 indexed)                                             | `1`     |
 
@@ -1708,7 +1708,7 @@ Message first bytes:
 | 0    | Length of the message (excluding this byte)      | `2` or more |
 | 1    | Command ID (see commands from ESP)               | `FILE_LIST` |
 | 2    | Number of files                                  | `3`         |
-|      | **_next bytes are returned if files are found_** |             |
+|      | _**next bytes are returned if files are found**_ |             |
 
 Using **auto mode**:
 
@@ -1767,7 +1767,7 @@ Get first free file ID in a specific predefined path.
 | ---- | ------------------------------------------------------ | ---------- |
 | 0    | Length of the message (excluding this byte)            | `1` or `2` |
 | 1    | Command ID (see commands from ESP)                     | `FILE_ID`  |
-|      | **_next byte is returned if a free file ID is found_** |            |
+|      | _**next byte is returned if a free file ID is found**_ |            |
 | 2    | File ID                                                | `3`        |
 
 [Back to command list](#Commands-overview)
@@ -1795,7 +1795,7 @@ Message first bytes:
 | ---- | ----------------------------------------------------- | -------------------------- |
 | 0    | Length of the message (excluding this byte)           | `1` or `27`                |
 | 1    | Command ID (see commands from ESP)                    | `FILE_FS_INFO`             |
-|      | **_next bytes are returned if file system is ready_** |                            |
+|      | _**next bytes are returned if file system is ready**_ |                            |
 | 2    | Total space MSB                                       | `0x00`                     |
 | 3    | Total space                                           | `0x00`                     |
 | 4    | Total space                                           | `0x00`                     |
@@ -1877,7 +1877,7 @@ Using **manual mode**:
 | ---- | ---------------------------------------------- | ----------- |
 | 0    | Length of the message (excluding this byte)    | `1` or `9`  |
 | 1    | Command ID (see commands from ESP)             | `FILE_INFO` |
-|      | **_next bytes are returned if file is found_** |             |
+|      | _**next bytes are returned if file is found**_ |             |
 | 2    | CRC32 MSB                                      | `0x3B`      |
 | 3    | CRC32                                          | `0x84`      |
 | 4    | CRC32                                          | `0xE6`      |

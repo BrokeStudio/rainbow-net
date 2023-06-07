@@ -1,20 +1,20 @@
 # Rainbow mapper documentation
 
 Rainbow or RNBW is a cartridge board intended for homebrew releases with its own unique mapper assigned to iNES Mapper 3873 (**temporary**).  
-The cartridge was initially designed with WiFi capabilities in mind (Rainbow NET protocol), but can also be used without it.  
+The cartridge was initially designed with Wi-Fi capabilities in mind (Rainbow NET protocol), but can also be used without it.  
 The board and mapper were designed by Broke Studio which also manufactures the cartridges.
 
 # Overview
 
-- WiFi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional)
-- Embedded bootrom to dump/flash the cart using the WiFi chip (optional, needs the WiFi chip to work)
-- On board micro SD card support (optional, needs the WiFi chip to work)
+- Wi-Fi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional)
+- Embedded bootrom to dump/flash the cart using the Wi-Fi chip (optional, needs the Wi-Fi chip to work)
+- On board micro SD card support (optional, needs the Wi-Fi chip to work)
 - 5 PRG-ROM banking modes
 - 2 PRG-RAM banking modes
 - 5 CHR-ROM/CHR-RAM banking modes
 - 8K of FPGA-RAM
   - first 4K shared between CPU and PPU so it can be updated during rendering and used as nametables or pattern tables or extended tiles/attributes tables
-  - last 2K are used to communicate with the WiFi chip but can also be used as general purpose PRG-RAM
+  - last 2K are used to communicate with the Wi-Fi chip but can also be used as general purpose PRG-RAM
 - Up to 8MiB PRG-ROM
 - Up to 8MiB CHR-ROM
 - 32K or 128K of PRG-RAM
@@ -140,12 +140,12 @@ On power-up and reset, some registers are initialized/reset with specific values
 | -------- | ----- | ---------------------------------------------------------------------- |
 |          |       | **PRG settings**                                                       |
 | \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)           |
-| \$4108   | \$7F  | Set PRG-ROM 32K bank upper bits to \$7F so it'll address the last bank |
-| \$4118   | \$FF  | Set PRG-ROM 32K bank lower bits so it'll address the last bank         |
+| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it'll address the first bank |
+| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it'll address the first bank |
 |          |       | **CHR settings**                                                       |
 | \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table                    |
-| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to zero so it'll address the first bank |
-| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to zero so it'll address the first bank |
+| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to $00 so it'll address the first bank  |
+| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to $00 so it'll address the first bank  |
 |          |       | **Nametables settings (horizontal mirroring using CIRAM)**             |
 | \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                       |
 | \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                       |
@@ -157,11 +157,11 @@ On power-up and reset, some registers are initialized/reset with specific values
 | \$412D   | \$80  | Set nametable @ \$2C00 chip selector to CIRAM                          |
 |          |       | **Scanline IRQ settings**                                              |
 | \$4151   | \$00  | Disable scanline IRQ                                                   |
-| \$4152   | \$87  | Set scanline IRQ offset to 135                                         |
+| \$4153   | \$87  | Set scanline IRQ offset to 135                                         |
 |          |       | **CPU Cycle IRQ settings**                                             |
 | \$415A   | \$00  | Disable CPU Cycle IRQ                                                  |
-|          |       | **WiFi**                                                               |
-| \$4170   | \$00  | Disable WiFi                                                           |
+|          |       | **Wi-Fi**                                                              |
+| \$4170   | \$00  | Disable Wi-Fi                                                          |
 
 ## PRG banking modes (\$4100, read/write)
 
@@ -534,7 +534,7 @@ BBBB BBBB
 ++++-++++- Bank index upper bits (\$413x) or lower bits (\$414x)
 ```
 
-## Scanline/PPU IRQ (\$4150-\$4151)
+## Scanline/PPU IRQ (\$4150-\$4153)
 
 Scanline IRQ is very close to MMC5's.  
 For more informations: https://www.nesdev.org/wiki/MMC5#Scanline_Detection_and_Scanline_IRQ.
@@ -552,39 +552,39 @@ LLLL LLLL
 ++++-++++- IRQ latch value
 ```
 
-### PPU IRQ control (\$4151, read-write)
+### PPU IRQ enable / status (\$4151, read-write)
 
 Write
 
-```
-7  bit  0
----- ----
-E... ....
-|
-+--------- Scanline IRQ Enable flag (1=enabled)
-```
+Writing any value to this register will enable scanline IRQ.
 
 Read
 
 ```
 7  bit  0
 ---- ----
-SV.. ....
-||
-|+-------- "In Frame" flag
+IF.. ...H
+||      |
+||      +- HBlank flag
+|+-------- In-Frame flag
 +--------- Scanline IRQ Pending flag
 ```
 
 The Scanline IRQ Pending flag becomes set at any time that the internal scanline counter matches the value written to register \$4150. If the scanline IRQ is enabled, it will also generate /IRQ to the system.
 
-The "In Frame" flag is set when the PPU is rendering a frame and cleared during vertical blank.
+The In-Frame flag is set when the PPU is rendering a frame and cleared during vertical blank.
 
-Any time this register is read, the Scanline IRQ Pending flag is cleared (acknowledging the IRQ).
+The HBlank flag is set when the PPU is rendering after pixel 250 of each scanline.
 
-### PPU IRQ offset (\$4152, write-only)
+Any time this register is read, the Scanline IRQ Pending flag is cleared (acknowledging the pending IRQ).
 
-The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.  
-You may need to trigger it early on a scanline to update a palette during HBlank for example.
+### PPU IRQ disable (\$4152, write-only)
+
+Writing any value to this register will disable scanline IRQ AND acknowledge any pending IRQ.
+
+### PPU IRQ offset (\$4153, write-only)
+
+The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.
 
 The minimum value is ... (\$).  
 The default value set on power-up and reset is 135 (\$87).  
@@ -758,7 +758,7 @@ E... FFFF
       +--- Outputs expansion audio data to APU register $4011 (read)
 ```
 
-## WiFi (\$4170-\$4174)
+## Wi-Fi (\$4170-\$4174)
 
 ### Configuration (\$4170, read/write)
 
@@ -913,9 +913,10 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$414F        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
 |               |            |        | **SCANLINE DETECTION IRQ**                                  |
 | \$4150        | `VVVVVVVV` |   W    | Latch value                                                 |
-| \$4151        | `E.......` |   W    | Control                                                     |
-| \$4152        | `OOOOOOOO` |   W    | Offset                                                      |
-| \$4153-\$4157 |            |        | Not used                                                    |
+| \$4151        | `IF.....H` |  R/W   | IRQ enable / status                                         |
+| \$4152        | `........` |   W    | IRQ disable                                                 |
+| \$4153        | `OOOOOOOO` |   W    | Offset                                                      |
+| \$4154-\$4157 |            |        | Not used                                                    |
 |               |            |        | **CPU CYCLE COUNTER IRQ**                                   |
 | \$4158        | `LLLLLLLL` |   W    | Latch low byte                                              |
 | \$4159        | `HHHHHHHH` |   W    | Latch high byte                                             |

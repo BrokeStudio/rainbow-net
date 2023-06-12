@@ -247,8 +247,8 @@ Here's an example on how to send and receive data.
 | 47    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                     |
 | 48    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)        |
 | 49    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)         |
-| 50    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                               |
-| 51    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                             |
+| 50    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                             |
+| 51    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                               |
 | 52    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index    |
 | 53    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                         |
 

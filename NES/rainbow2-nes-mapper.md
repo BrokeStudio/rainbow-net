@@ -1,6 +1,6 @@
 # Rainbow mapper documentation
 
-Rainbow or RNBW is a cartridge board intended for homebrew releases with its own unique mapper assigned to iNES Mapper 3873 (**temporary**).  
+Rainbow or RNBW is a cartridge board intended for homebrew releases with its own unique mapper assigned to iNES Mapper 682 (**temporary**).  
 The cartridge was initially designed with Wi-Fi capabilities in mind (Rainbow NET protocol), but can also be used without it.  
 The board and mapper were designed by Broke Studio which also manufactures the cartridges.
 

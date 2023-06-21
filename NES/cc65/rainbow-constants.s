@@ -88,7 +88,7 @@ TX_ADD    = $4174
   READY                           ; ESP is ready
   DEBUG_LEVEL                     ; Return debug configuration
   ESP_FIRMWARE_VERSION            ; Return ESP/Rainbow firmware version
-  ESP_FACTORY_RESET               ; See ESP_FACTORY_RESET_RES enum for details on returned
+  ESP_FACTORY_RESET               ; See ESP_FACTORY_RESET_RES enum for details on returned value
 
 ; WIFI / ACCESS POINT CMDS
   WIFI_STATUS                     ; Return Wi-Fi connection status
@@ -159,8 +159,6 @@ TX_ADD    = $4174
 
 ; Server protocols
 .enum SERVER_PROTOCOLS
-  WS
-  WS_S
   TCP
   TCP_S
   UDP

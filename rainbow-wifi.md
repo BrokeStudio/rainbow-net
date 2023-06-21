@@ -217,7 +217,7 @@ Here's an example on how to send and receive data.
 |       |                                                                   | **SERVER CMDS**                                                            |
 | 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                               |
 | 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                            |
-| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (WS/TCP/UDP)                        |
+| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (TCP/UDP)                           |
 | 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                      |
 | 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                      |
 | 25    | [SERVER_GET_SAVED_SETTINGS](#SERVER_GET_SAVED_SETTINGS)           | Get server host name and port values saved in the Rainbow config file      |
@@ -898,13 +898,11 @@ This command sets the protocol to be use when talking to game server.
 
 **Protocol values:**
 
-| Value | PROTOCOL | Description       |
-| ----- | -------- | ----------------- |
-| 0     | WS       | WebSocket         |
-| 1     | WS_S     | WebSocket Secured |
-| 2     | TCP      | TCP               |
-| 3     | TCP_S    | TCP Secured       |
-| 4     | UDP      | UDP               |
+| Value | PROTOCOL | Description |
+| ----- | -------- | ----------- |
+| 0     | TCP      | TCP         |
+| 1     | TCP_S    | TCP Secured |
+| 2     | UDP      | UDP         |
 
 [Back to command list](#Commands-overview)
 

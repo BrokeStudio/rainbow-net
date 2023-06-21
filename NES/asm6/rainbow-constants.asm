@@ -84,40 +84,41 @@ TOESP_FILE_FORMAT                     EQU 53  ; Format file system and save curr
 FROMESP_READY                         EQU 0   ; ESP is ready
 FROMESP_DEBUG_LEVEL                   EQU 1   ; Returns debug configuration
 FROMESP_ESP_FIRMWARE_VERSION          EQU 2   ; Returns ESP/Rainbow firmware version
+FROMESP_ESP_FACTORY_RESET             EQU 3   ; See ESP_FACTORY_RESET_RES constants for details on returned value
 
 ; WIFI / ACCESS POINT CMDS
-FROMESP_WIFI_STATUS                   EQU 3   ; Returns Wi-Fi connection status
-FROMESP_SSID                          EQU 4   ; Returns Wi-Fi / Access Point SSID
-FROMESP_IP                            EQU 5   ; Returns Wi-Fi / Access Point IP address
-FROMESP_WIFI_CONFIG                   EQU 6   ; Returns Wi-Fi station / Access Point / Web Server
+FROMESP_WIFI_STATUS                   EQU 4   ; Returns Wi-Fi connection status
+FROMESP_SSID                          EQU 5   ; Returns Wi-Fi / Access Point SSID
+FROMESP_IP                            EQU 6   ; Returns Wi-Fi / Access Point IP address
+FROMESP_WIFI_CONFIG                   EQU 7   ; Returns Wi-Fi station / Access Point / Web Server
 
 ; RND CMDS
-FROMESP_RND_BYTE                      EQU 7   ; Returns random byte value
-FROMESP_RND_WORD                      EQU 8   ; Returns random word value
+FROMESP_RND_BYTE                      EQU 8   ; Returns random byte value
+FROMESP_RND_WORD                      EQU 9   ; Returns random word value
 
 ; SERVER CMDS
-FROMESP_SERVER_STATUS                 EQU 9   ; Returns server connection status
-FROMESP_SERVER_PING                   EQU 10  ; Returns min, max and average round-trip time and number of lost packets
-FROMESP_SERVER_SETTINGS               EQU 11  ; Returns server settings (host name + port)
-FROMESP_MESSAGE_FROM_SERVER           EQU 12  ; Message from server
+FROMESP_SERVER_STATUS                 EQU 10   ; Returns server connection status
+FROMESP_SERVER_PING                   EQU 11  ; Returns min, max and average round-trip time and number of lost packets
+FROMESP_SERVER_SETTINGS               EQU 12  ; Returns server settings (host name + port)
+FROMESP_MESSAGE_FROM_SERVER           EQU 13  ; Message from server
 
 ; NETWORK CMDS
-FROMESP_NETWORK_COUNT                 EQU 13  ; Returns number of networks found
-FROMESP_NETWORK_SCANNED_DETAILS       EQU 14  ; Returns details for a scanned network
-FROMESP_NETWORK_REGISTERED_DETAILS    EQU 15  ; Returns SSID for a registered network
-FROMESP_NETWORK_REGISTERED            EQU 16  ; Returns registered networks status
+FROMESP_NETWORK_COUNT                 EQU 14  ; Returns number of networks found
+FROMESP_NETWORK_SCANNED_DETAILS       EQU 15  ; Returns details for a scanned network
+FROMESP_NETWORK_REGISTERED_DETAILS    EQU 16  ; Returns SSID for a registered network
+FROMESP_NETWORK_REGISTERED            EQU 17  ; Returns registered networks status
 
 ; FILE CMDS
-FROMESP_FILE_STATUS                   EQU 17  ; Returns working file status
-FROMESP_FILE_EXISTS                   EQU 18  ; Returns if file exists or not
-FROMESP_FILE_DELETE                   EQU 19  ; See RNBW_FILE_DELETE_xxx constants for details on returned value
-FROMESP_FILE_LIST                     EQU 20  ; Returns path file list (FILE_GET_LIST)
-FROMESP_FILE_DATA                     EQU 21  ; Returns file data (FILE_READ)
-FROMESP_FILE_COUNT                    EQU 22  ; Returns file count in a specific path
-FROMESP_FILE_ID                       EQU 23  ; Returns a free file ID (FILE_GET_FREE_ID)
-FROMESP_FILE_FS_INFO                  EQU 24  ; Returns file system info (FILE_GET_FS_INFO)
-FROMESP_FILE_INFO                     EQU 25  ; Returns file info (size + CRC32) (FILE_GET_INFO)
-FROMESP_FILE_DOWNLOAD                 EQU 26  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
+FROMESP_FILE_STATUS                   EQU 18  ; Returns working file status
+FROMESP_FILE_EXISTS                   EQU 19  ; Returns if file exists or not
+FROMESP_FILE_DELETE                   EQU 20  ; See RNBW_FILE_DELETE_xxx constants for details on returned value
+FROMESP_FILE_LIST                     EQU 21  ; Returns path file list (FILE_GET_LIST)
+FROMESP_FILE_DATA                     EQU 22  ; Returns file data (FILE_READ)
+FROMESP_FILE_COUNT                    EQU 23  ; Returns file count in a specific path
+FROMESP_FILE_ID                       EQU 24  ; Returns a free file ID (FILE_GET_FREE_ID)
+FROMESP_FILE_FS_INFO                  EQU 25  ; Returns file system info (FILE_GET_FS_INFO)
+FROMESP_FILE_INFO                     EQU 26  ; Returns file info (size + CRC32) (FILE_GET_INFO)
+FROMESP_FILE_DOWNLOAD                 EQU 27  ; See RNBW_FILE_DOWNLOAD_xxx constants for details on returned value
 
 ; ESP factory reset result codes
 RNBW_CONFIG_FACTORY_RESET_SUCCESS EQU 0
@@ -133,7 +134,7 @@ RNBW_WIFI_SCAN_COMPLETED EQU 2
 RNBW_WIFI_CONNECTED EQU 3
 RNBW_WIFI_CONNECTION_FAILED EQU 4
 RNBW_WIFI_CONNECTION_LOST EQU 5
-RNBW_WIFI_WRONG_PASSWORD 6
+RNBW_WIFI_WRONG_PASSWORD EQU 6
 RNBW_WIFI_DISCONNECTED EQU 7
 
 
@@ -146,11 +147,9 @@ RNBW_WIFI_ERROR_CONNECTION_LOST EQU 5
 RNBW_WIFI_ERROR_WRONG_PASSWORD EQU 6
 
 ; Server protocols
-RNBW_PROTOCOL_WEBSOCKET EQU 0
-RNBW_PROTOCOL_WEBSOCKET_SECURED EQU 1
-RNBW_PROTOCOL_TCP EQU 2
-RNBW_PROTOCOL_TCP_SECURED EQU 3
-RNBW_PROTOCOL_UDP EQU 4
+RNBW_PROTOCOL_TCP EQU 0
+RNBW_PROTOCOL_TCP_SECURED EQU 1
+RNBW_PROTOCOL_UDP EQU 2
 
 ; Server status
 RNBW_SERVER_DISCONNECTED EQU 0

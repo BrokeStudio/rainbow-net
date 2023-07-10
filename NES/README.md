@@ -5,7 +5,7 @@ Here you'll find the Rainbow documentation for the NES, and 6502 library for cc6
 | File                                                                         | Description                                 |
 | ---------------------------------------------------------------------------- | ------------------------------------------- |
 | [rainbow-wifi.md](../rainbow-wifi.md)                                        | Rainbow WiFi documentation                  |
-| [rainbow-nes-mapper.md](rainbow2-nes-mapper.md)                              | Rainbow NES mapper documentation            |
+| [rainbow-nes-mapper.md](rainbow-nes-mapper.md)                               | Rainbow NES mapper documentation            |
 | [rainbow-nes-prg-rom-self-flashing.md](rainbow-nes-prg-rom-self-flashing.md) | Rainbow PRG-ROM self-flashing documentation |
 | [rainbow-nes-chr-rom-self-flashing.md](rainbow-nes-chr-rom-self-flashing.md) | Rainbow CHR-ROM self-flashing documentation |
 

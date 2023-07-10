@@ -1245,26 +1245,26 @@ Current ESP Wi-Fi settings will be reset to take in account modification immedia
 If the active flag is set to `1`, it will be set to `0` for other networks.  
 Only one network can be active at a time.
 
-| Byte | Description                                 | Example                        |
-| ---- | ------------------------------------------- | ------------------------------ |
-| 0    | Length of the message (excluding this byte) | `17`                           |
-| 1    | Command ID (see commands to ESP)            | `NETWORK_REGISTER`             |
-| 2    | Network ID                                  | `0` (0 or 1 or 2)              |
-| 3    | Network active flag                         | `0` (0: inactive / 1: active)) |
-| 4    | SSID string length                          | `4`                            |
-| 5    | SSID string                                 | `S`                            |
-| 6    | ...                                         | `S`                            |
-| 7    | ...                                         | `I`                            |
-| 8    | ...                                         | `D`                            |
-| 9    | PASSWORD string length                      | `8`                            |
-| 10   | PASSWORD string                             | `P`                            |
-| 11   | ...                                         | `A`                            |
-| 12   | ...                                         | `S`                            |
-| 13   | ...                                         | `S`                            |
-| 14   | ...                                         | `W`                            |
-| 15   | ...                                         | `O`                            |
-| 16   | ...                                         | `R`                            |
-| 17   | ...                                         | `D`                            |
+| Byte | Description                                 | Example                       |
+| ---- | ------------------------------------------- | ----------------------------- |
+| 0    | Length of the message (excluding this byte) | `17`                          |
+| 1    | Command ID (see commands to ESP)            | `NETWORK_REGISTER`            |
+| 2    | Network ID                                  | `0` (0 or 1 or 2)             |
+| 3    | Network active flag                         | `0` (0: inactive / 1: active) |
+| 4    | SSID string length                          | `4`                           |
+| 5    | SSID string                                 | `S`                           |
+| 6    | ...                                         | `S`                           |
+| 7    | ...                                         | `I`                           |
+| 8    | ...                                         | `D`                           |
+| 9    | PASSWORD string length                      | `8`                           |
+| 10   | PASSWORD string                             | `P`                           |
+| 11   | ...                                         | `A`                           |
+| 12   | ...                                         | `S`                           |
+| 13   | ...                                         | `S`                           |
+| 14   | ...                                         | `W`                           |
+| 15   | ...                                         | `O`                           |
+| 16   | ...                                         | `R`                           |
+| 17   | ...                                         | `D`                           |
 
 **Notes:**
 

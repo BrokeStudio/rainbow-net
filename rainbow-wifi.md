@@ -14,6 +14,7 @@ Thanks to :
 - [Paul](https://twitter.com/InfiniteNesLive) / [InfiniteNesLives](http://www.infiniteneslives.com) for taking time to explain me lots of NES specific hardware stuff
 - Christian Gohin, my father, who helped me designing the first prototype board and fixing hardware issues
 - [Sylvain Gadrat](https://sgadrat.itch.io/super-tilt-bro) aka [RogerBidon](https://twitter.com/RogerBidon) for helping me update [FCEUX](http://www.fceux.com) to emulate the Rainbow mapper
+- [Margarita Gadrat](http://www.margarita-gadrat.com) for the Rainbow Net logo
 - The NES Wi-Fi Club (cheers guys 😊)
 - [NESdev](http://www.nesdev.com) community
 - Ludy, my wife, for the endless support ❤

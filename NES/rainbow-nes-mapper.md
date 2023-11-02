@@ -6,37 +6,45 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 
 # Overview
 
-- Wi-Fi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional)
-- Embedded bootrom to dump/flash the cart using the Wi-Fi chip (optional, needs the Wi-Fi chip to work)
-- On board micro SD card support (optional, needs the Wi-Fi chip to work)
+- Wi-Fi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional, needs the Wi-Fi chip to work)
+  - Embedded bootrom to perform multiple task (manage networks/files, dump/flash the cart, ...)
+  - On board micro SD card support
 - 5 PRG-ROM banking modes
 - 2 PRG-RAM banking modes
 - 5 CHR-ROM/CHR-RAM banking modes
 - 8K of FPGA-RAM
-  - first 4K shared between CPU and PPU so it can be updated during rendering and used as nametables or pattern tables or extended tiles/attributes tables
-  - last 2K are used to communicate with the Wi-Fi chip but can also be used as general purpose PRG-RAM
+  - first 4K are shared between CPU and PPU so it can be updated during rendering and used as nametables or pattern tables or extended tiles/attributes tables or as general purpose PRG-RAM
+  - next 2K can be used as general purpose PRG-RAM
+  - last 2K are used to communicate with the Wi-Fi chip and can also be used as general purpose PRG-RAM
 - Up to 8MiB PRG-ROM
 - Up to 8MiB CHR-ROM
 - 32K or 128K of PRG-RAM
 - 32K or 128K of CHR-RAM
-- Self-flashable PRG-ROM/CHR-ROM
-- Scanline detection with counter and configurable IRQ
-- Frame detection with status bit
-- CPU cycle counter and configurable IRQ
+- Self-flashable PRG-ROM
+- Self-flashable CHR-ROM
+- Scanline counter
+  - Configurable IRQ
+  - Frame detection with status bit
+  - HBlank detection with status bit
+  - M2 "jitter" counter
+- CPU cycle counter
+  - configurable IRQ
 - Nametables can be individually mapped to CHR-RAM/CHR-ROM/FPGA-RAM
 - Pattern tables can be mapped to CHR-RAM/CHR-ROM/FPGA-RAM
-- Extended background tile mode allows to address up to 16384 tiles
-- Extended sprite mode allows to address up to 65535 tiles
-- Three extra sound channels:
+- Attribute Extended Mode allows each individual 8x8 tile to have its own palette setting
+- Background Extended Mode allows to address up to 16384 tiles
+- Sprite Extended Mode allows to address up to 65535 tiles
+- Window Split Mode
+- Expansion audio:
   - 2 pulse channels
   - 1 sawtooth channel
-  - identical to those in the VRC6 mapper
+  - ZPCM mode that allows expansion audio on stock NES
 - System reset detection
-  - resets some, but not all, registers
+  - resets some registers
 
 # Banks
 
-The Rainbow provides:
+The Rainbow mapper provides:
 
 - PRG-ROM: 5 banking modes
 - PRG-RAM: 2 banking modes
@@ -136,32 +144,37 @@ The Rainbow provides:
 
 On power-up and reset, some registers are initialized/reset with specific values.
 
-| Register | Value | Note                                                                   |
-| -------- | ----- | ---------------------------------------------------------------------- |
-|          |       | **PRG settings**                                                       |
-| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)           |
-| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it'll address the first bank |
-| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it'll address the first bank |
-|          |       | **CHR settings**                                                       |
-| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table                    |
-| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to $00 so it'll address the first bank  |
-| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to $00 so it'll address the first bank  |
-|          |       | **Nametables settings (horizontal mirroring using CIRAM)**             |
-| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                       |
-| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                       |
-| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                       |
-| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                       |
-| \$412A   | \$80  | Set nametable @ \$2000 chip selector to CIRAM                          |
-| \$412B   | \$80  | Set nametable @ \$2400 chip selector to CIRAM                          |
-| \$412C   | \$80  | Set nametable @ \$2800 chip selector to CIRAM                          |
-| \$412D   | \$80  | Set nametable @ \$2C00 chip selector to CIRAM                          |
-|          |       | **Scanline IRQ settings**                                              |
-| \$4151   | \$00  | Disable scanline IRQ                                                   |
-| \$4153   | \$87  | Set scanline IRQ offset to 135                                         |
-|          |       | **CPU Cycle IRQ settings**                                             |
-| \$415A   | \$00  | Disable CPU Cycle IRQ                                                  |
-|          |       | **Wi-Fi**                                                              |
-| \$4170   | \$00  | Disable Wi-Fi                                                          |
+| Register | Value | Note                                                                     |
+| -------- | ----- | ------------------------------------------------------------------------ |
+|          |       | **PRG settings**                                                         |
+| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)             |
+| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it will address the first bank |
+| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it will address the first bank |
+|          |       | **CHR settings**                                                         |
+| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                     |
+|          |       | disable Sprite Extended Mode, disable Window Split Mode                  |
+| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to $00 so it will address the first bank  |
+| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to $00 so it will address the first bank  |
+|          |       | **Nametables settings (horizontal mirroring using CIRAM)**               |
+| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                         |
+| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                         |
+| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                         |
+| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                         |
+| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                |
+| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                            |
+| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                            |
+| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                            |
+| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                            |
+| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                |
+|          |       | **Scanline IRQ settings**                                                |
+| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                            |
+| \$4153   | \$87  | Set scanline IRQ offset to 135                                           |
+|          |       | **CPU Cycle IRQ settings**                                               |
+| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                           |
+|          |       | **Wi-Fi**                                                                |
+| \$4170   | \$00  | Disable Wi-Fi                                                            |
+|          |       | **Audio Expansion**                                                      |
+| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable ZPCM                               |
 
 ## PRG banking modes (\$4100, read/write)
 
@@ -277,11 +290,11 @@ CuUU UUUU
 |||| ||||
 |+++-++++- Bank index upper bits (u only used in PRG-ROM mode)
 ++-------- Chip selector
-              0x: PRG-ROM (b is used for bank index)
+              0x: PRG-ROM (u is used for bank index)
               10: PRG-RAM
               11: FPGA-RAM
                 If using PRG-RAM 8K mode, then bank number is ignored since FPGA-RAM is only 8K.
-                Only the bank number lower bit is used in FPGA-RAM 4K mode to select the 4K page.
+                If using PRG-RAM 4K mode, then only the bank number lower bit is used to select the 4K page.
 ```
 
 ### Bank lower bits
@@ -317,24 +330,25 @@ LLLL LLLL
 
 Some CHR configurations involve the first 4K of FPGA-RAM.  
 It can be used as nametables, pattern tables, 8x8 attribute tables, extended tiles (can address up to 16384 tiles).  
-It's important to keep in mind that those first 4K of FPGA-RAM is shared between CPU and PPU so it can be updated during rendering.
+It is important to keep in mind that those first 4K of FPGA-RAM are shared between CPU and PPU so it can be updated during rendering.
 
-**/!\ Using FPGA-RAM as nametable _and_ pattern table is not a good idea.**
+**/!\ Using FPGA-RAM as nametable _and_ pattern table is _not_ a good idea.**
 
-### CHR control (banking modes / source / Sprite Extended Mode) (\$4120, read/write)
+### CHR control (banking modes / source / Sprite Extended Mode / Window Split Mode) (\$4120, read/write)
 
 ```
 7  bit  0
 ---- ----
-CCE. .BBB
-|||   |||
-|||   +++- CHR banking mode
-|||         000: 8K CHR mode 0 (CHR bank 0 is used)
-|||         001: 4K CHR mode 1 (CHR bank 0 to 1 are used)
-|||         010: 2K CHR mode 2 (CHR banks 0 to 3 are used)
-|||         011: 1K CHR mode 3 (CHR banks 0 to 7 are used) - see note below
-|||         1xx: 512B CHR mode 4 (CHR banks 0 to 15 are used) - see note below
-||+------- Sprite Extended Mode (0: disabled, 1: enabled)
+CCSW .BBB
+||||  |||
+||||  +++- CHR banking mode
+||||        000: 8K CHR mode 0 (CHR bank 0 is used)
+||||        001: 4K CHR mode 1 (CHR bank 0 to 1 are used)
+||||        010: 2K CHR mode 2 (CHR banks 0 to 3 are used)
+||||        011: 1K CHR mode 3 (CHR banks 0 to 7 are used) - see note below
+||||        1xx: 512B CHR mode 4 (CHR banks 0 to 15 are used) - see note below
+|||+------ Window Split Mode (0: disabled, 1: enabled)
+||+------- Sprite Extended Mode (0: disabled, 1: enabled), see registers $4200-$4240
 ++-------- Chip selector for pattern tables
             00: CHR-ROM
             01: CHR-RAM
@@ -344,7 +358,7 @@ Note: when using 1K and 512B CHR banking modes with 512K (or more) CHR-ROM,
       you also need to update the CHR bank upper bits using the appropriate registers (\$4130-\$413F)
 ```
 
-### Background extended mode bank upper bits (\$4121, write-only)
+### Background Extended Mode bank upper bits (\$4121, write-only)
 
 ```
 7  bit  0
@@ -354,7 +368,8 @@ Note: when using 1K and 512B CHR banking modes with 512K (or more) CHR-ROM,
    +-++++-
 ```
 
-When using background extended mode
+When using Background Extended Mode, you can address up to 16384 tiles.  
+This registers is used to select a 256K CHR offset for every tiles.
 
 ### Nametables bank ($4126-$4129, write-only)
 
@@ -362,6 +377,7 @@ When using background extended mode
 - \$4127 controls nametable at \$2400
 - \$4128 controls nametable at \$2800
 - \$4129 controls nametable at \$2C00
+- \$412E controls Window Split nametable
 
 ```
 7  bit  0
@@ -379,6 +395,7 @@ BBBB BBBB
 - \$412B controls nametable at \$2400
 - \$412C controls nametable at \$2800
 - \$412D controls nametable at \$2C00
+- \$412F controls Window Split nametable
 
 ```
 7  bit  0
@@ -386,27 +403,31 @@ BBBB BBBB
 CC.. DDEE
 ||   ||||
 ||   ||||
-||   ||++- Extended mode
-||   ||     00: extended modes disabled
-||   ||     01: AT extended mode
-||   ||     10: BG extended mode
-||   ||     11: AT extended mode + BG extended mode
+||   ||++- Extended Modes
+||   ||     00: Extended Modes disabled
+||   ||     01: Attribute Extended Mode
+||   ||     10: Background Extended Mode
+||   ||     11: Attribute Extended Mode + Background Extended Mode
 ||   ++--- 1K destination in 4K FPGA-RAM
 ||          Used when Extended mode above is not %00
 ||          00: 1st 1K of FPGA-RAM
 ||          01: 2nd 1K of FPGA-RAM
 ||          10: 3rd 1K of FPGA-RAM
 ||          11: 4th 1K of FPGA-RAM
-++-------- Chip selector
+++-------- Chip selector (forced to FPGA-RAM for $412F)
             00: CIRAM
             01: CHR-RAM
             10: FPGA-RAM
             11: CHR-ROM
 ```
 
-#### Extended modes
+Note:
 
-When using AT and/or BG extended mode, values written to the corresponding 1K of FPGA-RAM are used to extend the tile read from the nametable.
+- Window Split chip will be forced to FPGA-RAM.
+
+#### Extended Modes
+
+When using Attribute Extended Mode and/or Background Extended Mode, values written to the corresponding 1K of FPGA-RAM are used to extend the tile read from the nametable.
 
 Extended byte format:
 
@@ -415,17 +436,17 @@ Extended byte format:
 ---- ----
 AABB BBBB
 |||| ||||
-||++-++++- Select 4 KB CHR bank to use with specified tile (BG extended mode)
-++-------- Select palette to use with specified tile (AT extended mode)
+||++-++++- Select 4 KB CHR bank to use with specified tile (Background Extended Mode)
+++-------- Select palette to use with specified tile (Attribute Extended Mode)
 ```
 
-In BG extended mode, CHR banking behaves differently than normal when fetching tiles from pattern tables:
+In Background extended mode, CHR banking behaves differently than normal when fetching tiles from pattern tables:
 
 - CHR banking mode (register \$4120) is ignored but not CHR source (register \$4120)
 - CHR banks are always 4KB in this mode
 - The values of the CHR banking registers \$4130-\$414F are also ignored
 - Bits 0-5 specified above are used for selecting a 4KB CHR bank on a per-tile basis
-- The five bits in $4121 are used for selecting a 16 CHR bank for every tiles
+- Bits 0-5 of register $4121 are used for selecting a 256K CHR offset for every tiles
 
 #### Chip selector
 
@@ -442,12 +463,12 @@ In BG extended mode, CHR banking behaves differently than normal when fetching t
 |                    |       | Those 4KB of FPGA-RAM can also be accessed by the CPU at \$5000-$5FFF (bank 0) |
 |                    |       | This means that you can update the nametable during rendering.                 |
 |                    |       | /!\ Using FPGA-RAM as nametable **and** pattern table is not a good idea.      |
-|                    |       | /!\ Using FPGA-RAM as nametable **and** as Extended mode data can be done      |
+|                    |       | /!\ Using FPGA-RAM as nametable **and** as Extended Mode data can be done      |
 |                    |       | under certain circumstances:                                                   |
 |                    |       | - when using FPGA-RAM as nametable at \$2000 or \$2400, you can only           |
-|                    |       | use 3rd and 4th 1K bank of FPGA-RAM as Extended mode data.                     |
+|                    |       | use 3rd and 4th 1K bank of FPGA-RAM as Extended Mode data.                     |
 |                    |       | - when using FPGA-RAM as nametable at \$2800 or \$2C00, you can only           |
-|                    |       | use 1st and 2nd 1K bank of FPGA-RAM as Extended mode data.                     |
+|                    |       | use 1st and 2nd 1K bank of FPGA-RAM as Extended Mode data.                     |
 |                    |       |                                                                                |
 | CHR-ROM            | %11   | Corresponding nametable bank register is used to address 1KB blocks of CHR-ROM |
 |                    |       | Depending on the CHR-ROM size, not all bits will be used                       |
@@ -534,7 +555,106 @@ BBBB BBBB
 ++++-++++- Bank index upper bits (\$413x) or lower bits (\$414x)
 ```
 
-## Scanline/PPU IRQ (\$4150-\$4153)
+## Sprite Extended Mode (\$4200-\$4240)
+
+In Sprite Extended Mode, CHR banking behaves differently than normal when fetching tiles from pattern tables:
+
+- CHR banking mode (register \$4120) is ignored but not CHR source (register \$4120)
+- CHR banks are always 4KB in this mode
+- The values of the CHR banking registers \$4130-\$414F are also ignored
+- Registers \$4200-\$423F specify the bank lower bits for each sprite (4K CHR bank selector) allowing the possibility to address 65535 sprites
+- Register \$4240 specify the bank upper bits for all sprites (1024K CHR bank selector)
+
+### Sprite Extended Mode bank lower bits (\$4200-\$423F, write-only)
+
+One register per sprite.
+
+```
+7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- Bank index lower bits
+```
+
+### Sprite Extended Mode bank upper bits (\$4240, write-only)
+
+The bank upper bits are common to every sprite.
+
+```
+7  bit  0
+---- ----
+.... .UUU
+      |||
+      +++- Bank index upper bits
+```
+
+## Window Split Mode (\$4122-\$4125)
+
+When Window Split Mode is enabled (see register \$4120), all VRAM fetches corresponding to the appropriate screen region will be redirected to nametable defined by registers \$412E (Window Split nametable bank) and \$412F (Window Split nametable control).
+
+Notes:
+
+- 34 background tiles are fetched per scanline. The mapper performs the split by watching which background tile is being fetched during which scanline, and if it is within the split region, replacing the normal NT data with the split data according to the absolute screen position of the tile (i.e., ignoring the coarse horizontal and vertical scroll output as part of the VRAM address for the fetch).
+- Since it operates on a per-tile basis horizontally, fine horizontal scrolling "carries into" the split region: setting the horizontal scroll to 1-7 will result in the split being moved to the left 1-7 pixels. Whenever scrolling exceeds a multiple of 8, the split will "snap" back to its normal position.
+- Horizontal scrolling for the split region operates on a per-tile basis, meaning that it will move horizontally by 8px steps.
+- Vertical scrolling for the split region operates like normal vertical scrolling. 0-239 are valid scroll values, whereas 240-255 will display Attribute table data as NT data for the first few scanlines. The split nametable will wrap so that the top of the nametable will appear below as you scroll (just as if vertical mirroring were employed).
+- FPGA-RAM is always used as the nametable in split mode (see register \$412F).
+
+### Window Split start/stop tile ($4122-$4123, write-only)
+
+Register \$4122 defines the tile where the split starts.
+
+```
+7  bit  0
+---- ----
+...S SSSS
+   |-||||
+   +-++++- Specify Window Split start tile (0-31)
+```
+
+Register \$4123 defines the tile where the split region stops.
+
+```
+7  bit  0
+---- ----
+...E EEEE
+   |-||||
+   +-++++- Specify Window Split stop tile (0-31)
+```
+
+Note:
+
+- If the start tile is **smaller** than the stop tile, then the split NT region will appear in the middle of the normal NT region.
+- If the start tile is **higher** than the stop tile, then the normal NT region will appear in the middle of the split NT region.
+
+### Window Split coarse X scroll ($4124, write-only)
+
+This register controls the horizontal scrolling of the split region on a per-tile basis.
+
+```
+7  bit  0
+---- ----
+...X XXXX
+   |-||||
+   +-++++- Specify Window Split coarse X scroll (0-32)
+```
+
+TODO...
+
+### Window Split fine Y scroll ($4125, write-only)
+
+This register controls the vertical scrolling of the split region.
+
+```
+7  bit  0
+---- ----
+YYYY YYYYY
+||||-||||
+++++-++++- Specify Window Split fine Y scroll (0-256)
+```
+
+## Scanline/PPU IRQ (\$4150-\$4154)
 
 Scanline IRQ is very close to MMC5's.  
 For more informations: https://www.nesdev.org/wiki/MMC5#Scanline_Detection_and_Scanline_IRQ.
@@ -563,18 +683,18 @@ Read
 ```
 7  bit  0
 ---- ----
-IF.. ...H
+IF.. ...I
 ||      |
-||      +- HBlank flag
+||      +- Scanline IRQ Pending flag
 |+-------- In-Frame flag
-+--------- Scanline IRQ Pending flag
++--------- HBlank flag
 ```
 
 The Scanline IRQ Pending flag becomes set at any time that the internal scanline counter matches the value written to register \$4150. If the scanline IRQ is enabled, it will also generate /IRQ to the system.
 
 The In-Frame flag is set when the PPU is rendering a frame and cleared during vertical blank.
 
-The HBlank flag is set when the PPU is rendering after pixel 250 of each scanline.
+The HBlank flag is set when the PPU is rendering pixel 256 of each scanline.
 
 Any time this register is read, the Scanline IRQ Pending flag is cleared (acknowledging the pending IRQ).
 
@@ -586,7 +706,7 @@ Writing any value to this register will disable scanline IRQ AND acknowledge any
 
 The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.
 
-The minimum value is ... (\$).  
+The minimum value is 0 (\$00).  
 The default value set on power-up and reset is 135 (\$87).  
 The maximum value is 169 (\$A9).
 
@@ -598,6 +718,20 @@ OOOO OOOO
 ++++-++++- IRQ offset value
 ```
 
+### PPU IRQ jitter counter (\$4154, read-only)
+
+This counter is incremented on every m2 falling edge.
+When an IRQ is triggered, this counter is reset to zero.
+It can then be read and used to adjust a delay to execute a piece of code (almost) always at the same time every time.
+
+```
+7  bit  0
+---- ----
+CCCC CCCC
+|||| ||||
+++++-++++- IRQ jitter counter
+```
+
 ## CPU Cycle IRQ (\$4158-\$415B)
 
 This IRQ feature is a CPU cycle counting IRQ generator.  
@@ -607,15 +741,14 @@ The IRQ line is held low until it is acknowledged.
 
 ### How to Use the IRQ Generator
 
-- Set the counter to the desired number of cycles.
-- Enable the IRQ generator by turning on both the IRQ Enable and IRQ Counter Enable flags of the IRQ Control command.
-- Within the IRQ handler, write to the IRQ Control command to acknowledge the IRQ.
+- Set the latch to the desired number of cycles.
+- Enable the IRQ generator by turning on the IRQ Enable flag of the IRQ Control register.
+- Within the IRQ handler, write to the IRQ acknowledge register to acknowledge the IRQ.
 - Optional: Go back to Step 1 for the next IRQ.
 
-### CPU IRQ latch/counter low byte (\$4158, write-only)
+### CPU IRQ latch low byte (\$4158, write-only)
 
-This register specifies the IRQ latch value low byte.  
-The IRQ counter is updated at the same time.
+This register specifies the IRQ latch value low byte.
 
 ```
 7  bit  0
@@ -625,10 +758,9 @@ LLLL LLLL
 ++++-++++- The low eight bits of the IRQ latch
 ```
 
-### CPU IRQ latch/counter high byte (\$4159, write-only)
+### CPU IRQ latch high byte (\$4159, write-only)
 
-This register specifies the IRQ latch value high byte.  
-The IRQ counter is updated at the same time.
+This register specifies the IRQ latch value high byte.
 
 ```
 7  bit  0
@@ -640,7 +772,11 @@ HHHH HHHH
 
 ### CPU IRQ control (\$415A, write-only)
 
-Writing zero to this register will disable interrupts.
+Writing zero to this register will disable interrupts.  
+If this register is written to with 'E' set, the IRQ counter is reloaded with the latch value.  
+If 'E' is clear, the IRQ counter remains unchanged.  
+The 'A' bit here has no immediate effect, and remains unused until IRQ Acknowledge is written to.  
+It can be used to distinguish a one-shot IRQ from a repeated IRQ.
 
 ```
 7  bit  0
@@ -648,7 +784,7 @@ Writing zero to this register will disable interrupts.
 .... ..EA
        ||
        |+- IRQ enable after acknowledgement (see IRQ acknowledge)
-       +-- IRQ enable (0: disabled, 1: enabled), this flag will be reset to 0 when IRQ counter reaches $0000.
+       +-- IRQ enable (0: disabled, 1: enabled)
 ```
 
 ### CPU IRQ acknowledge (\$415B, write-only)
@@ -685,6 +821,22 @@ PPPV VVVV
 | Version (VVVVV) | Description |
 | --------------- | ----------- |
 | 0               | v1.0        |
+
+## IRQ status (\$4161, read-only)
+
+Read this register to get the IRQ status.  
+It will indicate if PPU IRQ or CPU IRQ or ESP / Wi-Fi IRQ is pending (1) or not (0).  
+Reading this register will **NOT** acknowledge any IRQ.
+
+```
+7  bit  0
+---- ----
+PC.. ...W
+||      |
+||      +- ESP / Wi-Fi IRQ status
+|+-------- CPU Cycle IRQ status
++--------- PPU Scanline IRQ status
+```
 
 ## Sound / Audio Expansion (\$41A0-\$41AF)
 
@@ -751,16 +903,16 @@ E... FFFF
 ---- ----
 .... .ZTF
       |||
-      ||+- Outputs expansion audio to EXP6 pin ( 0 : disable | 1 : enable)
+      ||+- Outputs expansion audio to EXP6 pin (0: disable, 1: enable)
       |    usually used for front loader
-      |+-- Outputs expansion audio to EXP9 pin ( 0 : disable | 1 : enable)
+      |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
       |    usually used for top loader
       +--- Outputs expansion audio data to APU register $4011 (read)
 ```
 
-## Wi-Fi (\$4170-\$4174)
+## Wi-Fi (\$4190-\$4194)
 
-### Configuration (\$4170, read/write)
+### Configuration (\$4190, read/write)
 
 This register is readable and writable.
 
@@ -769,16 +921,16 @@ This register is readable and writable.
 ---- ----
 .... ..IE
        ||
-       |+ ESP enable ( 0 : disable | 1 : enable)
-       +- IRQ enable ( 0 : disable | 1 : enable)
+       |+ ESP enable (0: disable, 1: enable)
+       +- IRQ enable (0: disable, 1: enable)
 ```
 
-### RX - Reception (\$4171, read/write)
+### RX - Reception (\$4191, read/write)
 
 Writing any value to this register acknowledge the last received message and set the bit 7 of the register to 0.  
 The bit 7 will be set to 1 again when a new message if available.
 
-Reading:
+Reading this register will return the following byte:
 
 ```
 7  bit  0
@@ -786,28 +938,28 @@ Reading:
 DR.. ....
 ||
 |+------- Data ready, this flag is set to 1 if a message is waiting to be sent on the ESP side
-+-------- Data received ( 0 : FPGA can receive a new message | 1 : a new message is ready )
++-------- Data received (0: FPGA can receive a new message, 1: a new message is ready)
           This flag is set to 1 when the FPGA has received a new message
-          If the I flag of the ESP configuration register ($4170) is set, then the NES IRQ will be triggered
+          If the I flag of the ESP configuration register ($4190) is set, then the NES IRQ will be triggered
 ```
 
-### TX - Transimission (\$4172, read/write)
+### TX - Transimission (\$4192, read/write)
 
 Writing any value to this register sends the message currently stored in FPGA-RAM and sets the bit 7 of the register to 0.  
 The bit 7 will be set to 1 again when the message is sent.
 
-Reading:
+Reading this register will return the following byte:
 
 ```
 7  bit  0
 ---- ----
 D... ....
 |
-+-------- Data sent ( 0 : sending data | 1 : data sent )
++-------- Data sent (0: sending data, 1: data sent)
           This flag is set to 1 when the FPGA has sent a message
 ```
 
-### RX RAM destination address (\$4173, write-only)
+### RX RAM destination address (\$4193, write-only)
 
 The FPGA uses its internal RAM to store messages received from the ESP.  
 Only the last 2K of the total 8K of the FPGA-RAM can be used for this.  
@@ -822,7 +974,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
       +++ Destination RAM address hi bits
 ```
 
-### TX RAM source address (\$4174, write-only)
+### TX RAM source address (\$4194, write-only)
 
 The FPGA uses its internal RAM to store messages to be sent to the ESP.  
 Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
@@ -839,113 +991,124 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 
 ## Recap / Cheat sheet
 
-| Register      | Format     | Access | Details                                                     |
-| ------------- | ---------- | :----: | ----------------------------------------------------------- |
-|               |            |        | **CPU / PRG control**                                       |
-| \$4100        | `A....OOO` |  R/W   | PRG banking modes                                           |
-| \$4101-\$4105 |            |        | Not used                                                    |
-| \$4106        | `CuUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 0,1)           |
-| \$4107        | `CuUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 1)              |
-| \$4108        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 0,1,2,3,4)     |
-| \$4109        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)              |
-| \$410A        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 3,4)           |
-| \$410B        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)              |
-| \$410C        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 1,2,3,4)       |
-| \$410D        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)              |
-| \$410E        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 2,3,4)         |
-| \$410F        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)              |
-| \$4110-\$4114 |            |        | Not used                                                    |
-| \$4115        | `.......B` |   W    | FPGA-RAM bank bits                                          |
-| \$4116        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 0,1)                             |
-| \$4117        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 1)                                |
-| \$4118        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 0,1,2,3,4)                       |
-| \$4119        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                |
-| \$411A        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 3,4)                             |
-| \$411B        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                |
-| \$411C        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 1,2,3,4)                         |
-| \$411D        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                |
-| \$411E        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 2,3,4)                           |
-| \$411F        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                |
-|               |            |        | **PPU / CHR control**                                       |
-| \$4120        | `CCE..BBB` |  R/W   | CHR control (banking modes / source / Sprite Extended Mode) |
-| \$4121        | `...UUUUU` |   W    | Background extended mode bank upper bits control            |
-| \$4122-\$4125 |            |        | Not used                                                    |
-| \$4126        | `BBBBBBBB` |   W    | Nametable A bank (\$2000)                                   |
-| \$4127        | `BBBBBBBB` |   W    | Nametable B bank (\$2400)                                   |
-| \$4128        | `BBBBBBBB` |   W    | Nametable C bank (\$2800)                                   |
-| \$4129        | `BBBBBBBB` |   W    | Nametable D bank (\$2C00)                                   |
-| \$412A        | `CCEEDD..` |  R/W   | Nametable A control (\$2000)                                |
-| \$412B        | `CCEEDD..` |  R/W   | Nametable B control (\$2400)                                |
-| \$412C        | `CCEEDD..` |  R/W   | Nametable C control (\$2800)                                |
-| \$412D        | `CCEEDD..` |  R/W   | Nametable D control (\$2C00)                                |
-| \$412E-\$412F |            |        | Not used                                                    |
-| \$4130        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 0,1,2,3,4)                       |
-| \$4131        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 1,2,3,4)                         |
-| \$4132        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                           |
-| \$4133        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                           |
-| \$4134        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                             |
-| \$4135        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                             |
-| \$4136        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                             |
-| \$4137        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                             |
-| \$4138        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$4139        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$413A        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$413B        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$413C        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$413D        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$413E        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$413F        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                |
-| \$4140        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 0,1,2,3,4)                       |
-| \$4141        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 1,2,3,4)                         |
-| \$4142        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 2,3,4)                           |
-| \$4143        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 2,3,4)                           |
-| \$4144        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                             |
-| \$4145        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                             |
-| \$4146        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                             |
-| \$4147        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                             |
-| \$4148        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$4149        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$414A        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$414B        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$414C        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$414D        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$414E        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-| \$414F        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                |
-|               |            |        | **SCANLINE DETECTION IRQ**                                  |
-| \$4150        | `VVVVVVVV` |   W    | Latch value                                                 |
-| \$4151        | `IF.....H` |  R/W   | IRQ enable / status                                         |
-| \$4152        | `........` |   W    | IRQ disable                                                 |
-| \$4153        | `OOOOOOOO` |   W    | Offset                                                      |
-| \$4154-\$4157 |            |        | Not used                                                    |
-|               |            |        | **CPU CYCLE COUNTER IRQ**                                   |
-| \$4158        | `LLLLLLLL` |   W    | Latch low byte                                              |
-| \$4159        | `HHHHHHHH` |   W    | Latch high byte                                             |
-| \$415A        | `......EA` |   W    | Control                                                     |
-| \$415B        | `........` |   W    | Acknowledge                                                 |
-| \$415C-\$415F |            |        | Not used                                                    |
-|               |            |        | **MISCELLANEOUS**                                           |
-| \$4160        | `PPPVVVVV` |   R    | Mapper version                                              |
-| \$4161-\$416F |            |        | Not used                                                    |
-|               |            |        | **WIFI**                                                    |
-| \$4170        | `......IE` |  R/W   | Control                                                     |
-| \$4171        | `DR......` |  R/W   | RX data ready / acknowledge                                 |
-| \$4172        | `D.......` |  R/W   | TX data sent / send data                                    |
-| \$4173        | `.....AAA` |   W    | RX RAM destination address                                  |
-| \$4174        | `.....AAA` |   W    | TX RAM source address                                       |
-| \$4175-\$419F |            |        | Not used                                                    |
-|               |            |        | **AUDIO EXPANSION**                                         |
-| \$41A0        | `MDDDVVVV` |   W    | Pulse 1 control                                             |
-| \$41A1        | `FFFFFFFF` |   W    | Pulse 1 low freq                                            |
-| \$41A2        | `E...FFFF` |   W    | Pulse 1 high freq                                           |
-| \$41A3        | `MDDDVVVV` |   W    | Pulse 2 control                                             |
-| \$41A4        | `FFFFFFFF` |   W    | Pulse 2 low freq                                            |
-| \$41A5        | `E...FFFF` |   W    | Pulse 2 high freq                                           |
-| \$41A6        | `..AAAAAA` |   W    | Saw accumulator rate                                        |
-| \$41A7        | `FFFFFFFF` |   W    | Saw low freq                                                |
-| \$41A8        | `E...FFFF` |   W    | Saw high freq                                               |
-|               |            |        | **AUDIO OUTPUT CONTROL**                                    |
-| \$41A9        | `....AATF` |   W    | Audio output control                                        |
-| \$41B0-\$41FF |            |        | Not used                                                    |
-|               |            |        | **CHR SPRITES EXTENDED MODE**                               |
-| \$4200-\$423F | `LLLLLLLL` |   W    | Sprites bank lower bits                                     |
-| \$4240        | `.....UUU` |   W    | Sprites bank upper bits                                     |
+| Register      | Format     | Access | Details                                                                 |
+| ------------- | ---------- | :----: | ----------------------------------------------------------------------- |
+|               |            |        | **CPU / PRG control**                                                   |
+| \$4100        | `A....OOO` |  R/W   | PRG banking modes                                                       |
+| \$4101-\$4105 |            |        | Not used                                                                |
+| \$4106        | `CuUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 0,1)                       |
+| \$4107        | `CuUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 1)                          |
+| \$4108        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 0,1,2,3,4)                 |
+| \$4109        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410A        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 3,4)                       |
+| \$410B        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410C        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 1,2,3,4)                   |
+| \$410D        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410E        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 2,3,4)                     |
+| \$410F        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$4110-\$4114 |            |        | Not used                                                                |
+| \$4115        | `.......B` |   W    | FPGA-RAM bank bits                                                      |
+| \$4116        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 0,1)                                         |
+| \$4117        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 1)                                            |
+| \$4118        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 0,1,2,3,4)                                   |
+| \$4119        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                            |
+| \$411A        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 3,4)                                         |
+| \$411B        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                            |
+| \$411C        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 1,2,3,4)                                     |
+| \$411D        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                            |
+| \$411E        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 2,3,4)                                       |
+| \$411F        | `LLLLLLLL` |   W    | PRG bank lower bits (mode 4)                                            |
+|               |            |        | **PPU / CHR control**                                                   |
+| \$4120        | `CCSW.BBB` |  R/W   | PPU/CHR control (banking/source/Window Split Mode/Sprite Extended Mode) |
+| \$4121        | `...UUUUU` |   W    | Background Extended Mode bank upper bits control                        |
+| \$4122-\$4125 |            |        | Not used                                                                |
+| \$4126        | `BBBBBBBB` |   W    | Nametable A bank (\$2000)                                               |
+| \$4127        | `BBBBBBBB` |   W    | Nametable B bank (\$2400)                                               |
+| \$4128        | `BBBBBBBB` |   W    | Nametable C bank (\$2800)                                               |
+| \$4129        | `BBBBBBBB` |   W    | Nametable D bank (\$2C00)                                               |
+| \$412A        | `CCEEDD..` |  R/W   | Nametable A control (\$2000)                                            |
+| \$412B        | `CCEEDD..` |  R/W   | Nametable B control (\$2400)                                            |
+| \$412C        | `CCEEDD..` |  R/W   | Nametable C control (\$2800)                                            |
+| \$412D        | `CCEEDD..` |  R/W   | Nametable D control (\$2C00)                                            |
+| \$412E        | `BBBBBBBB` |   W    | Nametable W bank (Window Split)                                         |
+| \$412F        | `..EEDD..` |  R/W   | Nametable W control (Window Split)                                      |
+| \$4130        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 0,1,2,3,4)                                   |
+| \$4131        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 1,2,3,4)                                     |
+| \$4132        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
+| \$4133        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
+| \$4134        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4135        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4136        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4137        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4138        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$4139        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413A        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413B        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413C        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413D        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413E        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413F        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$4140        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 0,1,2,3,4)                                   |
+| \$4141        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 1,2,3,4)                                     |
+| \$4142        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 2,3,4)                                       |
+| \$4143        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 2,3,4)                                       |
+| \$4144        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                                         |
+| \$4145        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                                         |
+| \$4146        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                                         |
+| \$4147        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 3,4)                                         |
+| \$4148        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$4149        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$414A        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$414B        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$414C        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$414D        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$414E        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+| \$414F        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
+|               |            |        | **SCANLINE DETECTION IRQ**                                              |
+| \$4150        | `VVVVVVVV` |   W    | Latch value                                                             |
+| \$4151        | `HF.....I` |  R/W   | Enable / Status                                                         |
+| \$4152        | `........` |   W    | Disable                                                                 |
+| \$4153        | `OOOOOOOO` |   W    | Offset                                                                  |
+| \$4154        | `CCCCCCCC` |   R    | Jitter counter                                                          |
+| \$4155-\$4157 |            |        | Not used                                                                |
+|               |            |        | **CPU CYCLE COUNTER IRQ**                                               |
+| \$4158        | `LLLLLLLL` |   W    | Latch low byte                                                          |
+| \$4159        | `HHHHHHHH` |   W    | Latch high byte                                                         |
+| \$415A        | `......EA` |   W    | Control                                                                 |
+| \$415B        | `........` |   W    | Acknowledge                                                             |
+| \$415C-\$415F |            |        | Not used                                                                |
+|               |            |        | **MISCELLANEOUS**                                                       |
+| \$4160        | `PPPVVVVV` |   R    | Mapper version                                                          |
+| \$4161        | `PC.....W` |   R    | IRQ status                                                              |
+| \$4162-\$416F |            |        | Not used                                                                |
+|               |            |        | **Window Split Mode**                                                        |
+| \$4170        | `...SSSSS` |   W    | Window Split X start tile (0-31)                                        |
+| \$4171        | `...EEEEE` |   W    | Window Split X end tile (0-31)                                          |
+| \$4172        | `SSSSSSSS` |   W    | Window Split Y start (0-255)                                            |
+| \$4173        | `EEEEEEEE` |   W    | Window Split Y end (0-255)                                              |
+| \$4174        | `...XXXXX` |   W    | Window Split coarse X scroll (0-31)                                     |
+| \$4175        | `YYYYYYYY` |   W    | Window Split fine Y scroll (0-256)                                      |
+| \$4176-\$418F |            |        | Not used                                                                |
+|               |            |        | **WIFI**                                                                |
+| \$4190        | `......IE` |  R/W   | Control                                                                 |
+| \$4191        | `DR......` |  R/W   | RX data ready / acknowledge                                             |
+| \$4192        | `D.......` |  R/W   | TX data sent / send data                                                |
+| \$4193        | `.....AAA` |   W    | RX RAM destination address                                              |
+| \$4194        | `.....AAA` |   W    | TX RAM source address                                                   |
+| \$4195-\$419F |            |        | Not used                                                                |
+|               |            |        | **AUDIO EXPANSION**                                                     |
+| \$41A0        | `MDDDVVVV` |   W    | Pulse 1 control                                                         |
+| \$41A1        | `FFFFFFFF` |   W    | Pulse 1 low freq                                                        |
+| \$41A2        | `E...FFFF` |   W    | Pulse 1 high freq                                                       |
+| \$41A3        | `MDDDVVVV` |   W    | Pulse 2 control                                                         |
+| \$41A4        | `FFFFFFFF` |   W    | Pulse 2 low freq                                                        |
+| \$41A5        | `E...FFFF` |   W    | Pulse 2 high freq                                                       |
+| \$41A6        | `..AAAAAA` |   W    | Saw accumulator rate                                                    |
+| \$41A7        | `FFFFFFFF` |   W    | Saw low freq                                                            |
+| \$41A8        | `E...FFFF` |   W    | Saw high freq                                                           |
+|               |            |        | **AUDIO OUTPUT CONTROL**                                                |
+| \$41A9        | `.....ZTF` |   W    | Audio output control                                                    |
+| \$41B0-\$41FF |            |        | Not used                                                                |
+|               |            |        | **CHR SPRITES EXTENDED MODE**                                           |
+| \$4200-\$423F | `LLLLLLLL` |   W    | Sprites bank lower bits                                                 |
+| \$4240        | `.....UUU` |   W    | Sprites bank upper bits                                                 |

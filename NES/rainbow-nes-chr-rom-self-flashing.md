@@ -296,7 +296,7 @@ lda $2007   ; read $xx00 to get manufacturer ID
             ; ISSI:     $9D
             ; MX:       $C2
             ; SST:      $BF
-lda $2007   ; dummy read @ $xx01
+lda $2007   ; ignore read @ $xx01
 lda $2007   ; read $xx02 to get device ID 1, value depends on device
 
 lda #$00
@@ -304,7 +304,7 @@ sta $2006
 lda #$1C
 sta $2006
 lda $2007   ; read $xx1C to get device ID 2, value depends on device
-lda $2007   ; dummy read @ $xx1D
+lda $2007   ; ignore read @ $xx1D
 lda $2007   ; read $xx1E to get device ID 3, value depends on device
 ```
 

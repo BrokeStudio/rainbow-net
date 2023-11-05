@@ -1,10 +1,10 @@
 # Rainbow
 
-Here you'll find the Rainbow documentation.
+Here you'll find the Rainbow Net protoccol documentation.
 
 | File                                            | Description                                                     |
 | ----------------------------------------------- | --------------------------------------------------------------- |
-| [rainbow-wifi.md](rainbow-wifi.md)              | Rainbow WiFi / protocol documentation                           |
+| [rainbow-net.md](rainbow-net.md)                | Rainbow Net Wi-Fi protocol documentation                        |
 | [NES](NES)                                      | Rainbow mapper documentation for the NES                        |
 | [Mega Drive / Genesis](MEGADRIVE-GENESIS) (WIP) | Rainbow mapper documentation for the Mega Drive / Genesis (WIP) |
 
@@ -15,7 +15,7 @@ I'd be happy to test it on real hardware if you want.
 
 You can email me at contact@brokestudio.fr or via the contact form at https://www.brokestudio.fr/contact/
 
-Also, you can join Broke Studio's Discord server https://discord.gg/ccDS9Au, and discuss about the Rainbow project or other things :)
+Also, you can join Broke Studio's Discord server https://discord.gg/ccDS9Au, and discuss about the Rainbow project and/or other things :)
 
 > &nbsp;  
 > _Antoine GOHIN / Broke Studio_  

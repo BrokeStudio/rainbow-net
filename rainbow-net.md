@@ -68,7 +68,7 @@ Thanks to :
     - [SERVER_SEND_MESSAGE](#server_send_message)
     - [NETWORK_SCAN](#network_scan)
     - [NETWORK_GET_SCAN_RESULT](#network_get_scan_result)
-    - [NETWORK_GET_DETAILS](#network_get_details)
+    - [NETWORK_GET_SCANNED_DETAILS](#network_get_scanned_details)
     - [NETWORK_GET_REGISTERED](#network_get_registered)
     - [NETWORK_GET_REGISTERED_DETAILS](#network_get_registered_details)
     - [NETWORK_REGISTER](#network_register)
@@ -279,7 +279,7 @@ Here's an example on how to send and receive data.
 | 13    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                               | Message from server                                                    |
 |       |                                                                               | **NETWORK CMDS**                                                       |
 | 14    | NETWORK_SCAN_RESULT ([SYNC](#NETWORK_SCAN)/[ASYNC](#NETWORK_GET_SCAN_RESULT)) | Return result of last scan                                             |
-| 15    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)                       | Return details for a scanned network                                   |
+| 15    | [NETWORK_GET_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)                   | Return details for a scanned network                                   |
 | 16    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)                 | Return SSID for a registered network                                   |
 | 17    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                                 | Return registered networks status                                      |
 |       |                                                                               | **FILE CMDS**                                                          |
@@ -1165,9 +1165,10 @@ This command returns the result of the last scan.
 
 ---
 
-### NETWORK_GET_DETAILS
+### NETWORK_GET_SCANNED_DETAILS
 
-This command returns the network SSID of a scanned network referenced by the passed ID.
+This command returns the network details (SSID, Channel, RSSI, hidden state, encryption type) of a scanned network referenced by the passed ID.  
+An empty message will be sent if the passed ID is not valid.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
@@ -1177,31 +1178,32 @@ This command returns the network SSID of a scanned network referenced by the pas
 
 **Returns:**
 
-| Byte | Description                                 | Example                                       |
-| ---- | ------------------------------------------- | --------------------------------------------- |
-| 0    | Length of the message (excluding this byte) | `13`                                          |
-|      |                                             | (max is 43 because SSID is 32 characters max) |
-| 1    | Command ID (see commands from ESP)          | `NETWORK_SCANNED_DETAILS`                     |
-| 2    | Encryption type                             | `4` (see below for details)                   |
-| 3    | RSSI (absolute value)                       | `0x47` (means -70 DbM)                        |
-| 7    | Channel MSB                                 | `0x01`                                        |
-| 5    | Channel                                     | `0x00`                                        |
-| 6    | Channel                                     | `0x00`                                        |
-| 4    | Channel LSB                                 | `0x00`                                        |
-| 8    | Hidden?                                     | `0` (0: no / 1: yes)                          |
-| 9    | SSID string length                          | `4`                                           |
-| 10   | SSID string                                 | `S`                                           |
-| 11   | ...                                         | `S`                                           |
-| 12   | ...                                         | `I`                                           |
-| 13   | ...                                         | `D`                                           |
+| Byte | Description                                                    | Example                                       |
+| ---- | -------------------------------------------------------------- | --------------------------------------------- |
+| 0    | Length of the message (excluding this byte)                    | `1` or more (`13` in this example)            |
+|      |                                                                | (max is 43 because SSID is 32 characters max) |
+| 1    | Command ID (see commands from ESP)                             | `NETWORK_GET_SCANNED_DETAILS`                 |
+|      | _**next bytes are sent only if the network ID sent is valid**_ |                                               |
+| 2    | Encryption type                                                | `4` (see below for details)                   |
+| 3    | RSSI (absolute value)                                          | `0x47` (means -70 DbM)                        |
+| 7    | Channel MSB                                                    | `0x01`                                        |
+| 5    | Channel                                                        | `0x00`                                        |
+| 6    | Channel                                                        | `0x00`                                        |
+| 4    | Channel LSB                                                    | `0x00`                                        |
+| 8    | Hidden?                                                        | `0` (0: no / 1: yes)                          |
+| 9    | SSID string length                                             | `4`                                           |
+| 10   | SSID string                                                    | `S`                                           |
+| 11   | ...                                                            | `S`                                           |
+| 12   | ...                                                            | `I`                                           |
+| 13   | ...                                                            | `D`                                           |
 
 **Encryption types:**
 
 | Value | Description      |
 | ----- | ---------------- |
-| 5     | WEP              |
 | 2     | WPA / PSK        |
 | 4     | WPA2 / PSK       |
+| 5     | WEP              |
 | 7     | open network     |
 | 8     | WPA / WPA2 / PSK |
 

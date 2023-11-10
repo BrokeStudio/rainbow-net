@@ -1021,35 +1021,30 @@ This command returns the server settings (hostname and port) from the Rainbow co
 
 This command sets the server settings (hostname and port) to the Rainbow config file, and sets them as active.
 
-| Byte | Description                                 | Example                     |
-| ---- | ------------------------------------------- | --------------------------- |
-| 0    | Length of the message (excluding this byte) | `1`                         |
-| 1    | Command ID (see commands to ESP)            | `SERVER_SET_SAVED_SETTINGS` |
-
-**Returns:**
-
-| Byte | Description                                 | Example         |
-| ---- | ------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte) | `19`            |
-| 1    | Command ID (see commands from ESP)          | `HOST_SETTINGS` |
-| 2    | Port MSB                                    | `0x0B`          |
-| 3    | Port LSB                                    | `0xB8`          |
-| 4    | Hostname string length                      | `15`            |
-| 5    | Hostname string                             | `G`             |
-| 6    | ...                                         | `A`             |
-| 7    | ...                                         | `M`             |
-| 8    | ...                                         | `E`             |
-| 9    | ...                                         | `.`             |
-| 10   | ...                                         | `S`             |
-| 11   | ...                                         | `E`             |
-| 12   | ...                                         | `R`             |
-| 13   | ...                                         | `V`             |
-| 14   | ...                                         | `E`             |
-| 15   | ...                                         | `R`             |
-| 16   | ...                                         | `.`             |
-| 17   | ...                                         | `N`             |
-| 18   | ...                                         | `E`             |
-| 19   | ...                                         | `T`             |
+| Byte | Description                                                          | Example                     |
+| ---- | -------------------------------------------------------------------- | --------------------------- |
+| 0    | Length of the message (excluding this byte)                          | `1` or `5+`                 |
+| 1    | Command ID (see commands to ESP)                                     | `SERVER_SET_SAVED_SETTINGS` |
+|      | _**next bytes are sent only to configure server hostname and port**_ |                             |
+|      | _**set message length to 1 to clear saved settings**_                |                             |
+| 2    | Port MSB                                                             | `0x0B`                      |
+| 3    | Port LSB                                                             | `0xB8`                      |
+| 4    | Hostname string length                                               | `15`                        |
+| 5    | Hostname string                                                      | `G`                         |
+| 6    | ...                                                                  | `A`                         |
+| 7    | ...                                                                  | `M`                         |
+| 8    | ...                                                                  | `E`                         |
+| 9    | ...                                                                  | `.`                         |
+| 10   | ...                                                                  | `S`                         |
+| 11   | ...                                                                  | `E`                         |
+| 12   | ...                                                                  | `R`                         |
+| 13   | ...                                                                  | `V`                         |
+| 14   | ...                                                                  | `E`                         |
+| 15   | ...                                                                  | `R`                         |
+| 16   | ...                                                                  | `.`                         |
+| 17   | ...                                                                  | `N`                         |
+| 18   | ...                                                                  | `E`                         |
+| 19   | ...                                                                  | `T`                         |
 
 [Back to command list](#Commands-overview)
 

@@ -95,7 +95,7 @@ TX_ADD    = $4194
   WIFI_STATUS                     ; Return Wi-Fi connection status
   SSID                            ; Return Wi-Fi / Access Point SSID
   IP                              ; Return Wi-Fi / Access Point IP address
-  WIFI_CONFIG                     ; Return Wi-Fi station / Access Point / Web Server
+  WIFI_CONFIG                     ; Return Wi-Fi station / Access Point / Web Server status
 
 ; RND CMDS
   RND_BYTE                        ; Return random byte value
@@ -117,12 +117,12 @@ TX_ADD    = $4194
   FILE_STATUS                     ; Return working file status
   FILE_EXISTS                     ; Return if file exists or not
   FILE_DELETE                     ; See FILE_DELETE_RES enum for details on returned value
-  FILE_LIST                       ; Return path file list (FILE_GET_LIST)
-  FILE_DATA                       ; Return file data (FILE_READ)
+  FILE_LIST                       ; Return path file list
+  FILE_DATA                       ; Return file data
   FILE_COUNT                      ; Return file count in a specific path
-  FILE_ID                         ; Return a free file ID (FILE_GET_FREE_ID)
-  FILE_FS_INFO                    ; Returns file system info (FILE_GET_FS_INFO)
-  FILE_INFO                       ; Return file info (size + CRC32) (FILE_GET_INFO)
+  FILE_ID                         ; Return a free file ID
+  FILE_FS_INFO                    ; Return file system info
+  FILE_INFO                       ; Return file info (size + CRC32)
   FILE_DOWNLOAD                   ; See FILE_DOWNLOAD_RES enum for details on returned value
 
 .endenum

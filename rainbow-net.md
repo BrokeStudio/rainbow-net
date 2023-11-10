@@ -92,7 +92,7 @@ Thanks to :
     - [FILE_GET_INFO](#file_get_info)
     - [FILE_DOWNLOAD](#file_download)
     - [FILE_FORMAT](#file_format)
-  - [Bootrom](#bootrom)
+  - [BootROM](#bootrom)
   - [TODO](#todo)
 
 ---
@@ -298,7 +298,7 @@ Here's an example on how to send and receive data.
 
 ### ESP_GET_STATUS
 
-This command asks the Wi-Fi module if it's ready and returns additionnal information.  
+This command asks the ESP if it's ready and returns additionnal information.  
 The ESP will only answer when ready, so once you sent the message, just wait for the answer.
 
 | Byte | Description                                 | Example          |
@@ -364,7 +364,7 @@ This command sets the debug level.
       |+--  enable/disable serial logs
       |     outputs what is sent to the NES
       +---  enable/disable network logs
-            outputs what is received from the outside world (WebSocket/TCP/UDP)
+            outputs what is received from the outside world (TCP/UDP)
 
 Note: serial/network logs are not recommended when lots of messages are exchanged (ex: during real-time game)
 
@@ -377,7 +377,7 @@ Note: serial/network logs are not recommended when lots of messages are exchange
 ### DEBUG_LOG
 
 This command logs data on the serial port of the ESP.  
-Can be read using a UART/USB adapter, RX to pin 5 of the ESP board edge connector, GND to pin 6. (v1.1 and v1.3)  
+Can be read using a UART/USB adapter, RX to pin 5 of the Rainbow board edge connector, GND to pin 6.  
 Bit 0 of the debug level needs to be set (see [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)).
 
 | Byte | Description                                 | Example     |
@@ -535,18 +535,18 @@ This command asks the Wi-Fi status.
 
 **Wi-Fi status:**
 
-| Value | WIFI_STATUS     | Description                                                             |
-| ----- | --------------- | ----------------------------------------------------------------------- |
-| 255   | TIMEOUT         | Connection timeout                                                      |
-| 0     | IDLE_STATUS     | Temporary status assigned between statuses                              |
-| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached                                       |
-| 2     | SCAN_COMPLETED  | Network scan completed                                                  |
-| 3     | CONNECTED       | Wi-Fi connected                                                         |
-| 4     | CONNECT_FAILED  | Wi-Fi connection failed                                                 |
-| 5     | CONNECTION_LOST | Wi-Fi connection lost                                                   |
-| 6     | WRONG_PASSWORD  | Configured password is incorrect                                        |
-| 7     | DISCONNECTED    | Wi-Fi module disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
-|       |                 | or disconnected from network                                            |
+| Value | WIFI_STATUS     | Description                                                    |
+| ----- | --------------- | -------------------------------------------------------------- |
+| 255   | TIMEOUT         | Connection timeout                                             |
+| 0     | IDLE_STATUS     | Temporary status assigned between statuses                     |
+| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached                              |
+| 2     | SCAN_COMPLETED  | Network scan completed                                         |
+| 3     | CONNECTED       | Wi-Fi connected                                                |
+| 4     | CONNECT_FAILED  | Wi-Fi connection failed                                        |
+| 5     | CONNECTION_LOST | Wi-Fi connection lost                                          |
+| 6     | WRONG_PASSWORD  | Configured password is incorrect                               |
+| 7     | DISCONNECTED    | ESP disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
+|       |                 | or disconnected from network                                   |
 
 **Wi-Fi status:**
 
@@ -1070,7 +1070,6 @@ This command sets the current server settings (hostname and port) to what is def
 
 ### SERVER_CONNECT
 
-When using WS protocol, this command connects to the server.  
 When using TCP protocol, this command conects to the server.  
 When using UDP protocol, this command starts the UDP server on the ESP side using a random port between 49152 and 65535.
 
@@ -1085,7 +1084,6 @@ When using UDP protocol, this command starts the UDP server on the ESP side usin
 
 ### SERVER_DISCONNECT
 
-When using WS protocol, this command disconnects from server.  
 When using TCP protocol, this command disconnects from server.  
 When using UDP protocol, this command stops the UDP server on the ESP side.
 
@@ -1253,25 +1251,25 @@ This command returns the SSID of the requested configuration network.
 
 **Returns:**
 
-| Byte | Description                                 | Example                        |
-| ---- | ------------------------------------------- | ------------------------------ |
-| 0    | Length of the message (excluding this byte) | `16`                           |
-| 1    | Command ID (see commands from ESP)          | `NETWORK_REGISTERED_DETAILS`   |
-| 2    | Network active flag                         | `0` (0: inactive / 1: active)) |
-| 3    | SSID string length                          | `4`                            |
-| 4    | SSID string                                 | `S`                            |
-| 5    | ...                                         | `S`                            |
-| 6    | ...                                         | `I`                            |
-| 7    | ...                                         | `D`                            |
-| 8    | PASSWORD string length                      | `8`                            |
-| 9    | PASSWORD string                             | `P`                            |
-| 10   | ...                                         | `A`                            |
-| 11   | ...                                         | `S`                            |
-| 12   | ...                                         | `S`                            |
-| 13   | ...                                         | `W`                            |
-| 14   | ...                                         | `O`                            |
-| 15   | ...                                         | `R`                            |
-| 16   | ...                                         | `D`                            |
+| Byte | Description                                 | Example                       |
+| ---- | ------------------------------------------- | ----------------------------- |
+| 0    | Length of the message (excluding this byte) | `16`                          |
+| 1    | Command ID (see commands from ESP)          | `NETWORK_REGISTERED_DETAILS`  |
+| 2    | Network active flag                         | `0` (0: inactive / 1: active) |
+| 3    | SSID string length                          | `4`                           |
+| 4    | SSID string                                 | `S`                           |
+| 5    | ...                                         | `S`                           |
+| 6    | ...                                         | `I`                           |
+| 7    | ...                                         | `D`                           |
+| 8    | PASSWORD string length                      | `8`                           |
+| 9    | PASSWORD string                             | `P`                           |
+| 10   | ...                                         | `A`                           |
+| 11   | ...                                         | `S`                           |
+| 12   | ...                                         | `S`                           |
+| 13   | ...                                         | `W`                           |
+| 14   | ...                                         | `O`                           |
+| 15   | ...                                         | `R`                           |
+| 16   | ...                                         | `D`                           |
 
 [Back to command list](#Commands-overview)
 
@@ -2100,17 +2098,18 @@ Current ESP configuration will be saved afterwards.
 
 ---
 
-## Bootrom
+## BootROM
 
-A bootrom is provided directly on the cartridge, embedded in the FPGA Flash Memory.  
+A BootROM is provided directly on the cartridge, embedded in the FPGA Flash Memory.  
 To access it, simply press `SELECT` and `START` on controller 1 or 2 while powering on the console.  
-The bootrom allows you to perform some low level actions like:
+The BootROM allows you to perform some low level actions:
 
-- configure Wi-Fi networks without the need to connect to the cartridge's Wi-Fi module access point from another device
-- manage files on the Wi-Fi module Flash Memory / SD Card
-- backup/dump ROM to a file on the Wi-Fi module Flash Memory / SD Card
-- program ROM from a file on the Wi-Fi module Flash Memory / SD Card
-- display the current status of the Wi-Fi module
+- display cartridge informations
+- display ESP informations
+- configure Wi-Fi networks
+- configure game server hostname and port
+- update the cartridge (PRG-ROM/CHR-ROM) from a file on the ESP Flash Memory / SD Card
+- manage files on the ESP Flash Memory / SD Card
 - reset the ESP to factory settings
 
 ---

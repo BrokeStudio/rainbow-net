@@ -53,7 +53,8 @@ TX_ADD    = $4194
   SERVER_SEND_MESSAGE             ; Send message to server
 
 ; NETWORK CMDS
-  NETWORK_SCAN                    ; Scan networks around and return count
+  NETWORK_SCAN                    ; Scan networks around synchronously or asynchronously
+  NETWORK_GET_SCAN_RESULT         ; Get result of the last scan
   NETWORK_GET_SCANNED_DETAILS     ; Get scanned network details
   NETWORK_GET_REGISTERED          ; Get registered networks status
   NETWORK_GET_REGISTERED_DETAILS  ; Get registered network SSID
@@ -107,7 +108,7 @@ TX_ADD    = $4194
   MESSAGE_FROM_SERVER             ; Message from server
 
 ; NETWORK CMDS
-  NETWORK_COUNT                   ; Return number of networks found
+  NETWORK_RESULT                  ; Return result of last scan
   NETWORK_SCANNED_DETAILS         ; Return details for a scanned network
   NETWORK_REGISTERED_DETAILS      ; Return SSID for a registered network
   NETWORK_REGISTERED              ; Return registered networks status

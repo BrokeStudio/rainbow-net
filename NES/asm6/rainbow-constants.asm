@@ -52,31 +52,32 @@ TOESP_SERVER_DISCONNECT               EQU 29  ; Disconnect from server
 TOESP_SERVER_SEND_MSG                 EQU 30  ; Send message to rainbow server
 
 ; NETWORK CMDS
-TOESP_NETWORK_SCAN                    EQU 31  ; Scan networks around and return count
-TOESP_NETWORK_GET_SCANNED_DETAILS     EQU 32  ; Get scanned network details
-TOESP_NETWORK_GET_REGISTERED          EQU 33  ; Get registered networks status
-TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 34  ; Get registered network SSID
-TOESP_NETWORK_REGISTER                EQU 35  ; Register network
-TOESP_NETWORK_UNREGISTER              EQU 36  ; Unregister network
-TOESP_NETWORK_SET_ACTIVE              EQU 37  ; Set active network
+TOESP_NETWORK_SCAN                    EQU 31  ; Scan networks around synchronously or asynchronously
+TOESP_NETWORK_GET_SCAN_RESULT         EQU 32  ; Get result of the last scan
+TOESP_NETWORK_GET_SCANNED_DETAILS     EQU 33  ; Get scanned network details
+TOESP_NETWORK_GET_REGISTERED          EQU 34  ; Get registered networks status
+TOESP_NETWORK_GET_REGISTERED_DETAILS  EQU 35  ; Get registered network SSID
+TOESP_NETWORK_REGISTER                EQU 36  ; Register network
+TOESP_NETWORK_UNREGISTER              EQU 37  ; Unregister network
+TOESP_NETWORK_SET_ACTIVE              EQU 38  ; Set active network
 
 ; FILE COMMANDS
-TOESP_FILE_OPEN                       EQU 38  ; Open working file
-TOESP_FILE_CLOSE                      EQU 39  ; Close working file
-TOESP_FILE_STATUS                     EQU 40  ; Get working file status
-TOESP_FILE_EXISTS                     EQU 41  ; Check if file exists
-TOESP_FILE_DELETE                     EQU 42  ; Delete a file
-TOESP_FILE_SET_CUR                    EQU 43  ; Set working file cursor position a file
-TOESP_FILE_READ                       EQU 44  ; Read working file (at specific position)
-TOESP_FILE_WRITE                      EQU 45  ; Write working file (at specific position)
-TOESP_FILE_APPEND                     EQU 46  ; Append data to working file
-TOESP_FILE_COUNT                      EQU 47  ; Count files in a specific path
-TOESP_FILE_GET_LIST                   EQU 48  ; Get list of existing files in a path
-TOESP_FILE_GET_FREE_ID                EQU 49  ; Get an unexisting file ID in a specific path
-TOESP_FILE_GET_FS_INFO                EQU 50  ; Get file system details (ESP flash or SD card)
-TOESP_FILE_GET_INFO                   EQU 51  ; Get file info (size + crc32)
-TOESP_FILE_DOWNLOAD                   EQU 52  ; Download a file
-TOESP_FILE_FORMAT                     EQU 53  ; Format file system and save current config
+TOESP_FILE_OPEN                       EQU 39  ; Open working file
+TOESP_FILE_CLOSE                      EQU 40  ; Close working file
+TOESP_FILE_STATUS                     EQU 41  ; Get working file status
+TOESP_FILE_EXISTS                     EQU 42  ; Check if file exists
+TOESP_FILE_DELETE                     EQU 43  ; Delete a file
+TOESP_FILE_SET_CUR                    EQU 44  ; Set working file cursor position a file
+TOESP_FILE_READ                       EQU 45  ; Read working file (at specific position)
+TOESP_FILE_WRITE                      EQU 46  ; Write working file (at specific position)
+TOESP_FILE_APPEND                     EQU 47  ; Append data to working file
+TOESP_FILE_COUNT                      EQU 48  ; Count files in a specific path
+TOESP_FILE_GET_LIST                   EQU 49  ; Get list of existing files in a path
+TOESP_FILE_GET_FREE_ID                EQU 50  ; Get an unexisting file ID in a specific path
+TOESP_FILE_GET_FS_INFO                EQU 51  ; Get file system details (ESP flash or SD card)
+TOESP_FILE_GET_INFO                   EQU 52  ; Get file info (size + crc32)
+TOESP_FILE_DOWNLOAD                   EQU 53  ; Download a file
+TOESP_FILE_FORMAT                     EQU 54  ; Format file system and save current config
 
 ; commands from ESP
 
@@ -103,7 +104,7 @@ FROMESP_SERVER_SETTINGS               EQU 12  ; Returns server settings (host na
 FROMESP_MESSAGE_FROM_SERVER           EQU 13  ; Message from server
 
 ; NETWORK CMDS
-FROMESP_NETWORK_COUNT                 EQU 14  ; Returns number of networks found
+FROMESP_NETWORK_RESULT                EQU 14  ; Returns result of last scan
 FROMESP_NETWORK_SCANNED_DETAILS       EQU 15  ; Returns details for a scanned network
 FROMESP_NETWORK_REGISTERED_DETAILS    EQU 16  ; Returns SSID for a registered network
 FROMESP_NETWORK_REGISTERED            EQU 17  ; Returns registered networks status

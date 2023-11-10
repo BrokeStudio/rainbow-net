@@ -108,7 +108,7 @@ TX_ADD    = $4194
   MESSAGE_FROM_SERVER             ; Message from server
 
 ; NETWORK CMDS
-  NETWORK_RESULT                  ; Return result of last scan
+  NETWORK_SCAN_RESULT             ; Return result of last scan
   NETWORK_SCANNED_DETAILS         ; Return details for a scanned network
   NETWORK_REGISTERED_DETAILS      ; Return SSID for a registered network
   NETWORK_REGISTERED              ; Return registered networks status

@@ -104,7 +104,7 @@ FROMESP_SERVER_SETTINGS               EQU 12  ; Return server settings (host nam
 FROMESP_MESSAGE_FROM_SERVER           EQU 13  ; Message from server
 
 ; NETWORK CMDS
-FROMESP_NETWORK_RESULT                EQU 14  ; Return result of last scan
+FROMESP_NETWORK_SCAN_RESULT           EQU 14  ; Return result of last scan
 FROMESP_NETWORK_SCANNED_DETAILS       EQU 15  ; Return details for a scanned network
 FROMESP_NETWORK_REGISTERED_DETAILS    EQU 16  ; Return SSID for a registered network
 FROMESP_NETWORK_REGISTERED            EQU 17  ; Return registered networks status

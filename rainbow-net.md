@@ -257,42 +257,42 @@ Here's an example on how to send and receive data.
 
 ### Commands from the ESP
 
-| Value | Command                                                                  | Description                                                            |
-| ----- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-|       |                                                                          | **ESP CMDS**                                                           |
-| 0     | [READY](#ESP_GET_STATUS)                                                 | ESP is ready                                                           |
-| 1     | [DEBUG_LEVEL](#DEBUG_GET_LEVEL)                                          | Return debug configuration                                             |
-| 2     | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                        | Return ESP/Rainbow firmware version                                    |
-| 3     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                                  | Return result code (see command for details)                           |
-|       |                                                                          | **WIFI CMDS**                                                          |
-| 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                          | Return Wi-Fi connection status                                         |
-| 5     | SSID ([WIFI](#WIFI_GET_SSID)/[AP](#AP_GET_SSID))                         | Return Wi-Fi / Access Point SSID                                       |
-| 6     | IP_ADDRESS ([WIFI](#WIFI_GET_IP)/[AP](#AP_GET_IP))                       | Return Wi-Fi / Access Point IP address                                 |
-| 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                          | Return Wi-Fi station / Access Point / Web Server status                |
-|       |                                                                          | **RND CMDS**                                                           |
-| 8     | [RND_BYTE](#RND_GET_BYTE)                                                | Return random byte value                                               |
-| 9     | [RND_WORD](#RND_GET_WORD)                                                | Return random word value                                               |
-|       |                                                                          | **SERVER CMDS**                                                        |
-| 10    | [SERVER_STATUS](#SERVER_GET_STATUS)                                      | Return server connection status                                        |
-| 11    | [SERVER_PING](#SERVER_GET_PING)                                          | Return min, max and average round-trip time and number of lost packets |
-| 12    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                                  | Return server settings (host name + port)                              |
-| 13    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                          | Message from server                                                    |
-|       |                                                                          | **NETWORK CMDS**                                                       |
-| 14    | NETWORK_RESULT ([SYNC](#NETWORK_SCAN)/[ASYNC](#NETWORK_GET_SCAN_RESULT)) | Return result of last scan                                             |
-| 15    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)                  | Return details for a scanned network                                   |
-| 16    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)            | Return SSID for a registered network                                   |
-| 17    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                            | Return registered networks status                                      |
-|       |                                                                          | **FILE CMDS**                                                          |
-| 18    | [FILE_STATUS](#FILE_STATUS)                                              | Return working file status                                             |
-| 19    | [FILE_EXISTS](#FILE_EXISTS)                                              | Return if file exists or not                                           |
-| 20    | [FILE_DELETE](#FILE_DELETE)                                              | Return result code (see command for details)                           |
-| 21    | [FILE_LIST](#FILE_GET_LIST)                                              | Return path file list                                                  |
-| 22    | [FILE_DATA](#FILE_READ)                                                  | Return file data                                                       |
-| 23    | [FILE_COUNT](#FILE_COUNT)                                                | Return file count in a specific path                                   |
-| 24    | [FILE_ID](#FILE_GET_FREE_ID)                                             | Return a free file ID                                                  |
-| 25    | [FILE_FS_INFO](#FILE_GET_INFO)                                           | Return file system info                                                |
-| 26    | [FILE_INFO](#FILE_GET_INFO)                                              | Return file info (size + CRC32)                                        |
-| 27    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                          | Return result code (see command for details)                           |
+| Value | Command                                                                       | Description                                                            |
+| ----- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+|       |                                                                               | **ESP CMDS**                                                           |
+| 0     | [READY](#ESP_GET_STATUS)                                                      | ESP is ready                                                           |
+| 1     | [DEBUG_LEVEL](#DEBUG_GET_LEVEL)                                               | Return debug configuration                                             |
+| 2     | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                             | Return ESP/Rainbow firmware version                                    |
+| 3     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                                       | Return result code (see command for details)                           |
+|       |                                                                               | **WIFI CMDS**                                                          |
+| 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                               | Return Wi-Fi connection status                                         |
+| 5     | SSID ([WIFI](#WIFI_GET_SSID)/[AP](#AP_GET_SSID))                              | Return Wi-Fi / Access Point SSID                                       |
+| 6     | IP_ADDRESS ([WIFI](#WIFI_GET_IP)/[AP](#AP_GET_IP))                            | Return Wi-Fi / Access Point IP address                                 |
+| 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                               | Return Wi-Fi station / Access Point / Web Server status                |
+|       |                                                                               | **RND CMDS**                                                           |
+| 8     | [RND_BYTE](#RND_GET_BYTE)                                                     | Return random byte value                                               |
+| 9     | [RND_WORD](#RND_GET_WORD)                                                     | Return random word value                                               |
+|       |                                                                               | **SERVER CMDS**                                                        |
+| 10    | [SERVER_STATUS](#SERVER_GET_STATUS)                                           | Return server connection status                                        |
+| 11    | [SERVER_PING](#SERVER_GET_PING)                                               | Return min, max and average round-trip time and number of lost packets |
+| 12    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                                       | Return server settings (host name + port)                              |
+| 13    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                               | Message from server                                                    |
+|       |                                                                               | **NETWORK CMDS**                                                       |
+| 14    | NETWORK_SCAN_RESULT ([SYNC](#NETWORK_SCAN)/[ASYNC](#NETWORK_GET_SCAN_RESULT)) | Return result of last scan                                             |
+| 15    | [NETWORK_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)                       | Return details for a scanned network                                   |
+| 16    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)                 | Return SSID for a registered network                                   |
+| 17    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                                 | Return registered networks status                                      |
+|       |                                                                               | **FILE CMDS**                                                          |
+| 18    | [FILE_STATUS](#FILE_STATUS)                                                   | Return working file status                                             |
+| 19    | [FILE_EXISTS](#FILE_EXISTS)                                                   | Return if file exists or not                                           |
+| 20    | [FILE_DELETE](#FILE_DELETE)                                                   | Return result code (see command for details)                           |
+| 21    | [FILE_LIST](#FILE_GET_LIST)                                                   | Return path file list                                                  |
+| 22    | [FILE_DATA](#FILE_READ)                                                       | Return file data                                                       |
+| 23    | [FILE_COUNT](#FILE_COUNT)                                                     | Return file count in a specific path                                   |
+| 24    | [FILE_ID](#FILE_GET_FREE_ID)                                                  | Return a free file ID                                                  |
+| 25    | [FILE_FS_INFO](#FILE_GET_INFO)                                                | Return file system info                                                |
+| 26    | [FILE_INFO](#FILE_GET_INFO)                                                   | Return file info (size + CRC32)                                        |
+| 27    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                               | Return result code (see command for details)                           |
 
 ## Commands details
 
@@ -1123,11 +1123,11 @@ If the request is asynchronous, then the command doesn't return anything.
 
 **Returns (only if request is synchronous):**
 
-| Byte | Description                                 | Example          |
-| ---- | ------------------------------------------- | ---------------- |
-| 0    | Length of the message (excluding this byte) | `2`              |
-| 1    | Command ID (see commands from ESP)          | `NETWORK_RESULT` |
-| 2    | Network count                               | `3`              |
+| Byte | Description                                 | Example               |
+| ---- | ------------------------------------------- | --------------------- |
+| 0    | Length of the message (excluding this byte) | `2`                   |
+| 1    | Command ID (see commands from ESP)          | `NETWORK_SCAN_RESULT` |
+| 2    | Network count                               | `3`                   |
 
 **Notes:**
 
@@ -1149,11 +1149,11 @@ This command returns the result of the last scan.
 
 **Returns:**
 
-| Byte | Description                                 | Example          |
-| ---- | ------------------------------------------- | ---------------- |
-| 0    | Length of the message (excluding this byte) | `2`              |
-| 1    | Command ID (see commands from ESP)          | `NETWORK_RESULT` |
-| 2    | Network count                               | `3`              |
+| Byte | Description                                 | Example               |
+| ---- | ------------------------------------------- | --------------------- |
+| 0    | Length of the message (excluding this byte) | `2`                   |
+| 1    | Command ID (see commands from ESP)          | `NETWORK_SCAN_RESULT` |
+| 2    | Network count                               | `3`                   |
 
 **Notes:**
 

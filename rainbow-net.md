@@ -7,7 +7,7 @@
 
 ## Credits
 
-The Rainbow project is developed by [Antoine Gohin / Broke Studio](https://twitter.com/Broke_Studio).
+The Rainbow Net project is developed by [Antoine Gohin / Broke Studio](https://twitter.com/Broke_Studio).
 
 Thanks to :
 
@@ -953,7 +953,7 @@ This command returns the current server settings (hostname and port).
 ### SERVER_SET_SETTINGS
 
 This command sets the current server settings (hostname and port).  
-It doesn't overwrite values set in the Rainbow config file.
+It doesn't overwrite values set in the Rainbow Net configuration file.
 
 | Byte | Description                                 | Example               |
 | ---- | ------------------------------------------- | --------------------- |
@@ -979,7 +979,7 @@ It doesn't overwrite values set in the Rainbow config file.
 
 ### SERVER_GET_SAVED_SETTINGS
 
-This command returns the server settings (hostname and port) from the Rainbow config file.
+This command returns the server settings (hostname and port) from the Rainbow Net configuration file.
 
 | Byte | Description                                 | Example                     |
 | ---- | ------------------------------------------- | --------------------------- |
@@ -1019,7 +1019,7 @@ This command returns the server settings (hostname and port) from the Rainbow co
 
 ### SERVER_SET_SAVED_SETTINGS
 
-This command sets the server settings (hostname and port) to the Rainbow config file, and sets them as active.
+This command sets the server settings (hostname and port) to the Rainbow Net configuration file, and sets them as active.
 
 | Byte | Description                                                          | Example                     |
 | ---- | -------------------------------------------------------------------- | --------------------------- |
@@ -1052,7 +1052,7 @@ This command sets the server settings (hostname and port) to the Rainbow config 
 
 ### SERVER_RESTORE_SAVED_SETTINGS
 
-This command sets the current server settings (hostname and port) to what is defined in the Rainbow config file.
+This command sets the current server settings (hostname and port) to what is defined in the Rainbow Net configuration file.
 
 | Byte | Description                                 | Example                         |
 | ---- | ------------------------------------------- | ------------------------------- |
@@ -1212,7 +1212,7 @@ An empty message will be sent if the passed ID is not valid.
 
 ### NETWORK_GET_REGISTERED
 
-The Rainbow configuration can hold up to 3 network settings.  
+The Rainbow Net configuration file can hold up to 3 network settings.  
 This command returns 1 or 0 if an SSID/password is registered or not for each network.
 
 | Byte | Description                                 | Example                  |
@@ -1236,7 +1236,7 @@ This command returns 1 or 0 if an SSID/password is registered or not for each ne
 
 ### NETWORK_GET_REGISTERED_DETAILS
 
-The Rainbow configuration can hold up to 3 network settings.  
+The Rainbow Net configuration file can hold up to 3 network settings.  
 This command returns the SSID and password of the requested configuration network.
 
 | Byte | Description                                 | Example                          |
@@ -1275,7 +1275,7 @@ This command returns the SSID and password of the requested configuration networ
 
 ### NETWORK_REGISTER
 
-The Rainbow configuration can hold up to 3 network settings.  
+The Rainbow Net configuration can hold up to 3 network settings.  
 If the network ID is invalid then the request is ignored.  
 This command registers a network in one of the spots.  
 Current ESP Wi-Fi settings will be reset to take in account modification immediately.  
@@ -1315,7 +1315,7 @@ Only one network can be active at a time.
 
 ### NETWORK_UNREGISTER
 
-The Rainbow configuration can hold up to 3 network settings.  
+The Rainbow Net configuration file can hold up to 3 network settings.  
 If the network ID is invalid then the request is ignored.  
 This command unregister a network by:
 

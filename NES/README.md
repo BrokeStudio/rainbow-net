@@ -2,14 +2,16 @@
 
 Here you'll find the Rainbow mapper documentation for the NES and 6502 library for cc65 and asm6.
 
-| File / Folder                                                                | Description                                 |
-| ---------------------------------------------------------------------------- | ------------------------------------------- |
-| [rainbow-net.md](../rainbow-net.md)                                          | Rainbow NET Wi-Fi protocol documentation    |
-| [rainbow-nes-mapper.md](rainbow-nes-mapper.md)                               | Rainbow NES mapper documentation            |
-| [rainbow-nes-prg-rom-self-flashing.md](rainbow-nes-prg-rom-self-flashing.md) | Rainbow PRG-ROM self-flashing documentation |
-| [rainbow-nes-chr-rom-self-flashing.md](rainbow-nes-chr-rom-self-flashing.md) | Rainbow CHR-ROM self-flashing documentation |
-| [/asm6](./asm6)                                                              | ASM6 Rainbow Net lib code                   |
-| [/cc65](./cc65)                                                              | cc65 suite Rainbow Net lib code             |
+| File / Folder                                              | Description                                 |
+| ---------------------------------------------------------- | ------------------------------------------- |
+| [rainbow-net.md](../rainbow-net.md)                        | Rainbow NET Wi-Fi protocol documentation    |
+| [mapper-doc.md](mapper-doc.md)                             | Rainbow NES mapper documentation            |
+| [prg-rom-self-flashing.md](prg-rom-self-flashing.md)       | Rainbow PRG-ROM self-flashing documentation |
+| [chr-rom-self-flashing.md](chr-rom-self-flashing.md)       | Rainbow CHR-ROM self-flashing documentation |
+| [rainbow-net-code-example.md](rainbow-net-code-example.md) | Rainbow Net example code                    |
+| [mapper-registers.s](mapper-registers.s)                   | Rainbow NES mapper registers                |
+| [/asm6](./asm6)                                            | ASM6 Rainbow Net lib code                   |
+| [/cc65](./cc65)                                            | cc65 suite Rainbow Net lib code             |
 
 # Try it yourself
 

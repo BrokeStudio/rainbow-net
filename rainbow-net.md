@@ -1,4 +1,4 @@
-# Rainbow Wi-Fi documentation
+# Rainbow Net documentation
 
 > **Disclaimer**
 >
@@ -21,16 +21,13 @@ Thanks to :
 
 ## Table of content
 
-- [Rainbow Wi-Fi documentation](#rainbow-wi-fi-documentation)
+- [Rainbow Net documentation](#rainbow-net-documentation)
   - [Credits](#credits)
   - [Table of content](#table-of-content)
-  - [What is Rainbow?](#what-is-rainbow)
+  - [What is Rainbow Net?](#what-is-rainbow-net)
   - [Why 'Rainbow'?](#why-rainbow)
-  - [Mapper registers](#mapper-registers)
   - [Message format](#message-format)
   - [Code example](#code-example)
-    - [Configuration](#configuration)
-    - [Send and receive data](#send-and-receive-data)
   - [Commands overview](#commands-overview)
     - [Commands to the ESP](#commands-to-the-esp)
     - [Commands from the ESP](#commands-from-the-esp)
@@ -97,10 +94,11 @@ Thanks to :
 
 ---
 
-## What is Rainbow?
+## What is Rainbow Net?
 
-**Rainbow** is a mapper for the **NES** that allows to connect the console to the Internet.  
-It uses a Wi-Fi chip (**ESP8266**, called **ESP** in this doc) embedded on the cart.
+**Rainbow** is originally a new mapper for the **NES** that allows to connect the console to the Internet.  
+It uses a Wi-Fi chip (**ESP8266**, called **ESP** in this doc) embedded on the cart.  
+As the project progressed, I separated the Wi-Fi "protocol" (the commands in this doc) now called **Rainbow Net** but kept the name **Rainbow** for the mapper, currently developed for the NES but porting it to other platforms is planned.
 
 ## Why 'Rainbow'?
 
@@ -108,12 +106,7 @@ There are two reasons for this name.
 
 The first one is because when I was learning Verilog and was playing with my CPLD dev board, I wired it with a lot of colored floating wires as you can see in this [Tweet](https://twitter.com/Broke_Studio/status/1031836021976170497), and it looked a lot like a rainbow.
 
-Second reason is because Kevin Hanley from KHAN games is working on a game called Unicorn, which is based on an old BBS game called Legend of the Red Dragon, and therefore needs a connection to the outside world to be played online. This project would be a great oppurtunity to help him, and as everyone knows, Unicorns love Rainbows :)
-
-## Mapper registers
-
-First Rainbow prototypes were based on UNROM-512 mapper to make the development easier.  
-Now the board uses its own mapper. Detailed documentation of the mapper can be found here: [rainbow-mapper.md](rainbow-mapper.md).
+Second reason is because Kevin Hanley from KHAN games is working on a game called Unicorn for the NES, which is based on an old BBS game called Legend of the Red Dragon, and therefore needs a connection to the outside world to be played online. This project would be a great oppurtunity to help him, and as everyone knows, Unicorns love Rainbows :)
 
 ## Message format
 
@@ -125,66 +118,7 @@ A message is what is send to or received from the ESP and always have the same f
 
 ## Code example
 
-### Configuration
-
-First we need to configure Rainbow registers.
-
-```
-  ; received data will be stored in FPGA RAM at $4800
-  ; data to be sent must be written to FPGA RAM at $4900
-  lda #$00  ; $48 works too if you want it to be clearer
-  sta $4103 ; RX high
-  lda #$01  ; $49 works too if you want it to be clearer
-  sta $4104 ; TX high
-
-  ; Enable ESP communication
-  lda #1
-  sta $4100
-```
-
-### Send and receive data
-
-Here's an example on how to send and receive data.
-
-```
-  ; to send data we first need to write our message to RAM at $4900 since that's what we configured above
-  ; let's ask the ESP for a random 16 bits number between 0x0010 and 0x2000...
-  lda #$05                ; message length
-  sta $4900
-  lda #RND_GET_WORD_RANGE ; command
-  sta $4901
-  lda #$00                ; minimum value high byte
-  sta $4902
-  lda #$10                ; minimum value low byte
-  sta $4903
-  lda #$20                ; maximum value high byte
-  sta $4904
-  lda #$00                ; maximum value low byte
-  sta $4905
-  sta $4102               ; send the message
-
-  ; now we check if the message has been sent
-:
-  bit $4102               ; check TX register bit 7, should be 1 when message is sent
-  bpl :-
-
-  ; now we wait for an answer
-:
-  bit $4101               ; check RX register bit 7, should be 1 when a message is received
-  bpl :-
-
-  ; let's copy the received value to zeropage
-  ; $4800 should be the received message length
-  ; $4801 should be the received message command (RND_WORD here)
-  lda $4802               ; received value high byte
-  sta $00
-  lda $4803               ; received value low byte
-  sta $01
-
-  ; we can now acknowledge the received message
-  ; this will tell the FPGA that he can store a new message if a new message is available
-  sta $4102
-```
+Please check console folders for specific example depending on the system.
 
 ## Commands overview
 

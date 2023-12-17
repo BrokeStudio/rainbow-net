@@ -12,7 +12,7 @@ Beyond those 100 000 cycles, errors may appear while erasing/programming the chi
 
 In this document, the term _program_ instead of _write_ will be used to match the flash datasheets.
 
-Please read [S29GL064S datasheet](<https://www.infineon.com/dgdl/Infineon-S29GL064S_64-MBIT_(8_MBYTE)_3.0_V_FLASH_MEMORY-DataSheet-v09_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ed12bd84d2d>) for more general informations. This may not be the exact saeme flash chip used on your board, but most of the information should be true for another equivalent flash chip.
+Please read [S29GL064S datasheet](<https://www.infineon.com/dgdl/Infineon-S29GL064S_64-MBIT_(8_MBYTE)_3.0_V_FLASH_MEMORY-DataSheet-v09_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ed12bd84d2d>) for more general informations. This may not be the exact same flash chip used on your board, but most of the information should be true for another equivalent flash chip.
 
 ## Banks init
 

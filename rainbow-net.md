@@ -1375,9 +1375,9 @@ File paths for **auto mode** are defined as follow.
 
 This command opens a file as the working file.  
 It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).  
+If another file is already opened, then it will be closed, but only if the provided arguments are valid and allows to open a file.  
 If the file does not exists, an empty one will be created.  
-If the same file is already opened, then the file cursor will be reset to 0.  
-If another file is already opened, it will be closed.
+If the same file is already opened, then the file cursor will be reset to 0.
 
 Message first bytes:
 
@@ -1395,7 +1395,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5` (0 to 63)      |
+| 4    | File index (0 to 63)                       | `5`                |
 
 Using **manual mode**:
 
@@ -1465,7 +1465,7 @@ If file is opened in **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 4    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 5    | File index                                 | `5` (0 to 63)      |
+| 5    | File index (0 to 63)                       | `5`                |
 
 If file is opened in **manual mode**:
 
@@ -1512,7 +1512,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5` (0 to 63)      |
+| 4    | File index (0 to 63)                       | `5`                |
 
 Using **manual mode**:
 
@@ -1566,7 +1566,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5` (0 to 63)      |
+| 4    | File index (0 to 63)                       | `5`                |
 
 Using **manual mode**:
 
@@ -1632,11 +1632,11 @@ This command reads and sends data from the working file.
 You have to pass the number of bytes you want to read.  
 If there is no working file currently open, number of bytes will be 0.
 
-| Byte | Description                                 | Example          |
-| ---- | ------------------------------------------- | ---------------- |
-| 0    | Length of the message (excluding this byte) | `2`              |
-| 1    | Command ID (see commands to ESP)            | `FILE_READ`      |
-| 2    | Number of bytes to read                     | `64` (minimum 1) |
+| Byte | Description                                 | Example     |
+| ---- | ------------------------------------------- | ----------- |
+| 0    | Length of the message (excluding this byte) | `2`         |
+| 1    | Command ID (see commands to ESP)            | `FILE_READ` |
+| 2    | Number of bytes to read (minimum 1)         | `64`        |
 
 **Returns:**
 
@@ -1926,7 +1926,7 @@ Using **auto mode**:
 | Byte | Description                                | Example            |
 | ---- | ------------------------------------------ | ------------------ |
 | 3    | Path index (see [FILE_PATHS](#File-paths)) | `FILE_PATHS::SAVE` |
-| 4    | File index                                 | `5` (0 to 63)      |
+| 4    | File index (0 to 63)                       | `5`                |
 
 Using **manual mode**:
 

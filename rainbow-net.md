@@ -362,7 +362,7 @@ This command sets the debug level.
       |||
       ||+-  enable/disable dev logs
       |+--  enable/disable serial logs
-      |     outputs what is sent to the NES
+      |     outputs what is sent to the console
       +---  enable/disable network logs
             outputs what is received from the outside world (TCP/UDP)
 
@@ -399,7 +399,7 @@ Should be used on startup to make sure that we start with a clean setup.
 
 **Important** do NOT send another message right after sending a BUFFER_CLEAR_RX_TX command. The new message would arrive before the buffers are cleared and would then be lost. However, you can send ESP_GET_STATUS until you get a response, and then read $4100 until $4101.7 is 0.
 
-**Note:** sending a BUFFER_CLEAR_RX_TX at the ROM startup is HIGLY recommended to avoid undefined behaviour if resetting the console in the middle of communication between the NES and the ESP.
+**Note:** sending a BUFFER_CLEAR_RX_TX at the ROM startup is HIGLY recommended to avoid undefined behaviour if resetting the console in the middle of communication between the console and the ESP.
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
@@ -412,7 +412,7 @@ Should be used on startup to make sure that we start with a clean setup.
 
 ### BUFFER_DROP_FROM_ESP
 
-This command drops messages of a given type from TX (ESP->NES) buffer.  
+This command drops messages of a given type from TX (ESP->console) buffer.  
 You can keep the most recent messages using the second parameter.
 
 | Byte | Description                                 | Example                |

@@ -789,8 +789,8 @@ This command returns a random word between 0 and 65535.
 | ---- | ------------------------------------------- | ---------- |
 | 0    | Length of the message (excluding this byte) | `3`        |
 | 1    | Command ID (see commands from ESP)          | `RND_WORD` |
-| 2    | Random value HI byte                        | `0xA7`     |
-| 3    | Random value LO byte                        | `0xEF`     |
+| 2    | Random value high byte                      | `0xA7`     |
+| 3    | Random value low byte                       | `0xEF`     |
 
 [Back to command list](#Commands-overview)
 
@@ -804,10 +804,10 @@ This command returns a random word between custom min and max values.
 | ---- | ------------------------------------------- | -------------------- |
 | 0    | Length of the message (excluding this byte) | `5`                  |
 | 1    | Command ID (see commands to ESP)            | `RND_GET_WORD_RANGE` |
-| 2    | Custom min value (0 to 65534) HI byte       | `0x00`               |
-| 3    | Custom min value (0 to 65534) LO byte       | `0x00`               |
-| 4    | Custom max value (1 to 65535) HI byte       | `0x20`               |
-| 5    | Custom max value (1 to 65535) LO byte       | `0x00`               |
+| 2    | Custom min value (0 to 65534) high byte     | `0x00`               |
+| 3    | Custom min value (0 to 65534) low byte      | `0x00`               |
+| 4    | Custom max value (1 to 65535) high byte     | `0x20`               |
+| 5    | Custom max value (1 to 65535) low byte      | `0x00`               |
 
 **Returns:**
 
@@ -815,8 +815,8 @@ This command returns a random word between custom min and max values.
 | ---- | ------------------------------------------- | ---------- |
 | 0    | Length of the message (excluding this byte) | `3`        |
 | 1    | Command ID (see commands from ESP)          | `RND_WORD` |
-| 2    | Random value HI byte                        | `0x06`     |
-| 3    | Random value LO byte                        | `0x82`     |
+| 2    | Random value high byte                      | `0x06`     |
+| 3    | Random value low byte                       | `0x82`     |
 
 [Back to command list](#Commands-overview)
 
@@ -927,8 +927,8 @@ This command returns the current server settings (hostname and port).
 | 0    | Length of the message (excluding this byte)                         | `1` or more     |
 | 1    | Command ID (see commands from ESP)                                  | `HOST_SETTINGS` |
 |      | _**next bytes are returned if a server hostname AND port are set**_ |                 |
-| 2    | Port MSB                                                            | `0x0B`          |
-| 3    | Port LSB                                                            | `0xB8`          |
+| 2    | Port high byte                                                      | `0x0B`          |
+| 3    | Port low byte                                                       | `0xB8`          |
 | 4    | Hostname string length                                              | `15`            |
 | 5    | Hostname string                                                     | `G`             |
 | 6    | ...                                                                 | `A`             |
@@ -959,8 +959,8 @@ It doesn't overwrite values set in the Rainbow config file.
 | ---- | ------------------------------------------- | --------------------- |
 | 0    | Length of the message (excluding this byte) | `14`                  |
 | 1    | Command ID (see commands to ESP)            | `SERVER_SET_SETTINGS` |
-| 2    | Port MSB                                    | `0x0B`                |
-| 3    | Port LSB                                    | `0xB8`                |
+| 2    | Port high byte                              | `0x0B`                |
+| 3    | Port low byte                               | `0xB8`                |
 | 4    | Hostname string length                      | `10`                  |
 | 5    | Hostname string                             | `S`                   |
 | 6    | ...                                         | `E`                   |
@@ -988,30 +988,30 @@ This command returns the server settings (hostname and port) from the Rainbow co
 
 **Returns:**
 
-| Byte | Description                                        | Example         |
-| ---- | -------------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)        | `1` or more     |
-| 1    | Command ID (see commands from ESP)                 | `HOST_SETTINGS` |
-|      | _**next bytes are returned if a server hostname**_ |                 |
-|      | _**AND port are set in the Rainbow config file**_  |                 |
-| 2    | Port MSB                                           | `0x0B`          |
-| 3    | Port LSB                                           | `0xB8`          |
-| 4    | Hostname string length                             | `15`            |
-| 5    | Hostname string                                    | `G`             |
-| 6    | ...                                                | `A`             |
-| 7    | ...                                                | `M`             |
-| 8    | ...                                                | `E`             |
-| 9    | ...                                                | `.`             |
-| 10   | ...                                                | `S`             |
-| 11   | ...                                                | `E`             |
-| 12   | ...                                                | `R`             |
-| 13   | ...                                                | `V`             |
-| 14   | ...                                                | `E`             |
-| 15   | ...                                                | `R`             |
-| 16   | ...                                                | `.`             |
-| 17   | ...                                                | `N`             |
-| 18   | ...                                                | `E`             |
-| 19   | ...                                                | `T`             |
+| Byte | Description                                                  | Example         |
+| ---- | ------------------------------------------------------------ | --------------- |
+| 0    | Length of the message (excluding this byte)                  | `1` or more     |
+| 1    | Command ID (see commands from ESP)                           | `HOST_SETTINGS` |
+|      | _**next bytes are returned if a server hostname**_           |                 |
+|      | _**AND port are set in the Rainbow Net configuration file**_ |                 |
+| 2    | Port high byte                                               | `0x0B`          |
+| 3    | Port low byte                                                | `0xB8`          |
+| 4    | Hostname string length                                       | `15`            |
+| 5    | Hostname string                                              | `G`             |
+| 6    | ...                                                          | `A`             |
+| 7    | ...                                                          | `M`             |
+| 8    | ...                                                          | `E`             |
+| 9    | ...                                                          | `.`             |
+| 10   | ...                                                          | `S`             |
+| 11   | ...                                                          | `E`             |
+| 12   | ...                                                          | `R`             |
+| 13   | ...                                                          | `V`             |
+| 14   | ...                                                          | `E`             |
+| 15   | ...                                                          | `R`             |
+| 16   | ...                                                          | `.`             |
+| 17   | ...                                                          | `N`             |
+| 18   | ...                                                          | `E`             |
+| 19   | ...                                                          | `T`             |
 
 [Back to command list](#Commands-overview)
 
@@ -1023,12 +1023,12 @@ This command sets the server settings (hostname and port) to the Rainbow config 
 
 | Byte | Description                                                          | Example                     |
 | ---- | -------------------------------------------------------------------- | --------------------------- |
-| 0    | Length of the message (excluding this byte)                          | `1` or `5+`                 |
+| 0    | Length of the message (excluding this byte)                          | `1` or `6+`                 |
 | 1    | Command ID (see commands to ESP)                                     | `SERVER_SET_SAVED_SETTINGS` |
 |      | _**next bytes are sent only to configure server hostname and port**_ |                             |
 |      | _**set message length to 1 to clear saved settings**_                |                             |
-| 2    | Port MSB                                                             | `0x0B`                      |
-| 3    | Port LSB                                                             | `0xB8`                      |
+| 2    | Port high byte                                                       | `0x0B`                      |
+| 3    | Port low byte                                                        | `0xB8`                      |
 | 4    | Hostname string length                                               | `15`                        |
 | 5    | Hostname string                                                      | `G`                         |
 | 6    | ...                                                                  | `A`                         |
@@ -1617,10 +1617,10 @@ If the file is smaller than the passed offset, it'll be filled with 0x00.
 | ------- | ------------------------------------------- | -------------- |
 | 0       | Length of the message (excluding this byte) | `2` to `5`     |
 | 1       | Command ID (see commands to ESP)            | `FILE_SET_CUR` |
-| 2       | Offset LSB                                  | `0x00`         |
+| 2       | Offset low byte                             | `0x00`         |
 | 3 (opt) | Offset                                      | `0x00`         |
 | 4 (opt) | Offset                                      | `0x10`         |
-| 5 (opt) | Offset MSB                                  | `0x00`         |
+| 5 (opt) | Offset high byte                            | `0x00`         |
 
 [Back to command list](#Commands-overview)
 
@@ -1869,37 +1869,37 @@ Message first bytes:
 
 **Returns:**
 
-| Byte | Description                                           | Example                    |
-| ---- | ----------------------------------------------------- | -------------------------- |
-| 0    | Length of the message (excluding this byte)           | `1` or `27`                |
-| 1    | Command ID (see commands from ESP)                    | `FILE_FS_INFO`             |
-|      | _**next bytes are returned if file system is ready**_ |                            |
-| 2    | Total space MSB                                       | `0x00`                     |
-| 3    | Total space                                           | `0x00`                     |
-| 4    | Total space                                           | `0x00`                     |
-| 5    | Total space                                           | `0x00`                     |
-| 6    | Total space                                           | `0x00`                     |
-| 7    | Total space                                           | `0x1F`                     |
-| 8    | Total space                                           | `0xA0`                     |
-| 9    | Total space LSB                                       | `0x00`                     |
-| 10   | Free space MSB                                        | `0x00`                     |
-| 11   | Free space                                            | `0x00`                     |
-| 12   | Free space                                            | `0x00`                     |
-| 13   | Free space                                            | `0x00`                     |
-| 14   | Free space                                            | `0x00`                     |
-| 15   | Free space                                            | `0x1A`                     |
-| 16   | Free space                                            | `0x40`                     |
-| 17   | Free space LSB                                        | `0x00`                     |
-| 18   | Free space percentage                                 | `0x53` (max is 100 - 0x64) |
-| 19   | Used space MSB                                        | `0x00`                     |
-| 20   | Used space                                            | `0x00`                     |
-| 21   | Used space                                            | `0x00`                     |
-| 22   | Used space                                            | `0x00`                     |
-| 23   | Used space                                            | `0x00`                     |
-| 24   | Used space                                            | `0x56`                     |
-| 25   | Used space                                            | `0x00`                     |
-| 26   | Used space LSB                                        | `0x00`                     |
-| 27   | Used space percentage                                 | `0x10` (max is 100 - 0x64) |
+| Byte | Description                                           | Example        |
+| ---- | ----------------------------------------------------- | -------------- |
+| 0    | Length of the message (excluding this byte)           | `1` or `27`    |
+| 1    | Command ID (see commands from ESP)                    | `FILE_FS_INFO` |
+|      | _**next bytes are returned if file system is ready**_ |                |
+| 2    | Total space high byte                                 | `0x00`         |
+| 3    | Total space                                           | `0x00`         |
+| 4    | Total space                                           | `0x00`         |
+| 5    | Total space                                           | `0x00`         |
+| 6    | Total space                                           | `0x00`         |
+| 7    | Total space                                           | `0x1F`         |
+| 8    | Total space                                           | `0xA0`         |
+| 9    | Total space low byte                                  | `0x00`         |
+| 10   | Free space high byte                                  | `0x00`         |
+| 11   | Free space                                            | `0x00`         |
+| 12   | Free space                                            | `0x00`         |
+| 13   | Free space                                            | `0x00`         |
+| 14   | Free space                                            | `0x00`         |
+| 15   | Free space                                            | `0x1A`         |
+| 16   | Free space                                            | `0x40`         |
+| 17   | Free space low byte                                   | `0x00`         |
+| 18   | Free space percentage (max is 100 - 0x64)             | `0x53`         |
+| 19   | Used space high byte                                  | `0x00`         |
+| 20   | Used space                                            | `0x00`         |
+| 21   | Used space                                            | `0x00`         |
+| 22   | Used space                                            | `0x00`         |
+| 23   | Used space                                            | `0x00`         |
+| 24   | Used space                                            | `0x56`         |
+| 25   | Used space                                            | `0x00`         |
+| 26   | Used space low byte                                   | `0x00`         |
+| 27   | Used space percentage (max is 100 - 0x64)             | `0x10`         |
 
 [Back to command list](#Commands-overview)
 
@@ -1956,14 +1956,14 @@ Using **manual mode**:
 | 0    | Length of the message (excluding this byte)    | `1` or `9`  |
 | 1    | Command ID (see commands from ESP)             | `FILE_INFO` |
 |      | _**next bytes are returned if file is found**_ |             |
-| 2    | CRC32 MSB                                      | `0x3B`      |
+| 2    | CRC32 high byte                                | `0x3B`      |
 | 3    | CRC32                                          | `0x84`      |
 | 4    | CRC32                                          | `0xE6`      |
-| 5    | CRC32 LSB                                      | `0xFB`      |
-| 6    | Size MSB                                       | `0x00`      |
+| 5    | CRC32 low byte                                 | `0xFB`      |
+| 6    | Size high byte                                 | `0x00`      |
 | 7    | Size                                           | `0x00`      |
 | 8    | Size                                           | `0x10`      |
-| 9    | Size LSB                                       | `0x00`      |
+| 9    | Size low byte                                  | `0x00`      |
 
 [Back to command list](#Commands-overview)
 
@@ -2038,13 +2038,13 @@ Using **manual mode**:
 
 **Returns:**
 
-| Byte | Description                                       | Example         |
-| ---- | ------------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)       | `4`             |
-| 1    | Command ID (see commands from ESP)                | `FILE_DOWNLOAD` |
-| 2    | Result code (see below)                           | `0`             |
-| 3    | HTTP status MSB                                   | `0x00`          |
-| 4    | HTTP status LSB or network error code (see notes) | `0xC8`          |
+| Byte | Description                                            | Example         |
+| ---- | ------------------------------------------------------ | --------------- |
+| 0    | Length of the message (excluding this byte)            | `4`             |
+| 1    | Command ID (see commands from ESP)                     | `FILE_DOWNLOAD` |
+| 2    | Result code (see below)                                | `0`             |
+| 3    | HTTP status high byte                                  | `0x00`          |
+| 4    | HTTP status low byte or network error code (see notes) | `0xC8`          |
 
 **Result codes:**
 

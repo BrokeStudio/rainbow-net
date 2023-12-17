@@ -190,70 +190,70 @@ Here's an example on how to send and receive data.
 
 ### Commands to the ESP
 
-| Value | Command                                                           | Description                                                                |
-| ----- | ----------------------------------------------------------------- | -------------------------------------------------------------------------- |
-|       |                                                                   | **ESP CMDS**                                                               |
-| 0     | [ESP_GET_STATUS](#ESP_GET_STATUS)                                 | Get ESP status                                                             |
-| 1     | [DEBUG_GET_LEVEL](#DEBUG_GET_LEVEL)                               | Get debug level                                                            |
-| 2     | [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)                               | Set debug level                                                            |
-| 3     | [DEBUG_LOG](#DEBUG_LOG)                                           | Debug / Log data                                                           |
-| 4     | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                        |
-| 5     | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->NES) buffer                                    |
-| 6     | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                               |
-| 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                              |
-| 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                            |
-|       |                                                                   | **WIFI CMDS**                                                              |
-| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                                |
-| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                     |
-| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get Wi-Fi IP address                                                       |
-| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                               |
-| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                               |
-|       |                                                                   | **ACCESS POINT CMDS**                                                      |
-| 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                              |
-| 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                                |
-|       |                                                                   | **RND CMDS**                                                               |
-| 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                            |
-| 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                     |
-| 18    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                            |
-| 19    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                     |
-|       |                                                                   | **SERVER CMDS**                                                            |
-| 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                               |
-| 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                            |
-| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (TCP/UDP)                           |
-| 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                      |
-| 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                      |
-| 25    | [SERVER_GET_SAVED_SETTINGS](#SERVER_GET_SAVED_SETTINGS)           | Get server host name and port values saved in the Rainbow config file      |
-| 26    | [SERVER_SET_SAVED_SETTINGS](#SERVER_SET_SAVED_SETTINGS)           | Set server host name and port values saved in the Rainbow config file      |
-| 27    | [SERVER_RESTORE_SAVED_SETTINGS](#SERVER_RESTORE_SAVED_SETTINGS)   | Restore server host name and port to saved values from Rainbow config file |
-| 28    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                          |
-| 29    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                     |
-| 30    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                     |
-|       |                                                                   | **NETWORK CMDS**                                                           |
-| 31    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks synchronously or asynchronously                              |
-| 32    | [NETWORK_GET_SCAN_RESULT](#NETWORK_GET_SCAN_RESULT)               | Get result of the last scan                                                |
-| 33    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                           |
-| 34    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                             |
-| 35    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                                |
-| 36    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                           |
-| 37    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                         |
-| 38    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                         |
-|       |                                                                   | **FILE CMDS**                                                              |
-| 39    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                          |
-| 40    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                         |
-| 41    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                    |
-| 42    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                       |
-| 43    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                              |
-| 44    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                    |
-| 45    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                   |
-| 46    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                  |
-| 47    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                                |
-| 48    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                     |
-| 49    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)        |
-| 50    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)         |
-| 51    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                             |
-| 52    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                               |
-| 53    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index    |
-| 54    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                         |
+| Value | Command                                                           | Description                                                                           |
+| ----- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+|       |                                                                   | **ESP CMDS**                                                                          |
+| 0     | [ESP_GET_STATUS](#ESP_GET_STATUS)                                 | Get ESP status                                                                        |
+| 1     | [DEBUG_GET_LEVEL](#DEBUG_GET_LEVEL)                               | Get debug level                                                                       |
+| 2     | [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)                               | Set debug level                                                                       |
+| 3     | [DEBUG_LOG](#DEBUG_LOG)                                           | Debug / Log data                                                                      |
+| 4     | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                                   |
+| 5     | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->console) buffer                                           |
+| 6     | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                                          |
+| 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                                         |
+| 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                                       |
+|       |                                                                   | **WIFI CMDS**                                                                         |
+| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                                           |
+| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                                |
+| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get Wi-Fi IP address                                                                  |
+| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                                          |
+| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                                          |
+|       |                                                                   | **ACCESS POINT CMDS**                                                                 |
+| 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                                         |
+| 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                                           |
+|       |                                                                   | **RND CMDS**                                                                          |
+| 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                                       |
+| 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                                |
+| 18    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                                       |
+| 19    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                                |
+|       |                                                                   | **SERVER CMDS**                                                                       |
+| 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                                          |
+| 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                                       |
+| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (TCP/UDP)                                      |
+| 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                                 |
+| 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                                 |
+| 25    | [SERVER_GET_SAVED_SETTINGS](#SERVER_GET_SAVED_SETTINGS)           | Get server host name and port values saved in the Rainbow Net configuration file      |
+| 26    | [SERVER_SET_SAVED_SETTINGS](#SERVER_SET_SAVED_SETTINGS)           | Set server host name and port values saved in the Rainbow Net configuration file      |
+| 27    | [SERVER_RESTORE_SAVED_SETTINGS](#SERVER_RESTORE_SAVED_SETTINGS)   | Restore server host name and port to saved values from Rainbow Net configuration file |
+| 28    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                                     |
+| 29    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                                |
+| 30    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                                |
+|       |                                                                   | **NETWORK CMDS**                                                                      |
+| 31    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks synchronously or asynchronously                                         |
+| 32    | [NETWORK_GET_SCAN_RESULT](#NETWORK_GET_SCAN_RESULT)               | Get result of the last scan                                                           |
+| 33    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                                      |
+| 34    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                                        |
+| 35    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                                           |
+| 36    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                                      |
+| 37    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                                    |
+| 38    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                                    |
+|       |                                                                   | **FILE CMDS**                                                                         |
+| 39    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                                     |
+| 40    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                                    |
+| 41    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                               |
+| 42    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                                  |
+| 43    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                                         |
+| 44    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                               |
+| 45    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                              |
+| 46    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                             |
+| 47    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                                           |
+| 48    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                                |
+| 49    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)                   |
+| 50    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)                    |
+| 51    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                                        |
+| 52    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                                          |
+| 53    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index               |
+| 54    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                                    |
 
 ### Commands from the ESP
 
@@ -548,7 +548,7 @@ This command asks the Wi-Fi status.
 | 7     | DISCONNECTED    | ESP disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
 |       |                 | or disconnected from network                                   |
 
-**Wi-Fi status:**
+**Wi-Fi error:**
 
 | Value | WIFI_ERROR      | Description                       |
 | ----- | --------------- | --------------------------------- |
@@ -574,19 +574,19 @@ This command returns the Wi-Fi SSID (if active).
 
 **Returns:**
 
-| Byte | Description                                                  | Example                   |
-| ---- | ------------------------------------------------------------ | ------------------------- |
-| 0    | Length of the message (excluding this byte)                  | `2` or more               |
-| 1    | Command ID (see commands from ESP)                           | `SSID`                    |
-| 2    | SSID string length                                           | `0` if not active or more |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                           |
-| 3    | SSID string                                                  | `M`                       |
-| 4    | ...                                                          | `Y`                       |
-| 5    | ...                                                          | `_`                       |
-| 6    | ...                                                          | `S`                       |
-| 7    | ...                                                          | `S`                       |
-| 8    | ...                                                          | `I`                       |
-| 9    | ...                                                          | `D`                       |
+| Byte | Description                                                  | Example     |
+| ---- | ------------------------------------------------------------ | ----------- |
+| 0    | Length of the message (excluding this byte)                  | `1` or more |
+| 1    | Command ID (see commands from ESP)                           | `SSID`      |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |             |
+| 2    | SSID string length                                           | `7`         |
+| 3    | SSID string                                                  | `M`         |
+| 4    | ...                                                          | `Y`         |
+| 5    | ...                                                          | `_`         |
+| 6    | ...                                                          | `S`         |
+| 7    | ...                                                          | `S`         |
+| 8    | ...                                                          | `I`         |
+| 9    | ...                                                          | `D`         |
 
 [Back to command list](#Commands-overview)
 
@@ -603,24 +603,24 @@ This command asks the Wi-Fi IP address (if active and connected).
 
 **Returns:**
 
-| Byte | Description                                                  | Example                                 |
-| ---- | ------------------------------------------------------------ | --------------------------------------- |
-| 0    | Length of the message (excluding this byte)                  | `2` or more                             |
-| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS`                            |
-| 2    | IP address string length                                     | `0` if not active and connected or more |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                                         |
-| 3    | IP address string                                            | `1`                                     |
-| 4    | ...                                                          | `9`                                     |
-| 5    | ...                                                          | `2`                                     |
-| 6    | ...                                                          | `.`                                     |
-| 7    | ...                                                          | `1`                                     |
-| 8    | ...                                                          | `6`                                     |
-| 9    | ...                                                          | `8`                                     |
-| 10   | ...                                                          | `.`                                     |
-| 11   | ...                                                          | `1`                                     |
-| 12   | ...                                                          | `.`                                     |
-| 13   | ...                                                          | `2`                                     |
-| 14   | ...                                                          | `0`                                     |
+| Byte | Description                                                  | Example      |
+| ---- | ------------------------------------------------------------ | ------------ |
+| 0    | Length of the message (excluding this byte)                  | `1` or more  |
+| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |              |
+| 2    | IP address string length                                     | `12`         |
+| 3    | IP address string                                            | `1`          |
+| 4    | ...                                                          | `9`          |
+| 5    | ...                                                          | `2`          |
+| 6    | ...                                                          | `.`          |
+| 7    | ...                                                          | `1`          |
+| 8    | ...                                                          | `6`          |
+| 9    | ...                                                          | `8`          |
+| 10   | ...                                                          | `.`          |
+| 11   | ...                                                          | `1`          |
+| 12   | ...                                                          | `.`          |
+| 13   | ...                                                          | `2`          |
+| 14   | ...                                                          | `0`          |
 
 [Back to command list](#Commands-overview)
 
@@ -639,10 +639,10 @@ This command returns the Wi-Fi station status.
 | ---- | ------------------------------------------------ | ------------- |
 | 0    | Length of the message (excluding this byte)      | `2`           |
 | 1    | Command ID (see commands from ESP)               | `WIFI_CONFIG` |
-| 2    | Access Point Config                              | `%zzzzzsaw`   |
-|      | w: Wi-Fi station status (0: disable / 1: enable) |               |
+| 2    | Access Point Config                              | `%zzzzzwas`   |
+|      | s: Wi-Fi station status (0: disable / 1: enable) |               |
 |      | a: access point status (0: disable / 1: enable)  |               |
-|      | s: web server status (0: disable / 1: enable)    |               |
+|      | w: web server status (0: disable / 1: enable)    |               |
 |      | z: reserved for future use, must be set to zero  |               |
 
 [Back to command list](#Commands-overview)
@@ -651,16 +651,16 @@ This command returns the Wi-Fi station status.
 
 ### WIFI_SET_CONFIG
 
-This command sets the Wi-Fi station, Access Point and Web Server configuration / status.
+This command sets the Wi-Fi Station, Access Point and Web Server configuration / status.
 
 | Byte | Description                                      | Example           |
 | ---- | ------------------------------------------------ | ----------------- |
 | 0    | Length of the message (excluding this byte)      | `2`               |
 | 1    | Command ID (see commands to ESP)                 | `WIFI_SET_CONFIG` |
-| 2    | Access Point Config                              | `%zzzzzsaw`       |
-|      | w: Wi-Fi station status (0: disable / 1: enable) |                   |
+| 2    | Access Point Config                              | `%zzzzzwas`       |
+|      | s: Wi-Fi station status (0: disable / 1: enable) |                   |
 |      | a: access point status (0: disable / 1: enable)  |                   |
-|      | s: web server status (0: disable / 1: enable)    |                   |
+|      | w: web server status (0: disable / 1: enable)    |                   |
 |      | z: reserved for future use, must be set to zero  |                   |
 
 [Back to command list](#Commands-overview)
@@ -678,19 +678,19 @@ This command asks the aceess point SSID.
 
 **Returns:**
 
-| Byte | Description                                                  | Example                   |
-| ---- | ------------------------------------------------------------ | ------------------------- |
-| 0    | Length of the message (excluding this byte)                  | `2` or more               |
-| 1    | Command ID (see commands from ESP)                           | `SSID`                    |
-| 2    | SSID string length                                           | `0` if not active or more |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                           |
-| 3    | SSID string                                                  | `M`                       |
-| 4    | ...                                                          | `Y`                       |
-| 5    | ...                                                          | `_`                       |
-| 6    | ...                                                          | `S`                       |
-| 7    | ...                                                          | `S`                       |
-| 8    | ...                                                          | `I`                       |
-| 9    | ...                                                          | `D`                       |
+| Byte | Description                                                  | Example     |
+| ---- | ------------------------------------------------------------ | ----------- |
+| 0    | Length of the message (excluding this byte)                  | `1` or more |
+| 1    | Command ID (see commands from ESP)                           | `SSID`      |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |             |
+| 2    | SSID string length                                           | `7`         |
+| 3    | SSID string                                                  | `M`         |
+| 4    | ...                                                          | `Y`         |
+| 5    | ...                                                          | `_`         |
+| 6    | ...                                                          | `S`         |
+| 7    | ...                                                          | `S`         |
+| 8    | ...                                                          | `I`         |
+| 9    | ...                                                          | `D`         |
 
 [Back to command list](#Commands-overview)
 
@@ -707,24 +707,24 @@ This command asks the acess point IP address.
 
 **Returns:**
 
-| Byte | Description                                                  | Example                   |
-| ---- | ------------------------------------------------------------ | ------------------------- |
-| 0    | Length of the message (excluding this byte)                  | `2` or more               |
-| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS`              |
-| 2    | IP address string length                                     | `0` if not active or more |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |                           |
-| 3    | IP address string                                            | `1`                       |
-| 4    | ...                                                          | `9`                       |
-| 5    | ...                                                          | `2`                       |
-| 6    | ...                                                          | `.`                       |
-| 7    | ...                                                          | `1`                       |
-| 8    | ...                                                          | `6`                       |
-| 9    | ...                                                          | `8`                       |
-| 10   | ...                                                          | `.`                       |
-| 11   | ...                                                          | `1`                       |
-| 12   | ...                                                          | `.`                       |
-| 13   | ...                                                          | `2`                       |
-| 14   | ...                                                          | `0`                       |
+| Byte | Description                                                  | Example      |
+| ---- | ------------------------------------------------------------ | ------------ |
+| 0    | Length of the message (excluding this byte)                  | `1` or more  |
+| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |              |
+| 2    | IP address string length                                     | `12`         |
+| 3    | IP address string                                            | `1`          |
+| 4    | ...                                                          | `9`          |
+| 5    | ...                                                          | `2`          |
+| 6    | ...                                                          | `.`          |
+| 7    | ...                                                          | `1`          |
+| 8    | ...                                                          | `6`          |
+| 9    | ...                                                          | `8`          |
+| 10   | ...                                                          | `.`          |
+| 11   | ...                                                          | `1`          |
+| 12   | ...                                                          | `.`          |
+| 13   | ...                                                          | `2`          |
+| 14   | ...                                                          | `0`          |
 
 [Back to command list](#Commands-overview)
 
@@ -897,7 +897,7 @@ This command sets the protocol to be use when talking to game server.
 | ---- | ------------------------------------------- | --------------------- |
 | 0    | Length of the message (excluding this byte) | `2`                   |
 | 1    | Command ID (see commands to ESP)            | `SERVER_SET_PROTOCOL` |
-| 2    | Protocol value (see below)                  | `PROTOCOL::WS`        |
+| 2    | Protocol value (see below)                  | `PROTOCOL::UDP`       |
 
 **Protocol values:**
 
@@ -1113,13 +1113,12 @@ This command scans the networks around and returns the number of networks found.
 By default, the request is synchronous and doesn't show hidden networks.  
 If the request is asynchronous, then the command doesn't return anything.
 
-| Byte | Description                                               | Example              |
-| ---- | --------------------------------------------------------- | -------------------- |
-| 0    | Length of the message (excluding this byte)               | `1` or `2` or `3`    |
-| 1    | Command ID (see commands to ESP)                          | `NETWORK_SCAN`       |
-|      | _**next bytes are sent depending on the message length**_ |                      |
-| 2    | Asynchronous request (default to 0)                       | `0` (0: no / 1: yes) |
-| 3    | Show hidden networks (default to 0)                       | `0` (0: no / 1: yes) |
+| Byte    | Description                                         | Example        |
+| ------- | --------------------------------------------------- | -------------- |
+| 0       | Length of the message (excluding this byte)         | `1` to `3`     |
+| 1       | Command ID (see commands to ESP)                    | `NETWORK_SCAN` |
+| 2 (opt) | Asynchronous request (0: no / 1: yes, default to 0) | `0`            |
+| 3 (opt) | Show hidden networks (0: no / 1: yes, default to 0) | `0`            |
 
 **Returns (only if request is synchronous):**
 
@@ -1131,7 +1130,7 @@ If the request is asynchronous, then the command doesn't return anything.
 
 **Notes:**
 
-- -2 (0xFE) is returned if the scan failed
+- 0xFE (-2) is returned if the scan failed
 - any positive value (including 0) corresponds to the number of networks found
 
 [Back to command list](#Commands-overview)
@@ -1157,8 +1156,8 @@ This command returns the result of the last scan.
 
 **Notes:**
 
-- -1 (0xFF) is returned if the scan is still running
-- -2 (0xFE) is returned if the scan failed
+- 0xFF (-1) is returned if the scan is still running
+- 0xFE (-2) is returned if the scan failed
 - any positive value (including 0) corresponds to the number of networks found
 
 [Back to command list](#Commands-overview)
@@ -1180,17 +1179,17 @@ An empty message will be sent if the passed ID is not valid.
 
 | Byte | Description                                                    | Example                                       |
 | ---- | -------------------------------------------------------------- | --------------------------------------------- |
-| 0    | Length of the message (excluding this byte)                    | `1` or more (`13` in this example)            |
+| 0    | Length of the message (excluding this byte)                    | `1` or more                                   |
 |      |                                                                | (max is 43 because SSID is 32 characters max) |
 | 1    | Command ID (see commands from ESP)                             | `NETWORK_GET_SCANNED_DETAILS`                 |
 |      | _**next bytes are sent only if the network ID sent is valid**_ |                                               |
 | 2    | Encryption type                                                | `4` (see below for details)                   |
 | 3    | RSSI (absolute value)                                          | `0x47` (means -70 DbM)                        |
-| 7    | Channel MSB                                                    | `0x01`                                        |
+| 7    | Channel high byte                                              | `0x01`                                        |
 | 5    | Channel                                                        | `0x00`                                        |
 | 6    | Channel                                                        | `0x00`                                        |
-| 4    | Channel LSB                                                    | `0x00`                                        |
-| 8    | Hidden?                                                        | `0` (0: no / 1: yes)                          |
+| 4    | Channel low byte                                               | `0x00`                                        |
+| 8    | Hidden? (0: no / 1: yes)                                       | `0`                                           |
 | 9    | SSID string length                                             | `4`                                           |
 | 10   | SSID string                                                    | `S`                                           |
 | 11   | ...                                                            | `S`                                           |
@@ -1238,35 +1237,37 @@ This command returns 1 or 0 if an SSID/password is registered or not for each ne
 ### NETWORK_GET_REGISTERED_DETAILS
 
 The Rainbow configuration can hold up to 3 network settings.  
-This command returns the SSID of the requested configuration network.
+This command returns the SSID and password of the requested configuration network.
 
 | Byte | Description                                 | Example                          |
 | ---- | ------------------------------------------- | -------------------------------- |
 | 0    | Length of the message (excluding this byte) | `2`                              |
 | 1    | Command ID (see commands to ESP)            | `NETWORK_GET_REGISTERED_DETAILS` |
-| 2    | Network ID                                  | `0`                              |
+| 2    | Network ID (0 or 1 or 2)                    | `0`                              |
 
 **Returns:**
 
-| Byte | Description                                 | Example                       |
-| ---- | ------------------------------------------- | ----------------------------- |
-| 0    | Length of the message (excluding this byte) | `16`                          |
-| 1    | Command ID (see commands from ESP)          | `NETWORK_REGISTERED_DETAILS`  |
-| 2    | Network active flag                         | `0` (0: inactive / 1: active) |
-| 3    | SSID string length                          | `4`                           |
-| 4    | SSID string                                 | `S`                           |
-| 5    | ...                                         | `S`                           |
-| 6    | ...                                         | `I`                           |
-| 7    | ...                                         | `D`                           |
-| 8    | PASSWORD string length                      | `8`                           |
-| 9    | PASSWORD string                             | `P`                           |
-| 10   | ...                                         | `A`                           |
-| 11   | ...                                         | `S`                           |
-| 12   | ...                                         | `S`                           |
-| 13   | ...                                         | `W`                           |
-| 14   | ...                                         | `O`                           |
-| 15   | ...                                         | `R`                           |
-| 16   | ...                                         | `D`                           |
+| Byte | Description                                                | Example                      |
+| ---- | ---------------------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte)                | `1` or more                  |
+| 1    | Command ID (see commands from ESP)                         | `NETWORK_REGISTERED_DETAILS` |
+|      | _**next bytes are sent only if the requested network ID**_ |                              |
+|      | _**is valid and a network registered**_                    |                              |
+| 2    | Network active flag (0: inactive / 1: active)              | `0`                          |
+| 3    | SSID string length                                         | `4`                          |
+| 4    | SSID string                                                | `S`                          |
+| 5    | ...                                                        | `S`                          |
+| 6    | ...                                                        | `I`                          |
+| 7    | ...                                                        | `D`                          |
+| 8    | PASSWORD string length                                     | `8`                          |
+| 9    | PASSWORD string                                            | `P`                          |
+| 10   | ...                                                        | `A`                          |
+| 11   | ...                                                        | `S`                          |
+| 12   | ...                                                        | `S`                          |
+| 13   | ...                                                        | `W`                          |
+| 14   | ...                                                        | `O`                          |
+| 15   | ...                                                        | `R`                          |
+| 16   | ...                                                        | `D`                          |
 
 [Back to command list](#Commands-overview)
 
@@ -1275,37 +1276,38 @@ This command returns the SSID of the requested configuration network.
 ### NETWORK_REGISTER
 
 The Rainbow configuration can hold up to 3 network settings.  
+If the network ID is invalid then the request is ignored.  
 This command registers a network in one of the spots.  
 Current ESP Wi-Fi settings will be reset to take in account modification immediately.  
-If the active flag is set to `1`, it will be set to `0` for other networks.  
 Only one network can be active at a time.
 
-| Byte | Description                                 | Example                       |
-| ---- | ------------------------------------------- | ----------------------------- |
-| 0    | Length of the message (excluding this byte) | `17`                          |
-| 1    | Command ID (see commands to ESP)            | `NETWORK_REGISTER`            |
-| 2    | Network ID                                  | `0` (0 or 1 or 2)             |
-| 3    | Network active flag                         | `0` (0: inactive / 1: active) |
-| 4    | SSID string length                          | `4`                           |
-| 5    | SSID string                                 | `S`                           |
-| 6    | ...                                         | `S`                           |
-| 7    | ...                                         | `I`                           |
-| 8    | ...                                         | `D`                           |
-| 9    | PASSWORD string length                      | `8`                           |
-| 10   | PASSWORD string                             | `P`                           |
-| 11   | ...                                         | `A`                           |
-| 12   | ...                                         | `S`                           |
-| 13   | ...                                         | `S`                           |
-| 14   | ...                                         | `W`                           |
-| 15   | ...                                         | `O`                           |
-| 16   | ...                                         | `R`                           |
-| 17   | ...                                         | `D`                           |
+| Byte | Description                                   | Example            |
+| ---- | --------------------------------------------- | ------------------ |
+| 0    | Length of the message (excluding this byte)   | `17`               |
+| 1    | Command ID (see commands to ESP)              | `NETWORK_REGISTER` |
+| 2    | Network ID (0 or 1 or 2)                      | `0`                |
+| 3    | Network active flag (0: inactive / 1: active) | `0`                |
+| 4    | SSID string length                            | `4`                |
+| 5    | SSID string                                   | `S`                |
+| 6    | ...                                           | `S`                |
+| 7    | ...                                           | `I`                |
+| 8    | ...                                           | `D`                |
+| 9    | PASSWORD string length                        | `8`                |
+| 10   | PASSWORD string                               | `P`                |
+| 11   | ...                                           | `A`                |
+| 12   | ...                                           | `S`                |
+| 13   | ...                                           | `S`                |
+| 14   | ...                                           | `W`                |
+| 15   | ...                                           | `O`                |
+| 16   | ...                                           | `R`                |
+| 17   | ...                                           | `D`                |
 
 **Notes:**
 
 - Strings can only use ASCII characters between 0x20 to 0x7E.
 - SSID is 32 characters max.
 - Password is 64 characters max.
+- If the active flag is set to `1`, then it will be set to `0` for other networks.
 
 [Back to command list](#Commands-overview)
 
@@ -1314,6 +1316,7 @@ Only one network can be active at a time.
 ### NETWORK_UNREGISTER
 
 The Rainbow configuration can hold up to 3 network settings.  
+If the network ID is invalid then the request is ignored.  
 This command unregister a network by:
 
 - setting its active flag to 0 (inactive)
@@ -1333,15 +1336,16 @@ This command unregister a network by:
 ### NETWORK_SET_ACTIVE
 
 This command sets the active network.  
-If the active flag is set to `1`, it will be set to `0` for other networks.  
+If the network ID is invalid then the request is ignored.  
+If the active flag is set to `1`, then it will be set to `0` for other networks.  
 Current ESP Wi-Fi settings will be reset to take in account modification immediately.
 
-| Byte | Description                                 | Example                        |
-| ---- | ------------------------------------------- | ------------------------------ |
-| 0    | Length of the message (excluding this byte) | `3`                            |
-| 1    | Command ID (see commands to ESP)            | `NETWORK_SET_ACTIVE`           |
-| 2    | Network ID                                  | `0`                            |
-| 3    | Network active flag                         | `0` (0: inactive / 1: active)) |
+| Byte | Description                                   | Example              |
+| ---- | --------------------------------------------- | -------------------- |
+| 0    | Length of the message (excluding this byte)   | `3`                  |
+| 1    | Command ID (see commands to ESP)              | `NETWORK_SET_ACTIVE` |
+| 2    | Network ID                                    | `0`                  |
+| 3    | Network active flag (0: inactive / 1: active) | `0`                  |
 
 [Back to command list](#Commands-overview)
 

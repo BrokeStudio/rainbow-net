@@ -432,12 +432,12 @@ This won't reset the ESP firmware to a previous version.
 
 **Result codes:**
 
-| Value | WIFI_STATUS                  | Description                          |
-| ----- | ---------------------------- | ------------------------------------ |
-| 0     | SUCCESS                      | Factory reset successfully completed |
-| 1     | ERROR_WHILE_DELETING_WEB     | Error while deleting folder `/web`   |
-| 1     | ERROR_WHILE_DELETING_TWEB    | Error while deleting folder `/tweb`  |
-| 3     | ERROR_WHILE_RESETTING_CONFIG | Error while resetting config file    |
+| Value | WIFI_STATUS               | Description                          |
+| ----- | ------------------------- | ------------------------------------ |
+| 0     | SUCCESS                   | Factory reset successfully completed |
+| 1     | ERROR_WHILE_SAVING_CONFIG | Error while saving config file       |
+| 2     | ERROR_WHILE_DELETING_TWEB | Error while deleting folder `/tweb`  |
+| 3     | ERROR_WHILE_DELETING_WEB  | Error while deleting folder `/web`   |
 
 [Back to command list](#Commands-overview)
 
@@ -2144,4 +2144,3 @@ The BootROM allows you to perform some low level actions:
 ## TODO
 
 - [ ] Add math functions/commands (multiplication, division, cos, sin, ...)
-- [ ] Move NES code example to NES folder and describe the basics of how it works

@@ -371,30 +371,6 @@ Note: when using 1K and 512B CHR banking modes with 512K (or more) CHR-ROM,
 When using Background Extended Mode, you can address up to 16384 tiles.  
 This registers is used to select a 256K CHR offset for every tiles.
 
-## Fill-mode (\$4124-\$4125)
-
-When a nametable fill-mode is set to 1 (see registers \$4126-\$4129, \$412E), all nametable fetches get replaced by the value of register \$4124 for the tile index and \$4125 for the attribute index. Only the nametable is affected by fill-mode. When the PPU later uses this information to fetch the corresponding tile from the pattern table, CHR banking is unaffected and continues to work normally.
-
-### Fill-mode tile index (\$4124, write-only)
-
-```
-7  bit  0
----- ----
-TTTT TTTT
-|||| ||||
-++++-++++- Specify tile index to use for fill-mode nametable
-```
-
-### Fill-mode attribute index (\$4125, write-only)
-
-```
-7  bit  0
----- ----
-.... ..AA
-       ||
-       ++- Specify background palette index to use for fill-mode nametable
-```
-
 ### Nametables bank ($4126-$4129, write-only)
 
 - \$4126 controls nametable at \$2000
@@ -519,6 +495,30 @@ Mirroring depends on the way you arrange registers \$4126-\$4129 and \$412A-\$41
 | Single-screen | \$412A.CC = \$412B.CC = \$412C.CC = \$412D.CC |
 |               | \$4126 = \$4127 = \$4128 = \$4129             |
 | 4-screen      | All 4 nametables must have different settings |
+
+## Fill-mode (\$4124-\$4125)
+
+When a nametable fill-mode is set to 1 (see registers \$4126-\$4129, \$412E), all nametable fetches get replaced by the value of register \$4124 for the tile index and \$4125 for the attribute index. Only the nametable is affected by fill-mode. When the PPU later uses this information to fetch the corresponding tile from the pattern table, CHR banking is unaffected and continues to work normally.
+
+### Fill-mode tile index (\$4124, write-only)
+
+```
+7  bit  0
+---- ----
+TTTT TTTT
+|||| ||||
+++++-++++- Specify tile index to use for fill-mode nametable
+```
+
+### Fill-mode attribute index (\$4125, write-only)
+
+```
+7  bit  0
+---- ----
+.... ..AA
+       ||
+       ++- Specify background palette index to use for fill-mode nametable
+```
 
 ## CHR banking (\$4130-\$414F, write-only)
 

@@ -51,6 +51,12 @@ TOESP_SERVER_CONNECT                  EQU 28  ; Connect to server
 TOESP_SERVER_DISCONNECT               EQU 29  ; Disconnect from server
 TOESP_SERVER_SEND_MSG                 EQU 30  ; Send message to rainbow server
 
+; UDP ADDRESS POOL CMDS
+TOESP_UDP_ADDR_POOL_CLEAR             EQU 55  ; Clear the UDP address pool
+TOESP_UDP_ADDR_POOL_ADD               EQU 56  ; Add an IP address to the UDP address pool
+TOESP_UDP_ADDR_POOL_REMOVE            EQU 57  ; Remove an IP address from the UDP address pool
+TOESP_UDP_ADDR_POOL_SEND_MSG          EQU 58  ; Send a message to all the addresses in the UDP address pool
+
 ; NETWORK CMDS
 TOESP_NETWORK_SCAN                    EQU 31  ; Scan networks around synchronously or asynchronously
 TOESP_NETWORK_GET_SCAN_RESULT         EQU 32  ; Get result of the last scan
@@ -123,7 +129,7 @@ FROMESP_FILE_DOWNLOAD                 EQU 27  ; See RNBW_FILE_DOWNLOAD_xxx const
 
 ; ESP factory reset result codes
 RNBW_CONFIG_FACTORY_RESET_SUCCESS EQU 0
-RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_RESETTING_CONFIG EQU 1
+RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_SAVING_CONFIG EQU 1
 RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_DELETING_TWEB EQU 2
 RNBW_CONFIG_FACTORY_RESET_ERROR_WHILE_DELETING_WEB EQU 3
 
@@ -151,6 +157,7 @@ RNBW_WIFI_ERROR_WRONG_PASSWORD EQU 6
 RNBW_PROTOCOL_TCP EQU 0
 RNBW_PROTOCOL_TCP_SECURED EQU 1
 RNBW_PROTOCOL_UDP EQU 2
+RNBW_PROTOCOL_UDP_POOL EQU 3
 
 ; Server status
 RNBW_SERVER_DISCONNECTED EQU 0

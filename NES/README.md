@@ -17,7 +17,7 @@ Here you'll find the Rainbow mapper documentation for the NES and 6502 library f
 
 If you want to try this mapper, here's what you'll need:
 
-- a custom version of [Mesen2](https://brokestudio.fr/rainbow/emulators/mesen) or [FCEUX](https://brokestudio.fr/rainbow/emulators/fceux) supporting the Rainbow mapper
+- a custom version of [Mesen2 or FCEUX](https://brokestudio.fr/rainbow/emulators) supporting the Rainbow mapper
 - a [rainbow NES boiler plate](https://github.com/BrokeStudio/rainbow-nes-boiler-plate) (using cc65) - optional
 - the above documentation
 - there's also a [chat demo](https://github.com/BrokeStudio/rainbow-chat) available

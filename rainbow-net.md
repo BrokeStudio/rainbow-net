@@ -63,6 +63,10 @@ Thanks to :
     - [SERVER_CONNECT](#server_connect)
     - [SERVER_DISCONNECT](#server_disconnect)
     - [SERVER_SEND_MESSAGE](#server_send_message)
+    - [UDP_ADDR_POOL_CLEAR](#udp_addr_pool_clear)
+    - [UDP_ADDR_POOL_ADD](#udp_addr_pool_add)
+    - [UDP_ADDR_POOL_REMOVE](#udp_addr_pool_remove)
+    - [UDP_ADDR_POOL_SEND_MESSAGE](#udp_addr_pool_send_message)
     - [NETWORK_SCAN](#network_scan)
     - [NETWORK_GET_SCAN_RESULT](#network_get_scan_result)
     - [NETWORK_GET_SCANNED_DETAILS](#network_get_scanned_details)
@@ -162,6 +166,11 @@ Please check console folders for specific example depending on the system.
 | 28    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                                     |
 | 29    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                                |
 | 30    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                                |
+|       |                                                                   | **UDP ADDRESS POOL CMDS**                                                             |
+| 55    | [UDP_ADDR_POOL_CLEAR](#UDP_ADDR_POOL_CLEAR)                       | Clear the UDP address pool                                                            |
+| 56    | [UDP_ADDR_POOL_ADD](#UDP_ADDR_POOL_ADD)                           | Add an IP address to the UDP address pool                                             |
+| 57    | [UDP_ADDR_POOL_REMOVE](#UDP_ADDR_POOL_REMOVE)                     | Remove an IP address from the UDP address pool                                        |
+| 58    | [UDP_ADDR_POOL_SEND_MESSAGE](#UDP_ADDR_POOL_SEND_MESSAGE)         | Send a message to all the addresses in the UDP address pool                           |
 |       |                                                                   | **NETWORK CMDS**                                                                      |
 | 31    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks synchronously or asynchronously                                         |
 | 32    | [NETWORK_GET_SCAN_RESULT](#NETWORK_GET_SCAN_RESULT)               | Get result of the last scan                                                           |
@@ -1036,6 +1045,89 @@ This command sends a message to the server.
 | 2    | Data                                        | `0xAA`                |
 | ...  | Data                                        | `0x12`                |
 | 30   | Data                                        | `0xE9`                |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### UDP_ADDR_POOL_CLEAR
+
+This command clears the UDP address pool.
+
+| Byte | Description                                 | Example               |
+| ---- | ------------------------------------------- | --------------------- |
+| 0    | Length of the message (excluding this byte) | `1`                   |
+| 1    | Command ID (see commands to ESP)            | `UDP_ADDR_POOL_CLEAR` |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### UDP_ADDR_POOL_ADD
+
+This command adds an IP address to the UDP address pool.  
+If the address is already registered, then it's not added again.  
+You can register a maximum of 16 addresses.
+If the address string length is greater than 15, then the command will be ignored.
+
+| Byte | Description                                 | Example             |
+| ---- | ------------------------------------------- | ------------------- |
+| 0    | Length of the message (excluding this byte) | `13`                |
+| 1    | Command ID (see commands to ESP)            | `UDP_ADDR_POOL_ADD` |
+| 2    | Port high byte                              | `0x0B`              |
+| 3    | Port low byte                               | `0xB8`              |
+| 4    | IP address string length                    | `9`                 |
+| 5    | IP address string                           | `2`                 |
+| 6    | ...                                         | `.`                 |
+| 7    | ...                                         | `3`                 |
+| 8    | ...                                         | `.`                 |
+| 9    | ...                                         | `7`                 |
+| 10   | ...                                         | `.`                 |
+| 11   | ...                                         | `1`                 |
+| 12   | ...                                         | `1`                 |
+| 13   | ...                                         | `7`                 |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### UDP_ADDR_POOL_REMOVE
+
+This command removes an IP address from the UDP address pool.  
+If the address string length is greater than 15, then the command will be ignored.
+
+| Byte | Description                                 | Example                |
+| ---- | ------------------------------------------- | ---------------------- |
+| 0    | Length of the message (excluding this byte) | `11`                   |
+| 1    | Command ID (see commands to ESP)            | `UDP_ADDR_POOL_REMOVE` |
+| 2    | Port high byte                              | `0x0B`                 |
+| 3    | Port low byte                               | `0xB8`                 |
+| 4    | IP address string length                    | `9`                    |
+| 5    | IP address string                           | `2`                    |
+| 6    | ...                                         | `.`                    |
+| 7    | ...                                         | `3`                    |
+| 8    | ...                                         | `.`                    |
+| 9    | ...                                         | `7`                    |
+| 10   | ...                                         | `.`                    |
+| 11   | ...                                         | `1`                    |
+| 12   | ...                                         | `1`                    |
+| 13   | ...                                         | `7`                    |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### UDP_ADDR_POOL_SEND_MESSAGE
+
+This command sends a message to all the addresses registered in the UDP address pool.
+
+| Byte | Description                                 | Example                      |
+| ---- | ------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte) | `30`                         |
+| 1    | Command ID (see commands to ESP)            | `UDP_ADDR_POOL_SEND_MESSAGE` |
+| 2    | Data                                        | `0xAA`                       |
+| ...  | Data                                        | `0x12`                       |
+| 30   | Data                                        | `0xE9`                       |
 
 [Back to command list](#Commands-overview)
 

@@ -25,13 +25,14 @@ TX_ADD    = $4194
 ; WIFI CMDS
   WIFI_GET_STATUS = 9                   ; Get Wi-Fi connection status
   WIFI_GET_SSID = 10                    ; Get Wi-Fi network SSID
-  WIFI_GET_IP = 11                      ; Get Wi-Fi IP address
+  WIFI_GET_IP_ADDRESS = 11              ; Get Wi-Fi IP address
+  WIFI_GET_MAC_ADDRESS = 59             ; Get Wi-Fi mac address
   WIFI_GET_CONFIG = 12                  ; Get Wi-Fi station / Access Point / Web Server config
   WIFI_SET_CONFIG = 13                  ; Set Wi-Fi station / Access Point / Web Server config
 
 ; ACESS POINT CMDS
   AP_GET_SSID = 14                      ; Get Access Point network SSID
-  AP_GET_IP = 15                        ; Get Access Point IP address
+  AP_GET_IP_ADDRESS = 15                ; Get Access Point IP address
 
 ; RND CMDS
   RND_GET_BYTE = 16                     ; Get random byte
@@ -100,7 +101,8 @@ TX_ADD    = $4194
 ; WIFI / ACCESS POINT CMDS
   WIFI_STATUS = 4                   ; Return Wi-Fi connection status
   SSID = 5                          ; Return Wi-Fi / Access Point SSID
-  IP = 6                            ; Return Wi-Fi / Access Point IP address
+  IP_ADDRESS = 6                    ; Return Wi-Fi / Access Point IP address
+  MAC_ADDRESS = 28                  ; Return Wi-Fi mac address
   WIFI_CONFIG = 7                   ; Return Wi-Fi station / Access Point / Web Server status
 
 ; RND CMDS

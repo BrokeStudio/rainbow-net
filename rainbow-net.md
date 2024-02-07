@@ -43,11 +43,12 @@ Thanks to :
     - [ESP_RESTART](#esp_restart)
     - [WIFI_GET_STATUS](#wifi_get_status)
     - [WIFI_GET_SSID](#wifi_get_ssid)
-    - [WIFI_GET_IP](#wifi_get_ip)
+    - [WIFI_GET_IP_ADDRESS](#wifi_get_ip_address)
+    - [WIFI_GET_MAC_ADDRESS](#wifi_get_mac_address)
     - [WIFI_GET_CONFIG](#wifi_get_config)
     - [WIFI_SET_CONFIG](#wifi_set_config)
     - [AP_GET_SSID](#ap_get_ssid)
-    - [AP_GET_IP](#ap_get_ip)
+    - [AP_GET_IP_ADDRESS](#ap_get_ip_address)
     - [RND_GET_BYTE](#rnd_get_byte)
     - [RND_GET_BYTE_RANGE](#rnd_get_byte_range)
     - [RND_GET_WORD](#rnd_get_word)
@@ -143,12 +144,13 @@ Please check console folders for specific example depending on the system.
 |       |                                                                   | **WIFI CMDS**                                                                         |
 | 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                                           |
 | 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                                |
-| 11    | [WIFI_GET_IP](#WIFI_GET_IP)                                       | Get Wi-Fi IP address                                                                  |
+| 11    | [WIFI_GET_IP_ADDRESS](#WIFI_GET_IP_ADDRESS)                       | Get Wi-Fi IP address                                                                  |
+| 59    | [WIFI_GET_MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                     | Get Wi-Fi mac address                                                                 |
 | 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                                          |
 | 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                                          |
 |       |                                                                   | **ACCESS POINT CMDS**                                                                 |
 | 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                                         |
-| 15    | [AP_GET_IP](#AP_GET_IP)                                           | Get Access Point IP address                                                           |
+| 15    | [AP_GET_IP_ADDRESS](#AP_GET_IP_ADDRESS)                           | Get Access Point IP address                                                           |
 |       |                                                                   | **RND CMDS**                                                                          |
 | 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                                       |
 | 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                                |
@@ -210,7 +212,8 @@ Please check console folders for specific example depending on the system.
 |       |                                                                               | **WIFI CMDS**                                                          |
 | 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                               | Return Wi-Fi connection status                                         |
 | 5     | SSID ([WIFI](#WIFI_GET_SSID)/[AP](#AP_GET_SSID))                              | Return Wi-Fi / Access Point SSID                                       |
-| 6     | IP_ADDRESS ([WIFI](#WIFI_GET_IP)/[AP](#AP_GET_IP))                            | Return Wi-Fi / Access Point IP address                                 |
+| 6     | IP_ADDRESS ([WIFI](#WIFI_GET_IP_ADDRESS)/[AP](#AP_GET_IP_ADDRESS))            | Return Wi-Fi / Access Point IP address                                 |
+| 28    | [MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                                          | Return Wi-Fi mac address                                               |
 | 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                               | Return Wi-Fi station / Access Point / Web Server status                |
 |       |                                                                               | **RND CMDS**                                                           |
 | 8     | [RND_BYTE](#RND_GET_BYTE)                                                     | Return random byte value                                               |
@@ -535,35 +538,104 @@ This command returns the Wi-Fi SSID (if active).
 
 ---
 
-### WIFI_GET_IP
+### WIFI_GET_IP_ADDRESS
 
-This command asks the Wi-Fi IP address (if active and connected).
+This command asks for the Wi-Fi IP address (if Wi-Fi is active and connected).  
+Returned message will use string format if the output format value is not provided or if provided value is different than 0 or 1.
+
+| Byte    | Description                                                              | Example               |
+| ------- | ------------------------------------------------------------------------ | --------------------- |
+| 0       | Length of the message (excluding this byte)                              | `1` or `2`            |
+| 1       | Command ID (see commands to ESP)                                         | `WIFI_GET_IP_ADDRESS` |
+|         | _**the next byte is required if you want to specify the output format**_ |                       |
+| 2 (opt) | Output format (0: string / 1: bytes)                                     | `0` or `1`            |
+
+**Returns (string mode):**
+
+| Byte | Description                                                             | Example      |
+| ---- | ----------------------------------------------------------------------- | ------------ |
+| 0    | Length of the message (excluding this byte)                             | `1` or more  |
+| 1    | Command ID (see commands from ESP)                                      | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Wi-Fi is active and connected**_ |              |
+| 2    | IP address string length                                                | `12`         |
+| 3    | IP address string                                                       | `1`          |
+| 4    | ...                                                                     | `9`          |
+| 5    | ...                                                                     | `2`          |
+| 6    | ...                                                                     | `.`          |
+| 7    | ...                                                                     | `1`          |
+| 8    | ...                                                                     | `6`          |
+| 9    | ...                                                                     | `8`          |
+| 10   | ...                                                                     | `.`          |
+| 11   | ...                                                                     | `1`          |
+| 12   | ...                                                                     | `.`          |
+| 13   | ...                                                                     | `2`          |
+| 14   | ...                                                                     | `0`          |
+
+**Returns (bytes mode):**
+
+| Byte | Description                                                             | Example      |
+| ---- | ----------------------------------------------------------------------- | ------------ |
+| 0    | Length of the message (excluding this byte)                             | `1` or `5`   |
+| 1    | Command ID (see commands from ESP)                                      | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Wi-Fi is active and connected**_ |              |
+| 2    | IP address high byte                                                    | `0xC0`       |
+| 3    | ...                                                                     | `0xA8`       |
+| 4    | ...                                                                     | `0x01`       |
+| 5    | IP address low byte                                                     | `0x14`       |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### WIFI_GET_MAC_ADDRESS
+
+This command returns the Wi-Fi mac address.  
+Returned message will use string format if the output format value is not provided or if provided value is different than 0 or 1.
+
+| Byte    | Description                                                              | Example                |
+| ------- | ------------------------------------------------------------------------ | ---------------------- |
+| 0       | Length of the message (excluding this byte)                              | `1` or `2`             |
+| 1       | Command ID (see commands to ESP)                                         | `WIFI_GET_MAC_ADDRESS` |
+|         | _**the next byte is required if you want to specify the output format**_ |                        |
+| 2 (opt) | Output format (0: string / 1: bytes)                                     | `0` or `1`             |
+
+**Returns (string mode):**
 
 | Byte | Description                                 | Example       |
 | ---- | ------------------------------------------- | ------------- |
-| 0    | Length of the message (excluding this byte) | `1`           |
-| 1    | Command ID (see commands to ESP)            | `WIFI_GET_IP` |
+| 0    | Length of the message (excluding this byte) | `19`          |
+| 1    | Command ID (see commands from ESP)          | `MAC_ADDRESS` |
+| 2    | Mac address string length                   | `17`          |
+| 3    | Mac address string                          | `B`           |
+| 4    | ...                                         | `C`           |
+| 5    | ...                                         | `:`           |
+| 6    | ...                                         | `D`           |
+| 7    | ...                                         | `D`           |
+| 8    | ...                                         | `:`           |
+| 9    | ...                                         | `C`           |
+| 10   | ...                                         | `2`           |
+| 11   | ...                                         | `:`           |
+| 12   | ...                                         | `F`           |
+| 13   | ...                                         | `D`           |
+| 14   | ...                                         | `:`           |
+| 15   | ...                                         | `E`           |
+| 16   | ...                                         | `D`           |
+| 17   | ...                                         | `:`           |
+| 18   | ...                                         | `F`           |
+| 19   | Mac address string                          | `6`           |
 
-**Returns:**
+**Returns (bytes mode):**
 
-| Byte | Description                                                  | Example      |
-| ---- | ------------------------------------------------------------ | ------------ |
-| 0    | Length of the message (excluding this byte)                  | `1` or more  |
-| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS` |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |              |
-| 2    | IP address string length                                     | `12`         |
-| 3    | IP address string                                            | `1`          |
-| 4    | ...                                                          | `9`          |
-| 5    | ...                                                          | `2`          |
-| 6    | ...                                                          | `.`          |
-| 7    | ...                                                          | `1`          |
-| 8    | ...                                                          | `6`          |
-| 9    | ...                                                          | `8`          |
-| 10   | ...                                                          | `.`          |
-| 11   | ...                                                          | `1`          |
-| 12   | ...                                                          | `.`          |
-| 13   | ...                                                          | `2`          |
-| 14   | ...                                                          | `0`          |
+| Byte | Description                                 | Example       |
+| ---- | ------------------------------------------- | ------------- |
+| 0    | Length of the message (excluding this byte) | `7`           |
+| 1    | Command ID (see commands from ESP)          | `MAC_ADDRESS` |
+| 2    | Mac address high byte                       | `0xBC`        |
+| 3    | ...                                         | `0xDD`        |
+| 4    | ...                                         | `0xC2`        |
+| 5    | ...                                         | `0xFD`        |
+| 6    | ...                                         | `0xED`        |
+| 7    | Mac address low byte                        | `0xF6`        |
 
 [Back to command list](#Commands-overview)
 
@@ -639,35 +711,49 @@ This command asks the aceess point SSID.
 
 ---
 
-### AP_GET_IP
+### AP_GET_IP_ADDRESS
 
-This command asks the acess point IP address.
+This command asks for the access point IP address (if access point is active).  
+Returned message will use string format if the output format value is not provided or if provided value is different than 0 or 1.
 
-| Byte | Description                                 | Example     |
-| ---- | ------------------------------------------- | ----------- |
-| 0    | Length of the message (excluding this byte) | `1`         |
-| 1    | Command ID (see commands to ESP)            | `AP_GET_IP` |
+| Byte    | Description                                                              | Example             |
+| ------- | ------------------------------------------------------------------------ | ------------------- |
+| 0       | Length of the message (excluding this byte)                              | `1` or `2`          |
+| 1       | Command ID (see commands to ESP)                                         | `AP_GET_IP_ADDRESS` |
+|         | _**the next byte is required if you want to specify the output format**_ |                     |
+| 2 (opt) | Output format (0: string / 1: bytes)                                     | `0` or `1`          |
 
-**Returns:**
+**Returns (string mode):**
 
-| Byte | Description                                                  | Example      |
-| ---- | ------------------------------------------------------------ | ------------ |
-| 0    | Length of the message (excluding this byte)                  | `1` or more  |
-| 1    | Command ID (see commands from ESP)                           | `IP_ADDRESS` |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |              |
-| 2    | IP address string length                                     | `12`         |
-| 3    | IP address string                                            | `1`          |
-| 4    | ...                                                          | `9`          |
-| 5    | ...                                                          | `2`          |
-| 6    | ...                                                          | `.`          |
-| 7    | ...                                                          | `1`          |
-| 8    | ...                                                          | `6`          |
-| 9    | ...                                                          | `8`          |
-| 10   | ...                                                          | `.`          |
-| 11   | ...                                                          | `1`          |
-| 12   | ...                                                          | `.`          |
-| 13   | ...                                                          | `2`          |
-| 14   | ...                                                          | `0`          |
+| Byte | Description                                                      | Example      |
+| ---- | ---------------------------------------------------------------- | ------------ |
+| 0    | Length of the message (excluding this byte)                      | `1` or more  |
+| 1    | Command ID (see commands from ESP)                               | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Access Point is active**_ |              |
+| 2    | IP address string length                                         | `11`         |
+| 3    | IP address string                                                | `1`          |
+| 4    | ...                                                              | `9`          |
+| 5    | ...                                                              | `2`          |
+| 6    | ...                                                              | `.`          |
+| 7    | ...                                                              | `1`          |
+| 8    | ...                                                              | `6`          |
+| 9    | ...                                                              | `8`          |
+| 10   | ...                                                              | `.`          |
+| 11   | ...                                                              | `4`          |
+| 12   | ...                                                              | `.`          |
+| 13   | ...                                                              | `1`          |
+
+**Returns (bytes mode):**
+
+| Byte | Description                                                      | Example      |
+| ---- | ---------------------------------------------------------------- | ------------ |
+| 0    | Length of the message (excluding this byte)                      | `1` or `5`   |
+| 1    | Command ID (see commands from ESP)                               | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Access Point is active**_ |              |
+| 2    | IP address high byte                                             | `0xC0`       |
+| 3    | ...                                                              | `0xA8`       |
+| 4    | ...                                                              | `0x04`       |
+| 5    | IP address low byte                                              | `0x01`       |
 
 [Back to command list](#Commands-overview)
 

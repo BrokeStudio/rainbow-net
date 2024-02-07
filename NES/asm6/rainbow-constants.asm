@@ -24,13 +24,14 @@ TOESP_ESP_RESTART                     EQU 8   ; Restart ESP
 ; WIFI CMDS
 TOESP_WIFI_GET_STATUS                 EQU 9   ; Get Wi-Fi connection status
 TOESP_WIFI_GET_SSID                   EQU 10  ; Get Wi-Fi network SSID
-TOESP_WIFI_GET_IP                     EQU 11  ; Get Wi-Fi IP address
+TOESP_WIFI_GET_IP_ADDRESS             EQU 11  ; Get Wi-Fi IP address
+TOESP_WIFI_GET_MAC_ADDRESS            EQU 59  ; Get Wi-Fi mac address
 TOESP_WIFI_GET_CONFIG                 EQU 12  ; Get Wi-Fi station / Access Point / Web Server config
 TOESP_WIFI_SET_CONFIG                 EQU 13  ; Set Wi-Fi station / Access Point / Web Server config
 
 ; ACESS POINT CMDS
 TOESP_AP_GET_SSID                     EQU 14  ; Get Access Point network SSID
-TOESP_AP_GET_IP                       EQU 15  ; Get Access Point IP address
+TOESP_AP_GET_IP_ADDRESS               EQU 15  ; Get Access Point IP address
 
 ; RND CMDS
 TOESP_RND_GET_BYTE                    EQU 16  ; Get random byte
@@ -96,7 +97,8 @@ FROMESP_ESP_FACTORY_RESET             EQU 3   ; See ESP_FACTORY_RESET_RES consta
 ; WIFI / ACCESS POINT CMDS
 FROMESP_WIFI_STATUS                   EQU 4   ; Return Wi-Fi connection status
 FROMESP_SSID                          EQU 5   ; Return Wi-Fi / Access Point SSID
-FROMESP_IP                            EQU 6   ; Return Wi-Fi / Access Point IP address
+FROMESP_IP_ADDRESS                    EQU 6   ; Return Wi-Fi / Access Point IP address
+FROMESP_MAC_ADDRESS                   EQU 28  ; Return Wi-Fi mac address
 FROMESP_WIFI_CONFIG                   EQU 7   ; Return Wi-Fi station / Access Point / Web Server status
 
 ; RND CMDS
@@ -143,7 +145,6 @@ RNBW_WIFI_CONNECTION_FAILED EQU 4
 RNBW_WIFI_CONNECTION_LOST EQU 5
 RNBW_WIFI_WRONG_PASSWORD EQU 6
 RNBW_WIFI_DISCONNECTED EQU 7
-
 
 ; Wi-Fi error
 RNBW_WIFI_ERROR_UNKNOWN EQU 255

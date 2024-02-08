@@ -1209,8 +1209,8 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$415A        | `.....ZEA` |   W    | Control                                                                 |
 | \$415B        | `........` |   W    | Acknowledge                                                             |
 |               |            |        | **FPGA-RAM auto R/W**                                                   |
-| \$415C        | `...HHHHH` |   W    | FPGA-RAM hi address                                                     |
-| \$415D        | `LLLLLLLL` |   W    | FPGA-RAM lo address                                                     |
+| \$415C        | `...HHHHH` |   W    | FPGA-RAM address high bytes                                             |
+| \$415D        | `LLLLLLLL` |   W    | FPGA-RAM address low bytes                                              |
 | \$415E        | `IIIIIIII` |   W    | FPGA-RAM increment                                                      |
 | \$415F        | `DDDDDDDD` |  R/W   | FPGA-RAM data                                                           |
 |               |            |        | **MISCELLANEOUS**                                                       |
@@ -1240,17 +1240,18 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4195-\$419F |            |        | _Not used_                                                              |
 |               |            |        | **AUDIO EXPANSION**                                                     |
 | \$41A0        | `MDDDVVVV` |   W    | Pulse 1 control                                                         |
-| \$41A1        | `FFFFFFFF` |   W    | Pulse 1 low freq                                                        |
-| \$41A2        | `E...FFFF` |   W    | Pulse 1 high freq                                                       |
+| \$41A1        | `FFFFFFFF` |   W    | Pulse 1 low frequency                                                   |
+| \$41A2        | `E...FFFF` |   W    | Pulse 1 high frequency                                                  |
 | \$41A3        | `MDDDVVVV` |   W    | Pulse 2 control                                                         |
-| \$41A4        | `FFFFFFFF` |   W    | Pulse 2 low freq                                                        |
-| \$41A5        | `E...FFFF` |   W    | Pulse 2 high freq                                                       |
+| \$41A4        | `FFFFFFFF` |   W    | Pulse 2 low frequency                                                   |
+| \$41A5        | `E...FFFF` |   W    | Pulse 2 high frequency                                                  |
 | \$41A6        | `..AAAAAA` |   W    | Saw accumulator rate                                                    |
-| \$41A7        | `FFFFFFFF` |   W    | Saw low freq                                                            |
-| \$41A8        | `E...FFFF` |   W    | Saw high freq                                                           |
+| \$41A7        | `FFFFFFFF` |   W    | Saw low frequency                                                       |
+| \$41A8        | `E...FFFF` |   W    | Saw high frequency                                                      |
 |               |            |        | **AUDIO OUTPUT CONTROL**                                                |
 | \$41A9        | `.....ZTF` |   W    | Audio output control                                                    |
 | \$41B0-\$41FF |            |        | _Not used_                                                              |
-|               |            |        | **CHR SPRITES EXTENDED MODE**                                           |
+| \$41AB-\$41FF |            |        | _Not used_                                                              |
+|               |            |        | **SPRITE EXTENDED MODE**                                                |
 | \$4200-\$423F | `LLLLLLLL` |   W    | Sprites individual bank lower bits                                      |
 | \$4240        | `.....UUU` |   W    | Sprites global bank upper bits                                          |

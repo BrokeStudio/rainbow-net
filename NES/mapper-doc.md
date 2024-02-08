@@ -912,6 +912,62 @@ PC.. ...W
 +--------- PPU Scanline IRQ status
 ```
 
+## Vector redirection (\$416B-\$416F, write-only)
+
+Vector redirection allows you to change the default vectors of the NMI of IRQ.  
+No more need of a trampoline, you can just set the address, enable the redirection, and forget about it.
+
+### Vector redirection control (\$416B, write-only)
+
+```
+7  bit  0
+---- ----
+.... ..IN
+       ||
+       |+- NMI vector redirection enable (0: disabled, 1: enabled)
+       +-- IRQ vector redirection enable (0: disabled, 1: enabled)
+```
+
+### NMI vector redirection address high bytes (\$416C, write-only)
+
+```
+7  bit  0
+---- ----
+HHHH HHHH
+|||| ||||
+++++-++++- High 8 bits of address
+```
+
+### NMI vector redirection address low bytes (\$416D, write-only)
+
+```
+7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- Low 8 bits of address
+```
+
+### IRQ vector redirection address high bytes (\$416E, write-only)
+
+```
+7  bit  0
+---- ----
+HHHH HHHH
+|||| ||||
+++++-++++- High 8 bits of address
+```
+
+### IRQ vector redirection address low bytes (\$416F, write-only)
+
+```
+7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- Low 8 bits of address
+```
+
 ## Sound / Audio Expansion (\$41A0-\$41AF)
 
 Channels registers work exactly like VRC6 audio expansion minus the frequency scaling register.  
@@ -1160,7 +1216,13 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **MISCELLANEOUS**                                                       |
 | \$4160        | `PPPVVVVV` |   R    | Mapper version                                                          |
 | \$4161        | `PC.....W` |   R    | IRQ status                                                              |
-| \$4166-\$416F |            |        | _Not used_                                                              |
+| \$4162-\$416A |            |        | _Not used_                                                              |
+|               |            |        | **VECTOR REDIRECTION**                                                  |
+| \$416B        | `......IN` |   W    | Vector redirection control                                              |
+| \$416C        | `HHHHHHHH` |   W    | NMI vector redirection address high bytes                               |
+| \$416D        | `LLLLLLLL` |   W    | NMI vector redirection address low bytes                                |
+| \$416E        | `HHHHHHHH` |   W    | IRQ vector redirection address high bytes                               |
+| \$416F        | `LLLLLLLL` |   W    | IRQ vector redirection address low bytes                                |
 |               |            |        | **Window Split Mode**                                                   |
 | \$4170        | `...SSSSS` |   W    | Window Split X start tile (0-31)                                        |
 | \$4171        | `...EEEEE` |   W    | Window Split X end tile (0-31)                                          |

@@ -771,7 +771,19 @@ The IRQ line is held low until it is acknowledged.
 - Within the IRQ handler, write to the IRQ acknowledge register to acknowledge the IRQ.
 - Optional: Go back to Step 1 for the next IRQ.
 
-### CPU IRQ latch low byte (\$4158, write-only)
+### CPU IRQ latch high byte (\$4158, write-only)
+
+This register specifies the IRQ latch value high byte.
+
+```
+7  bit  0
+---- ----
+HHHH HHHH
+|||| ||||
+++++-++++- The high eight bits of the IRQ latch
+```
+
+### CPU IRQ latch low byte (\$4159, write-only)
 
 This register specifies the IRQ latch value low byte.
 
@@ -783,33 +795,23 @@ LLLL LLLL
 ++++-++++- The low eight bits of the IRQ latch
 ```
 
-### CPU IRQ latch high byte (\$4159, write-only)
-
-This register specifies the IRQ latch value high byte.
-
-```
-7  bit  0
----- ----
-HHHH HHHH
-|||| ||||
-++++-++++- The high eight bits of the IRQ counter
-```
-
 ### CPU IRQ control (\$415A, write-only)
 
 Writing zero to this register will disable interrupts.  
 If this register is written to with 'E' set, the IRQ counter is reloaded with the latch value.  
 If 'E' is clear, the IRQ counter remains unchanged.  
 The 'A' bit here has no immediate effect, and remains unused until IRQ Acknowledge is written to.  
-It can be used to distinguish a one-shot IRQ from a repeated IRQ.
+It can be used to distinguish a one-shot IRQ from a repeated IRQ.  
+If 'Z' is set, the IRQ will be automatically acknowledged when reading \$4011, which makes ZPCM even easier to use.
 
 ```
 7  bit  0
 ---------
-.... ..EA
-       ||
-       |+- IRQ enable after acknowledgement (see IRQ acknowledge)
-       +-- IRQ enable (0: disabled, 1: enabled)
+.... .ZEA
+      |||
+      ||+- IRQ enable after acknowledgement (see IRQ acknowledge)
+      |+-- IRQ enable (0: disabled, 1: enabled)
+      +--- IRQ acknowledge if $4011 is read (0: disabled, 1: enabled)
 ```
 
 ### CPU IRQ acknowledge (\$415B, write-only)
@@ -1146,9 +1148,9 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4154        | `CCCCCCCC` |   R    | Jitter counter                                                          |
 | \$4155-\$4157 |            |        | _Not used_                                                              |
 |               |            |        | **CPU CYCLE COUNTER IRQ**                                               |
-| \$4158        | `LLLLLLLL` |   W    | Latch low byte                                                          |
-| \$4159        | `HHHHHHHH` |   W    | Latch high byte                                                         |
-| \$415A        | `......EA` |   W    | Control                                                                 |
+| \$4158        | `HHHHHHHH` |   W    | Latch high byte                                                         |
+| \$4159        | `LLLLLLLL` |   W    | Latch low byte                                                          |
+| \$415A        | `.....ZEA` |   W    | Control                                                                 |
 | \$415B        | `........` |   W    | Acknowledge                                                             |
 |               |            |        | **FPGA-RAM auto R/W**                                                   |
 | \$415C        | `...HHHHH` |   W    | FPGA-RAM hi address                                                     |

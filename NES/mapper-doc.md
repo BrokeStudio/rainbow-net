@@ -175,6 +175,7 @@ On power-up and reset, some registers are initialized/reset with specific values
 | \$4170   | \$00  | Disable Wi-Fi                                                            |
 |          |       | **Audio Expansion**                                                      |
 | \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable ZPCM                               |
+| \$41AA   | \$0F  | Set default master volume                                                |
 
 ## PRG banking modes (\$4100, read/write)
 
@@ -1040,6 +1041,16 @@ E... FFFF
       +--- Outputs expansion audio data to APU register $4011 (read)
 ```
 
+### Audio output control (\$41AA, write-only)
+
+```
+7  bit  0
+---- ----
+.... VVVV
+     ||||
+     ++++- Controls expansion audio output master volume
+```
+
 ## Wi-Fi (\$4190-\$4194)
 
 ### Configuration (\$4190, read/write)
@@ -1250,7 +1261,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$41A8        | `E...FFFF` |   W    | Saw high frequency                                                      |
 |               |            |        | **AUDIO OUTPUT CONTROL**                                                |
 | \$41A9        | `.....ZTF` |   W    | Audio output control                                                    |
-| \$41B0-\$41FF |            |        | _Not used_                                                              |
+| \$41AA        | `....VVVV` |   W    | Audio output master volume                                              |
 | \$41AB-\$41FF |            |        | _Not used_                                                              |
 |               |            |        | **SPRITE EXTENDED MODE**                                                |
 | \$4200-\$423F | `LLLLLLLL` |   W    | Sprites individual bank lower bits                                      |

@@ -141,6 +141,7 @@ MAP_SND_SAW_ACC         = $41A6
 MAP_SND_SAW_LOW         = $41A7
 MAP_SND_SAW_HIGH        = $41A8
 MAP_SND_OUTPUT_CONTROL  = $41A9
+MAP_SND_MASTER_VOLUME   = $41AA
 
 ; Sprite extended mode
 MAP_SPR_EXT_LOWER_BANK  = $4200 ; $4200 ... $423F, one register for each sprite

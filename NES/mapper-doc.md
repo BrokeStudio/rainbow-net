@@ -422,7 +422,7 @@ CCF. DDEE
 |||         01: 2nd 1K of FPGA-RAM
 |||         10: 3rd 1K of FPGA-RAM
 |||         11: 4th 1K of FPGA-RAM
-||+------- Fill-mode (0: enable, 1: disable, see $4124 and $4125)
+||+------- Fill-mode (0: disable, 1: enable, see $4124 and $4125)
 ++-------- Chip selector (forced to FPGA-RAM for $412F)
             00: CIRAM
             01: CHR-RAM
@@ -455,7 +455,7 @@ In Background extended mode, CHR banking behaves differently than normal when fe
 - CHR banks are always 4KB in this mode
 - The values of the CHR banking registers \$4130-\$414F are also ignored
 - Bits 0-5 specified above are used for selecting a 4KB CHR bank on a per-tile basis
-- Bits 0-5 of register $4121 are used for selecting a 256K CHR offset for every tiles
+- Bits 0-4 of register $4121 are used for selecting a 256K CHR offset for every tiles
 
 #### Chip selector
 

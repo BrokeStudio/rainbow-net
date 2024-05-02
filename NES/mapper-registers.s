@@ -85,12 +85,13 @@ MAP_NT_W_BANK           = $412E
 MAP_NT_W_CONTROL        = $412F
 
 ; Scanline IRQ
-MAP_PPU_IRQ_LATCH       = $4150
+MAP_PPU_IRQ_LATCH       = $4150 ; write
+MAP_PPU_IRQ_COUNTER     = $4150 ; read
 MAP_PPU_IRQ_ENABLE      = $4151 ; write
 MAP_PPU_IRQ_STATUS      = $4151 ; read
 MAP_PPU_IRQ_DISABLE     = $4152
 MAP_PPU_IRQ_OFFSET      = $4153
-MAP_PPU_IRQ_M2_CNT      =$4154
+MAP_PPU_IRQ_M2_CNT      = $4154
 
 ; CPU Cycle IRQ
 MAP_CPU_IRQ_LATCH_HI    = $4158
@@ -146,6 +147,11 @@ MAP_SND_MASTER_VOLUME   = $41AA
 ; Sprite extended mode
 MAP_SPR_EXT_LOWER_BANK  = $4200 ; $4200 ... $423F, one register for each sprite
 MAP_SPR_EXT_UPPER_BANK  = $4240
+
+; Auto-generated OAM procedures
+MAP_OAM_SLOW_UPDATE     = $4280
+MAP_OAM_EXT_UPDATE      = $4282
+MAP_OAM_SLOW_CLEAR      = $4286
 
 ; ################################################################################
 ; MAPPER FLAGS / MASKS

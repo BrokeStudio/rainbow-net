@@ -34,6 +34,10 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - Attribute Extended Mode allows each individual 8x8 tile to have its own palette setting
 - Background Extended Mode allows to address up to 16384 tiles
 - Sprite Extended Mode allows to address up to 65535 tiles
+- Auto-generated OAM procedures
+  - OAM slow clear routine
+  - OAM slow update routine
+  - OAM Extended bank update routine
 - Window Split Mode
 - Expansion audio:
   - 2 pulse channels
@@ -144,38 +148,41 @@ The Rainbow mapper provides:
 
 On power-up and reset, some registers are initialized/reset with specific values.
 
-| Register | Value | Note                                                                     |
-| -------- | ----- | ------------------------------------------------------------------------ |
-|          |       | **PRG settings**                                                         |
-| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)             |
-| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it will address the first bank |
-| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it will address the first bank |
-|          |       | **CHR settings**                                                         |
-| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                     |
-|          |       | disable Sprite Extended Mode, disable Window Split Mode                  |
-| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to $00 so it will address the first bank  |
-| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to $00 so it will address the first bank  |
-|          |       | **Nametables settings (horizontal mirroring using CIRAM)**               |
-| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                         |
-| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                         |
-| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                         |
-| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                         |
-| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                |
-| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                            |
-| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                            |
-| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                            |
-| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                            |
-| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                |
-|          |       | **Scanline IRQ settings**                                                |
-| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                            |
-| \$4153   | \$87  | Set scanline IRQ offset to 135                                           |
-|          |       | **CPU Cycle IRQ settings**                                               |
-| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                           |
-|          |       | **Wi-Fi**                                                                |
-| \$4170   | \$00  | Disable Wi-Fi                                                            |
-|          |       | **Audio Expansion**                                                      |
-| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable ZPCM                               |
-| \$41AA   | \$0F  | Set default master volume                                                |
+| Register | Value | Note                                                                                    |
+| -------- | ----- | --------------------------------------------------------------------------------------- |
+|          |       | **PRG settings**                                                                        |
+| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)                            |
+| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it will address the first bank                |
+| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it will address the first bank                |
+|          |       | **CHR settings**                                                                        |
+| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                                    |
+|          |       | disable Sprite Extended Mode, disable Window Split Mode                                 |
+| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to $00 so it will address the first bank                 |
+| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to $00 so it will address the first bank                 |
+|          |       | **Nametables settings (horizontal mirroring using CIRAM)**                              |
+| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                                        |
+| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                                        |
+| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                                        |
+| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                                        |
+| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                               |
+| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                                           |
+| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                                           |
+| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                                           |
+| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                                           |
+| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                               |
+|          |       | **Auto-generated OAM procedures**                                                       |
+| \$4241   | \$07  | Set the OAM slow update page to 7, using $4F00 as the OAM shadow data source            |
+| \$4242   | \$1B  | Set the OAM ext update page to 27, using $4EC0 as the Sprite Extended Banks data source |
+|          |       | **Scanline IRQ settings**                                                               |
+| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                                           |
+| \$4153   | \$87  | Set scanline IRQ offset to 135                                                          |
+|          |       | **CPU Cycle IRQ settings**                                                              |
+| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                                          |
+|          |       | **Wi-Fi**                                                                               |
+| \$4190   | \$00  | Disable Wi-Fi                                                                           |
+|          |       | **Audio Expansion**                                                                     |
+| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable ZPCM                                              |
+| \$41AA   | \$0F  | Set default master volume                                                               |
 
 ## PRG banking modes (\$4100, read/write)
 
@@ -615,7 +622,51 @@ The bank upper bits are common to every sprite.
       +++- Bank index upper bits
 ```
 
-## Window Split Mode (\$4122-\$4125)
+## Auto-generated OAM procedures
+
+You have access to 3 routines that allow you to easily clear/update OAM data without the need to write/update your own code in RAM:
+
+- **OAM slow clear** allows you to clear the sprites by writing \$FF for each sprite Y position only using registers $2003/$2004 (no OAM DMA)
+- **OAM slow update** allows you to update the sprites data for each sprite only using registers $2003/$2004 (no OAM DMA)
+- **OAM ext update** allows you to update the sprites extended bank automatically (when using Sprites Extended Mode)
+
+All you need to do is prepare your data in a specific RAM area (see routines details), and `jsr` to the corresponding routine start address.
+
+### OAM slow clear (\$4286, executable)
+
+To execute this routine, you just need to do `jsr $4286`.  
+This routine will write $FF for each sprite Y position using only registers $2003/2004, and uses **648** cycles including the final `rts` opcode.
+
+### OAM slow update (\$4241, write-only and \$4280, executable)
+
+To execute this routine, you just need to do `jsr $4280`.  
+This routine will update the sprites OAM data using only registers $2003/2004, and uses **1548** cycles including the final `rts` opcode.
+
+Register \$4241 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM).
+
+```
+7  bit  0
+---- ----
+.... .PPP
+      |||
+      +++- OAM shadow page index
+```
+
+### OAM ext update (\$4242, write-only and \$4282, executable)
+
+To execute this routine, you just need to do `jsr $4282`.  
+This routine will write the extended bank data for each sprite (registers \$42xx), and uses **390** cycles including the final `rts` opcode.
+
+Register \$4242 sets the 64 bytes page to be used, starting at \$4800 (FPGA-RAM).
+
+```
+7  bit  0
+---- ----
+...P PPPP
+   | ||||
+   +-++++- OAM extended banks page index
+```
+
 ## Window Split Mode (\$4170-\$4175)
 
 When Window Split Mode is enabled (see register \$4120), all VRAM fetches corresponding to the appropriate screen region will be redirected to nametable defined by registers \$412E (Window Split nametable bank) and \$412F (Window Split nametable control).
@@ -1294,3 +1345,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **SPRITE EXTENDED MODE**                                                |
 | \$4200-\$423F | `LLLLLLLL` |   W    | Sprites individual bank lower bits                                      |
 | \$4240        | `.....UUU` |   W    | Sprites global bank upper bits                                          |
+|               |            |        | **AUTO-GENERATED OAM PROCEDURES**                                       |
+| \$4280        |            |   X    | OAM slow update                                                         |
+| \$4282        |            |   X    | OAM ext update                                                          |
+| \$4286        |            |   X    | OAM slow clear                                                          |

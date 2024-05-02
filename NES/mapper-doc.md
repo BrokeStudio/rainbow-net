@@ -809,11 +809,12 @@ Writing any value to this register will disable scanline IRQ AND acknowledge any
 
 ### PPU IRQ offset (\$4153, write-only)
 
-The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.
+The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.  
+This value corresponds to the **even PPU dot** you want to trigger the IRQ on (1 for dot 1, 2 for dot 3, 3 for dot 5, etc).
 
-The minimum value is 0 (\$00).  
+The minimum value is 1 (\$01) and offset will be set to 1 if you try to set it to 0.  
 The default value set on power-up and reset is 135 (\$87).  
-The maximum value is 169 (\$A9).
+The maximum value is 170 (\$AA) and value will be capped to 170 if you try to set it to a higher value.
 
 ```
 7  bit  0
@@ -825,8 +826,8 @@ OOOO OOOO
 
 ### PPU IRQ jitter counter (\$4154, read-only)
 
-This counter is incremented on every m2 falling edge.
-When an IRQ is triggered, this counter is reset to zero.
+This counter is incremented on every m2 falling edge.  
+When an IRQ is triggered, this counter is reset to zero.  
 It can then be read and used to adjust a delay to execute a piece of code (almost) always at the same time every time.
 
 ```

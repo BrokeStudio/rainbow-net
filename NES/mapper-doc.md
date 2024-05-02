@@ -764,7 +764,9 @@ YYYY YYYY
 Scanline IRQ is very close to MMC5's.  
 For more informations: https://www.nesdev.org/wiki/MMC5#Scanline_Detection_and_Scanline_IRQ.
 
-### PPU IRQ latch (\$4150, write-only)
+### PPU IRQ latch (\$4150, read-write)
+
+Write
 
 **from MMC5 wiki page, need to test**  
 All eight bits specify the target scanline number at which to generate a scanline IRQ. Value $00 is a special case that will not produce IRQ pending conditions, though it is possible to get an IRQ while this is set to $00 (due to the pending flag being set already.) You will need to take additional measures to fully suppress the IRQ. See the detailed discussion.
@@ -776,6 +778,19 @@ LLLL LLLL
 |||| ||||
 ++++-++++- IRQ latch value
 ```
+
+Read
+
+```
+7  bit  0
+---- ----
+LLLL LLLL
+|||| ||||
+++++-++++- IRQ scanline counter value
+```
+
+Reading this register will return the current scanline being rendered.  
+This only works if rendering is enabled and if it hasn't been disabled during rendering.
 
 ### PPU IRQ enable / status (\$4151, read-write)
 

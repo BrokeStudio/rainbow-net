@@ -616,6 +616,7 @@ The bank upper bits are common to every sprite.
 ```
 
 ## Window Split Mode (\$4122-\$4125)
+## Window Split Mode (\$4170-\$4175)
 
 When Window Split Mode is enabled (see register \$4120), all VRAM fetches corresponding to the appropriate screen region will be redirected to nametable defined by registers \$412E (Window Split nametable bank) and \$412F (Window Split nametable control).
 
@@ -627,9 +628,9 @@ Notes:
 - Vertical scrolling for the split region operates like normal vertical scrolling. 0-239 are valid scroll values, whereas 240-255 will display Attribute table data as NT data for the first few scanlines. The split nametable will wrap so that the top of the nametable will appear below as you scroll (just as if vertical mirroring were employed).
 - FPGA-RAM is always used as the nametable in split mode (see register \$412F).
 
-### Window Split start/stop tile ($4122-$4123, write-only)
+### Window Split start/stop tile ($4170-$4171, write-only)
 
-Register \$4122 defines the tile where the split starts.
+Register \$4170 defines the tile where the split starts.
 
 ```
 7  bit  0
@@ -639,7 +640,7 @@ Register \$4122 defines the tile where the split starts.
    +-++++- Specify Window Split start tile (0-31)
 ```
 
-Register \$4123 defines the tile where the split region stops.
+Register \$4171 defines the tile where the split region stops.
 
 ```
 7  bit  0
@@ -654,7 +655,34 @@ Note:
 - If the start tile is **smaller** than the stop tile, then the split NT region will appear in the middle of the normal NT region.
 - If the start tile is **higher** than the stop tile, then the normal NT region will appear in the middle of the split NT region.
 
-### Window Split coarse X scroll ($4124, write-only)
+### Window Split start/stop tile ($4172-$4173, write-only)
+
+Register \$4172 defines the tile where the split starts.
+
+```
+7  bit  0
+---- ----
+SSSS SSSS
+||||-||||
+++++-++++- Specify Window Split start position (0-256)
+```
+
+Register \$4173 defines the tile where the split region stops.
+
+```
+7  bit  0
+---- ----
+EEEE EEEE
+||||-||||
+++++-++++- Specify Window Split stop position (0-256)
+```
+
+Note:
+
+- If the start position is **smaller** than the stop position, then the _split NT region_ will appear in the middle of the _normal NT region_.
+- If the start position is **higher** than the stop position, then the _normal NT region_ will appear in the middle of the _split NT region_.
+
+### Window Split coarse X scroll ($4174, write-only)
 
 This register controls the horizontal scrolling of the split region on a per-tile basis.
 
@@ -668,14 +696,14 @@ This register controls the horizontal scrolling of the split region on a per-til
 
 TODO...
 
-### Window Split fine Y scroll ($4125, write-only)
+### Window Split fine Y scroll ($4175, write-only)
 
 This register controls the vertical scrolling of the split region.
 
 ```
 7  bit  0
 ---- ----
-YYYY YYYYY
+YYYY YYYY
 ||||-||||
 ++++-++++- Specify Window Split fine Y scroll (0-256)
 ```

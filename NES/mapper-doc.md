@@ -803,7 +803,7 @@ Read
 ```
 7  bit  0
 ---- ----
-IF.. ...I
+HF.. ...I
 ||      |
 ||      +- Scanline IRQ Pending flag
 |+-------- In-Frame flag

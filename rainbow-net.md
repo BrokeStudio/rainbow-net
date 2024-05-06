@@ -470,40 +470,48 @@ This command asks the Wi-Fi status.
 
 **Returns:**
 
-| Byte | Description                                     | Example                  |
-| ---- | ----------------------------------------------- | ------------------------ |
-| 0    | Length of the message (excluding this byte)     | `3`                      |
-| 1    | Command ID (see commands from ESP)              | `WIFI_STATUS`            |
-| 2    | Wi-Fi status (see below)                        | `WIFI_STATUS::CONNECTED` |
-| 3    | Wi-Fi error (see below)                         | `WIFI_ERROR::NO_ERROR`   |
-|      | _**If the Wi-Fi status is not CONNECTED, you**_ |                          |
-|      | _**can check the Wi-Fi error.**_                |                          |
+| Byte | Description                                 | Example                      |
+| ---- | ------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte) | `4`                          |
+| 1    | Command ID (see commands from ESP)          | `WIFI_STATUS`                |
+| 2    | Wi-Fi status (see below)                    | `WIFI_STATUS::CONNECTED`     |
+| 3    | Wi-Fi error (see below)                     | `WIFI_ERROR::NO_ERROR`       |
+| 4    | ESP Wi-Fi status (see below)                | `WIFI_ESP_STATUS::CONNECTED` |
+|      | _**If the Wi-Fi status is NOT_CONNECTED,**_ |                              |
+|      | _**you can check the Wi-Fi error.**_        |                              |
 
 **Wi-Fi status:**
 
-| Value | WIFI_STATUS     | Description                                                    |
-| ----- | --------------- | -------------------------------------------------------------- |
-| 255   | TIMEOUT         | Connection timeout                                             |
-| 0     | IDLE_STATUS     | Temporary status assigned between statuses                     |
-| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached                              |
-| 2     | SCAN_COMPLETED  | Network scan completed                                         |
-| 3     | CONNECTED       | Wi-Fi connected                                                |
-| 4     | CONNECT_FAILED  | Wi-Fi connection failed                                        |
-| 5     | CONNECTION_LOST | Wi-Fi connection lost                                          |
-| 6     | WRONG_PASSWORD  | Configured password is incorrect                               |
-| 7     | DISCONNECTED    | ESP disabled (toggled via [WIFI_SET_CONFIG](#wifi_set_config)) |
-|       |                 | or disconnected from network                                   |
+| Value | WIFI_STATUS   | Description                 |
+| ----- | ------------- | --------------------------- |
+| 0     | NOT_CONNECTED | Wi-Fi not connected         |
+| 1     | CONNECTING    | Connecting to Wi-Fi network |
+| 2     | CONNECTED     | Connected to Wi-Fi network  |
 
 **Wi-Fi error:**
 
-| Value | WIFI_ERROR      | Description                       |
-| ----- | --------------- | --------------------------------- |
-| 255   | UNKNOWN         | Unknown error                     |
-| 0     | NO_ERROR        | NO ERROR                          |
-| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached |
-| 4     | CONNECT_FAILED  | Wi-Fi connection failed           |
-| 5     | CONNECTION_LOST | Wi-Fi connection lost             |
-| 6     | WRONG_PASSWORD  | Configured password is incorrect  |
+| Value | WIFI_ERROR        | Description                       |
+| ----- | ----------------- | --------------------------------- |
+| 255   | UNKNOWN_ERROR     | Unknown error                     |
+| 0     | NO_ERROR          | No error                          |
+| 1     | NO_SSID_AVAIL     | Configured SSID cannot be reached |
+| 2     | CONNECTION_FAILED | Wi-Fi connection failed           |
+| 3     | CONNECTION_LOST   | Wi-Fi connection lost             |
+| 4     | WRONG_PASSWORD    | Configured password is incorrect  |
+
+**ESP Wi-Fi status:**
+
+| Value | WIFI_STATUS     | Description                                |
+| ----- | --------------- | ------------------------------------------ |
+| 255   | WL_NO_SHIELD    | For compatibility with WiFi Shield library |
+| 0     | IDLE_STATUS     | Temporary status assigned between statuses |
+| 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached          |
+| 2     | SCAN_COMPLETED  | Network scan completed                     |
+| 3     | CONNECTED       | Wi-Fi connected                            |
+| 4     | CONNECT_FAILED  | Wi-Fi connection failed                    |
+| 5     | CONNECTION_LOST | Wi-Fi connection lost                      |
+| 6     | WRONG_PASSWORD  | Configured password is incorrect           |
+| 7     | DISCONNECTED    | Disconnected from network                  |
 
 [Back to command list](#Commands-overview)
 

@@ -393,7 +393,7 @@ This registers is used to select a 256K CHR offset for every tiles.
 BBBB BBBB
 |||| ||||
 ++++-++++- Bank index
-            Depending on chip source (CHR-ROM, CHR-RAM or FPGA-RAM) used for the corresponding nametable,
+            Depending on chip source (CIRAM, CHR-ROM, CHR-RAM or FPGA-RAM) used for the corresponding nametable,
             not all bits are used.
 ```
 
@@ -903,10 +903,10 @@ If 'Z' is set, the IRQ will be automatically acknowledged when reading \$4011, w
 ```
 7  bit  0
 ---------
-.... .ZEA
+.... .ZAE
       |||
-      ||+- IRQ enable after acknowledgement (see IRQ acknowledge)
-      |+-- IRQ enable (0: disabled, 1: enabled)
+      ||+- IRQ enable (0: disabled, 1: enabled)
+      |+-- IRQ enable after being acknowledged (see IRQ acknowledge)
       +--- IRQ acknowledge if $4011 is read (0: disabled, 1: enabled)
 ```
 
@@ -988,9 +988,9 @@ PPPV VVVV
 | 1              | Emulator     |
 | 2              | Web emulator |
 
-| Version (VVVVV) | Description |
-| --------------- | ----------- |
-| 0               | v1.0        |
+| Version (VVVVV) | Description | Description                             |
+| --------------- | ----------- | --------------------------------------- |
+| 0               | v1.0        | Initial release                         |
 
 ## IRQ status (\$4161, read-only)
 

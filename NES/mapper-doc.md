@@ -1362,6 +1362,9 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4200-\$423F | `LLLLLLLL` |   W    | Sprites individual bank lower bits                                      |
 | \$4240        | `.....UUU` |   W    | Sprites global bank upper bits                                          |
 |               |            |        | **AUTO-GENERATED OAM PROCEDURES**                                       |
+| \$4241        | `.....PPP` |   W    | OAM slow update 256 bytes page index                                    |
+| \$4242        | `...PPPPP` |   W    | OAM ext update 64 bytes page                                            |
+| \$4243-\$427F |            |        | _Not used_                                                              |
 | \$4280        |            |   X    | OAM slow update                                                         |
 | \$4282        |            |   X    | OAM ext update                                                          |
 | \$4286        |            |   X    | OAM slow clear                                                          |

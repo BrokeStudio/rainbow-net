@@ -15,17 +15,21 @@ Here you'll find the Rainbow mapper documentation for the NES and 6502 library f
 
 # Try it yourself
 
-If you want to try this mapper, here's what you'll need:
+If you want to try this mapper, here are some resources:
 
-- a custom version of [Mesen2 or FCEUX](https://brokestudio.fr/rainbow/emulators) supporting the Rainbow mapper
-- a [rainbow NES boiler plate](https://github.com/BrokeStudio/rainbow-nes-boiler-plate) (using cc65) - optional
+- a custom version of [Mesen2](https://brokestudio.fr/rainbow/emulators) supporting the Rainbow mapper
+- ~~a custom version of [FCEUX](https://brokestudio.fr/rainbow/emulators) supporting the Rainbow mapper~~ (see note below)
+- a mapper implementation for the [Everdrive N8 PRO](https://brokestudio.fr/rainbow/everdrive)
+- a bunch of [test roms](https://brokestudio.fr/rainbow/test-roms)
+- a [rainbow NES boiler plate](https://github.com/BrokeStudio/rainbow-nes-boiler-plate) (using cc65)
 - the above documentation
 - there's also a [chat demo](https://github.com/BrokeStudio/rainbow-chat) available
 
-## Notes
+# Notes
 
-- custom FCEUX version doesn't support all the mapper features yet
+- official Mesen2 already supports the Rainbow mapper, minus the Wi-Fi feature
 - custom Mesen2 version doesn't support secured TCP protocol
+- custom FCEUX version hasn't been updated for a long time and is not up to date with the latest mapper features
 
 # Contact
 

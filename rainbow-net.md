@@ -17,6 +17,7 @@ Special thanks to :
 - [Margarita Gadrat](http://www.margarita-gadrat.com) for the Rainbow Net logo
 - The NES Wi-Fi Club (cheers guys 😊)
 - [NESdev](http://www.nesdev.com) community
+- [Zeta](https://bsky.app/profile/zeta0134.bsky.social) for helping me testing the Rainbow NES mapper features with his great game Tactus and for helping me with some Verilog code
 - Ludy, my wife, for the endless support ❤
 
 ## Table of content

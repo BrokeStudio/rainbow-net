@@ -1018,15 +1018,24 @@ PPPV VVVV
 +++------- Platform
 ```
 
-| Platform (PPP) | Description  |
-| -------------- | ------------ |
-| 0              | PCB          |
-| 1              | Emulator     |
-| 2              | Web emulator |
+| Platform (PPP) | Description      |
+| -------------- | ---------------- |
+| 0              | PCB              |
+| 1              | Emulator         |
+| 2              | Web emulator     |
+| 3              | Everdrive N8 PRO |
 
-| Version (VVVVV) | Description | Description                             |
-| --------------- | ----------- | --------------------------------------- |
-| 0               | v1.0        | Initial release                         |
+| Version (vvvvv) | Description                                                 |
+| --------------- | ----------------------------------------------------------- |
+| 0               | Initial release                                             |
+| 1               | added register \$4150 (read current scanline counter value) |
+|                 | added register \$4157 (read m2 status)                      |
+|                 | added CIRAM as a possible source for pattern table          |
+|                 | updated register \$4242 to now select a 256 bytes page      |
+|                 | updated OAM ext routine to read every 4 bytes               |
+|                 | removed OAM clear routine                                   |
+|                 | improved level shifter direction timing                     |
+|                 | added EPSM support                                          |
 
 ## IRQ status (\$4161, read-only)
 

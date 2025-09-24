@@ -1163,13 +1163,14 @@ E... FFFF
 ```
 7  bit  0
 ---- ----
-.... .ITF
-      |||
-      ||+- Outputs expansion audio to EXP6 pin (0: disable, 1: enable)
-      |    usually used for front loader
-      |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
-      |    usually used for top loader
-      +--- Outputs expansion audio data to APU register $4011 (read)
+E... .ITF
+|     |||
+|     ||+- Outputs expansion audio to EXP6 pin (0: disable, 1: enable)
+|     |    usually used for front loader
+|     |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
+|     |    usually used for top loader
+|     +--- Outputs expansion audio data to APU register $4011 (read)
++--------- EPSM support (0: disable, 1: enable)
 ```
 
 ### Audio output control (\$41AA, write-only)
@@ -1394,7 +1395,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$41A7        | `FFFFFFFF` |   W    | Saw low frequency                                                       |
 | \$41A8        | `E...FFFF` |   W    | Saw high frequency                                                      |
 |               |            |        | **AUDIO OUTPUT CONTROL**                                                |
-| \$41A9        | `.....ITF` |   W    | Audio output control                                                    |
+| \$41A9        | `E....ITF` |   W    | Audio output control                                                    |
 | \$41AA        | `....VVVV` |   W    | Audio output master volume                                              |
 | \$41AB-\$41FF |            |        | _Not used_                                                              |
 |               |            |        | **SPRITE EXTENDED MODE**                                                |

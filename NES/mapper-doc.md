@@ -1,13 +1,13 @@
 # Rainbow mapper documentation
 
-Rainbow or RNBW is a cartridge board intended for homebrew releases with its own unique mapper assigned to iNES Mapper 682 (**temporary**).  
+Rainbow or RNBW is a cartridge board intended for homebrew releases with its own unique mapper assigned to iNES Mapper 682.  
 The cartridge was initially designed with Wi-Fi capabilities in mind (Rainbow NET protocol), but can also be used without it.  
 The board and mapper were designed by Broke Studio which also manufactures the cartridges.
 
 # Overview
 
 - Wi-Fi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional, needs the Wi-Fi chip to work)
-  - Embedded bootrom to perform multiple task (manage networks/files, dump/flash the cart, ...)
+  - Embedded bootrom to perform multiple task (manage networks, manage files, flash the cart, ...)
   - On board micro SD card support
 - 5 PRG-ROM banking modes
 - 2 PRG-RAM banking modes
@@ -29,7 +29,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
   - M2 "jitter" counter
 - CPU cycle counter
   - configurable IRQ
-- Nametables can be individually mapped to CHR-RAM/CHR-ROM/FPGA-RAM
+- Nametables can be individually mapped to CIRAM/FPGA-RAM/CHR-RAM/CHR-ROM
 - Pattern tables can be mapped to CHR-RAM/CHR-ROM/FPGA-RAM
 - Attribute Extended Mode allows each individual 8x8 tile to have its own palette setting
 - Background Extended Mode allows to address up to 16384 tiles
@@ -42,9 +42,9 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - Expansion audio:
   - 2 pulse channels
   - 1 sawtooth channel
-  - ZPCM mode that allows expansion audio on stock NES
+  - IPCM mode that allows expansion audio on stock NES
 - System reset detection
-  - resets some registers
+  - resets main registers
 
 # Banks
 
@@ -52,7 +52,8 @@ The Rainbow mapper provides:
 
 - PRG-ROM: 5 banking modes
 - PRG-RAM: 2 banking modes
-- CHR-ROM: 5 banking modes
+- CHR-ROM/RAM: 5 banking modes
+- FPGA-RAM: 1 banking mode
 
 ## PRG-ROM mode 0
 
@@ -95,6 +96,11 @@ The Rainbow mapper provides:
 
 - CPU \$6000-\$6FFF: 4 KB switchable PRG-RAM/ROM/FPGA-RAM bank
 - CPU \$7000-\$7FFF: 4 KB switchable PRG-RAM/ROM/FPGA-RAM bank
+
+## FPGA-RAM
+
+- CPU \$4800-\$4FFF: last 2KB of the FPGA-RAM
+- CPU \$5000-\$5FFF: 4KB switchable FPGA-RAM bank
 
 ## CHR mode 0
 
@@ -236,9 +242,9 @@ A... .OOO
 ```
 7  bit  0
 ---- ----
-CUUU UUUU
-|||| ||||
-|+++-++++- Bank index upper bits
+C... .UUU
+|     |||
+|     +++- Bank index upper bits
 +--------- Chip selector
               0: PRG-ROM
               1: PRG-RAM
@@ -294,11 +300,11 @@ LLLL LLLL
 ```
 7  bit  0
 ---- ----
-CuUU UUUU
-|||| ||||
-|+++-++++- Bank index upper bits (u only used in PRG-ROM mode)
+CC.. UUUU
+||   ||||
+||   ++++- Bank index upper bits
 ++-------- Chip selector
-              0x: PRG-ROM (u is used for bank index)
+              0x: PRG-ROM
               10: PRG-RAM
               11: FPGA-RAM
                 If using PRG-RAM 8K mode, then bank number is ignored since FPGA-RAM is only 8K.
@@ -583,9 +589,17 @@ TTTT TTTT
 ```
 7  bit  0
 ---- ----
+...B BBBB
+   | ||||
+   +-++++- Bank index upper bits (\$413x)
+```
+
+```
+7  bit  0
+---- ----
 BBBB BBBB
 |||| ||||
-++++-++++- Bank index upper bits (\$413x) or lower bits (\$414x)
+++++-++++- Bank index lower bits (\$414x)
 ```
 
 ## Sprite Extended Mode (\$4200-\$4240)
@@ -784,7 +798,7 @@ Read
 ```
 7  bit  0
 ---- ----
-LLLL LLLL
+CCCC CCCC
 |||| ||||
 ++++-++++- IRQ scanline counter value
 ```
@@ -898,16 +912,16 @@ If this register is written to with 'E' set, the IRQ counter is reloaded with th
 If 'E' is clear, the IRQ counter remains unchanged.  
 The 'A' bit here has no immediate effect, and remains unused until IRQ Acknowledge is written to.  
 It can be used to distinguish a one-shot IRQ from a repeated IRQ.  
-If 'Z' is set, the IRQ will be automatically acknowledged when reading \$4011, which makes ZPCM even easier to use.
+If 'I' is set, the IRQ will be automatically acknowledged when reading \$4011, which makes IPCM even easier to use.
 
 ```
 7  bit  0
 ---------
-.... .ZAE
+.... .IAE
       |||
       ||+- IRQ enable (0: disabled, 1: enabled)
       |+-- IRQ enable after being acknowledged (see IRQ acknowledge)
-      +--- IRQ acknowledge if $4011 is read (0: disabled, 1: enabled)
+      +--- IRQ acknowledged if $4011 is read (0: disabled, 1: enabled)
 ```
 
 ### CPU IRQ acknowledge (\$415B, write-only)
@@ -922,12 +936,13 @@ Writes to this register do not affect the current state of the IRQ counter.
 .... ....
 ```
 
-## FPGA-RAM auto reader/write (\$415C-\$415F)
+## FPGA-RAM auto reader/writer (\$415C-\$415F)
 
 The FPGA-RAM auto reader/writer allows you to access the FPGA-RAM without the need to set the address for each read or write.  
-First you set the start address, then you set the increment value that will be added the to address after each read or write, and finally you read or write through one register.  
+First you set the start address, then you set the increment value that will be added to the address after each read or write, and finally you read or write through one register.  
 This mimic how the PPU registers \$2006 and \$2007 work and allow you to do faster updates when using the FPGA-RAM as nametables or pattern tables.
-Since the FPGA-RAM is also used to store incoming and outcoming messages for the ESP / Wi-Fi chip, you can also use the auto reader/writer to read/write messages a bit faster.
+Since the FPGA-RAM is also used to store incoming and outcoming messages for the ESP / Wi-Fi chip, you can also use the auto reader/writer to read/write messages a bit faster.  
+The auto reader/writer address should be in the \$0000-\$1FFF range, which allows you to address the 8KB of FPGA-RAM.
 
 ### FPGA-RAM hi address (\$415C, write-only)
 
@@ -1024,7 +1039,7 @@ No more need of a trampoline, you can just set the address, enable the redirecti
        +-- IRQ vector redirection enable (0: disabled, 1: enabled)
 ```
 
-### NMI vector redirection address high bytes (\$416C, write-only)
+### NMI vector redirection address high byte (\$416C, write-only)
 
 ```
 7  bit  0
@@ -1034,7 +1049,7 @@ HHHH HHHH
 ++++-++++- High 8 bits of address
 ```
 
-### NMI vector redirection address low bytes (\$416D, write-only)
+### NMI vector redirection address low byte (\$416D, write-only)
 
 ```
 7  bit  0
@@ -1044,7 +1059,7 @@ LLLL LLLL
 ++++-++++- Low 8 bits of address
 ```
 
-### IRQ vector redirection address high bytes (\$416E, write-only)
+### IRQ vector redirection address high byte (\$416E, write-only)
 
 ```
 7  bit  0
@@ -1054,7 +1069,7 @@ HHHH HHHH
 ++++-++++- High 8 bits of address
 ```
 
-### IRQ vector redirection address low bytes (\$416F, write-only)
+### IRQ vector redirection address low byte (\$416F, write-only)
 
 ```
 7  bit  0
@@ -1127,7 +1142,7 @@ E... FFFF
 ```
 7  bit  0
 ---- ----
-.... .ZTF
+.... .ITF
       |||
       ||+- Outputs expansion audio to EXP6 pin (0: disable, 1: enable)
       |    usually used for front loader
@@ -1213,7 +1228,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 ### TX RAM source address (\$4194, write-only)
 
 The FPGA uses its internal RAM to store messages to be sent to the ESP.  
-Only the first 2K of the total 8K of the FPGA-RAM can be used for this.  
+Only the last 2K of the total 8K of the FPGA-RAM can be used for this.  
 Those 2K are permanently mapped at \$4800-\$4FFF.  
 This register allows you to specify a \$100 bytes page from \$4800 to be used for ready to be sent messages.
 
@@ -1232,16 +1247,16 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **CPU / PRG control**                                                   |
 | \$4100        | `A....OOO` |  R/W   | PRG banking modes                                                       |
 | \$4101-\$4105 |            |        | _Not used_                                                              |
-| \$4106        | `CuUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 0,1)                       |
-| \$4107        | `CuUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 1)                          |
-| \$4108        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 0,1,2,3,4)                 |
-| \$4109        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
-| \$410A        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 3,4)                       |
-| \$410B        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
-| \$410C        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 1,2,3,4)                   |
-| \$410D        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
-| \$410E        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (modes 2,3,4)                     |
-| \$410F        | `CUUUUUUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$4106        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 0,1)                       |
+| \$4107        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 1)                          |
+| \$4108        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 0,1,2,3,4)                 |
+| \$4109        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410A        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 3,4)                       |
+| \$410B        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410C        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 1,2,3,4)                   |
+| \$410D        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410E        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 2,3,4)                     |
+| \$410F        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
 | \$4110-\$4114 |            |        | _Not used_                                                              |
 | \$4115        | `.......B` |   W    | FPGA-RAM bank bits                                                      |
 | \$4116        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 0,1)                                         |
@@ -1270,22 +1285,22 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$412D        | `CCF.DDEE` |  R/W   | Nametable D control (\$2C00)                                            |
 | \$412E        | `BBBBBBBB` |   W    | Nametable W bank (Window Split)                                         |
 | \$412F        | `....DDEE` |  R/W   | Nametable W control (Window Split)                                      |
-| \$4130        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 0,1,2,3,4)                                   |
-| \$4131        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 1,2,3,4)                                     |
-| \$4132        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
-| \$4133        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
-| \$4134        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4135        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4136        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4137        | `UUUUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4138        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$4139        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413A        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413B        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413C        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413D        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413E        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413F        | `UUUUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$4130        | `...UUUUU` |   W    | CHR bank upper bits (modes 0,1,2,3,4)                                   |
+| \$4131        | `...UUUUU` |   W    | CHR bank upper bits (modes 1,2,3,4)                                     |
+| \$4132        | `...UUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
+| \$4133        | `...UUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
+| \$4134        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4135        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4136        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4137        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4138        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$4139        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413A        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413B        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413C        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413D        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413E        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413F        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
 | \$4140        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 0,1,2,3,4)                                   |
 | \$4141        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 1,2,3,4)                                     |
 | \$4142        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 2,3,4)                                       |
@@ -1305,18 +1320,20 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **SCANLINE DETECTION IRQ**                                              |
 | \$4150        | `VVVVVVVV` |   W    | Latch value                                                             |
 | \$4151        | `HF.....I` |  R/W   | Enable / Status                                                         |
+| \$4151        | `........` |   W    | Enable                                                                  |
+| \$4151        | `HF.....I` |   R    | Status (in-frame, HBlank, IRQ pending flags)                            |
 | \$4152        | `........` |   W    | Disable                                                                 |
 | \$4153        | `OOOOOOOO` |   W    | Offset                                                                  |
-| \$4154        | `CCCCCCCC` |   R    | Jitter counter                                                          |
+| \$4154        | `CCCCCCCC` |   R    | CPU cycle jitter counter                                                |
 | \$4155-\$4157 |            |        | _Not used_                                                              |
 |               |            |        | **CPU CYCLE COUNTER IRQ**                                               |
 | \$4158        | `HHHHHHHH` |   W    | Latch high byte                                                         |
 | \$4159        | `LLLLLLLL` |   W    | Latch low byte                                                          |
-| \$415A        | `.....ZEA` |   W    | Control                                                                 |
+| \$415A        | `.....IEA` |   W    | Control                                                                 |
 | \$415B        | `........` |   W    | Acknowledge                                                             |
 |               |            |        | **FPGA-RAM auto R/W**                                                   |
-| \$415C        | `...HHHHH` |   W    | FPGA-RAM address high bytes                                             |
-| \$415D        | `LLLLLLLL` |   W    | FPGA-RAM address low bytes                                              |
+| \$415C        | `...HHHHH` |   W    | FPGA-RAM address high byte                                              |
+| \$415D        | `LLLLLLLL` |   W    | FPGA-RAM address low byte                                               |
 | \$415E        | `IIIIIIII` |   W    | FPGA-RAM increment                                                      |
 | \$415F        | `DDDDDDDD` |  R/W   | FPGA-RAM data                                                           |
 |               |            |        | **MISCELLANEOUS**                                                       |
@@ -1325,10 +1342,10 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4162-\$416A |            |        | _Not used_                                                              |
 |               |            |        | **VECTOR REDIRECTION**                                                  |
 | \$416B        | `......IN` |   W    | Vector redirection control                                              |
-| \$416C        | `HHHHHHHH` |   W    | NMI vector redirection address high bytes                               |
-| \$416D        | `LLLLLLLL` |   W    | NMI vector redirection address low bytes                                |
-| \$416E        | `HHHHHHHH` |   W    | IRQ vector redirection address high bytes                               |
-| \$416F        | `LLLLLLLL` |   W    | IRQ vector redirection address low bytes                                |
+| \$416C        | `HHHHHHHH` |   W    | NMI vector redirection address high byte                                |
+| \$416D        | `LLLLLLLL` |   W    | NMI vector redirection address low byte                                 |
+| \$416E        | `HHHHHHHH` |   W    | IRQ vector redirection address high byte                                |
+| \$416F        | `LLLLLLLL` |   W    | IRQ vector redirection address low byte                                 |
 |               |            |        | **Window Split Mode**                                                   |
 | \$4170        | `...SSSSS` |   W    | Window Split X start tile (0-31)                                        |
 | \$4171        | `...EEEEE` |   W    | Window Split X end tile (0-31)                                          |
@@ -1355,7 +1372,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$41A7        | `FFFFFFFF` |   W    | Saw low frequency                                                       |
 | \$41A8        | `E...FFFF` |   W    | Saw high frequency                                                      |
 |               |            |        | **AUDIO OUTPUT CONTROL**                                                |
-| \$41A9        | `.....ZTF` |   W    | Audio output control                                                    |
+| \$41A9        | `.....ITF` |   W    | Audio output control                                                    |
 | \$41AA        | `....VVVV` |   W    | Audio output master volume                                              |
 | \$41AB-\$41FF |            |        | _Not used_                                                              |
 |               |            |        | **SPRITE EXTENDED MODE**                                                |
@@ -1367,4 +1384,10 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4243-\$427F |            |        | _Not used_                                                              |
 | \$4280        |            |   X    | OAM slow update                                                         |
 | \$4282        |            |   X    | OAM ext update                                                          |
-| \$4286        |            |   X    | OAM slow clear                                                          |
+|               |            |        | **MEMORY MAPPING**                                                      |
+| \$4800-\$4FFF |            |        | Last 2K of FPRA-RAM                                                     |
+| \$5000-\$5FFF |            |        | Switchable 4K of FPRA-RAM                                               |
+| \$6000-\$7FFF |            |        | Switchable 4K or 8K depending on the PRG-RAM banking mode               |
+|               |            |        | Can be assigned to PRG-RAM or PRG-ROM or FPRA-RAM                       |
+| \$8000-\$FFFF |            |        | Switchable 4K or 8K or 16K or 32K depending on the PRG-ROM banking mode |
+|               |            |        | Can be assigned to PRG-RAM or PRG-ROM                                   |

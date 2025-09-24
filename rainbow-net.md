@@ -9,7 +9,7 @@
 
 The Rainbow Net project is developed by [Antoine Gohin / Broke Studio](https://twitter.com/Broke_Studio).
 
-Thanks to :
+Special thanks to :
 
 - [Paul](https://twitter.com/InfiniteNesLive) / [InfiniteNesLives](http://www.infiniteneslives.com) for taking time to explain me lots of NES specific hardware stuff
 - Christian Gohin, my father, who helped me designing the first prototype board and fixing hardware issues

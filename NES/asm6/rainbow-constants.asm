@@ -2,11 +2,11 @@
 ; RAINBOW CONSTANTS
 
 ; Rainbow mapper registers
-RNBW_CONFIG    EQU $4170
-RNBW_RX        EQU $4171
-RNBW_TX        EQU $4172
-RNBW_RX_ADD    EQU $4173
-RNBW_TX_ADD    EQU $4174
+RNBW_CONFIG    EQU $4190
+RNBW_RX        EQU $4191
+RNBW_TX        EQU $4192
+RNBW_RX_ADD    EQU $4193
+RNBW_TX_ADD    EQU $4194
 
 ; commands to ESP
 

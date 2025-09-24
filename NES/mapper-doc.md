@@ -30,7 +30,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - CPU cycle counter
   - configurable IRQ
 - Nametables can be individually mapped to CIRAM/FPGA-RAM/CHR-RAM/CHR-ROM
-- Pattern tables can be mapped to CHR-RAM/CHR-ROM/FPGA-RAM
+- Pattern tables can be mapped to CHR-ROM/CHR-RAM/FPGA-RAM/CIRAM
 - Attribute Extended Mode allows each individual 8x8 tile to have its own palette setting
 - Background Extended Mode allows to address up to 16384 tiles
 - Sprite Extended Mode allows to address up to 65535 tiles
@@ -366,7 +366,8 @@ CCSW .BBB
 ++-------- Chip selector for pattern tables
             00: CHR-ROM
             01: CHR-RAM
-            1x: FPGA-RAM (4K mode is forced, \$0000-\$0FFF mirrored at \$1000-\$1FFF, banking settings are ignored)
+            10: FPGA-RAM (4K mode is forced, \$0000-\$0FFF mirrored at \$1000-\$1FFF, banking settings are ignored)
+            11: CIRAM
 
 Note: when using 1K and 512B CHR banking modes with 512K (or more) CHR-ROM,
       you also need to update the CHR bank upper bits using the appropriate registers (\$4130-\$413F)

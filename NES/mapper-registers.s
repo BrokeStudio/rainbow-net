@@ -106,6 +106,7 @@ MAP_FPGA_RAM_RW_INC     = $415E
 MAP_FPGA_RAM_RW_DATA    = $415F
 
 ; Miscellaneaous
+MAP_CPU_M2_PARITY       = $4157
 MAP_VERSION             = $4160
 MAP_IRQ_STATUS          = $4161
 

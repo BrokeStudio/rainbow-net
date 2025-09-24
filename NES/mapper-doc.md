@@ -28,6 +28,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
   - HBlank detection with status bit
   - M2 "jitter" counter
 - CPU cycle counter
+  - CPU cycle parity
   - configurable IRQ
 - Nametables can be individually mapped to CIRAM/FPGA-RAM/CHR-RAM/CHR-ROM
 - Pattern tables can be mapped to CHR-ROM/CHR-RAM/FPGA-RAM/CIRAM
@@ -873,6 +874,18 @@ CCCC CCCC
 ++++-++++- IRQ jitter counter
 ```
 
+### CPU cycle parity (\$4157, read-only)
+
+This bit is toggled on every falling edge of M2.
+
+```
+7  bit  0
+---- ----
+P... ....
+|
++--------- CPU cycle parity
+```
+
 ## CPU Cycle IRQ (\$4158-\$415B)
 
 This IRQ feature is a CPU cycle counting IRQ generator.  
@@ -1325,14 +1338,15 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$414F        | `LLLLLLLL` |   W    | CHR bank lower bits (mode 4)                                            |
 |               |            |        | **SCANLINE DETECTION IRQ**                                              |
 | \$4150        | `VVVVVVVV` |   W    | Latch value                                                             |
-| \$4151        | `HF.....I` |  R/W   | Enable / Status                                                         |
+| \$4150        | `CCCCCCCC` |   R    | Current scanline value                                                  |
 | \$4151        | `........` |   W    | Enable                                                                  |
 | \$4151        | `HF.....I` |   R    | Status (in-frame, HBlank, IRQ pending flags)                            |
 | \$4152        | `........` |   W    | Disable                                                                 |
 | \$4153        | `OOOOOOOO` |   W    | Offset                                                                  |
 | \$4154        | `CCCCCCCC` |   R    | CPU cycle jitter counter                                                |
-| \$4155-\$4157 |            |        | _Not used_                                                              |
+| \$4155-\$4156 |            |        | _Not used_                                                              |
 |               |            |        | **CPU CYCLE COUNTER IRQ**                                               |
+| \$4157        | `P.......` |   W    | CPU cycle parity                                                        |
 | \$4158        | `HHHHHHHH` |   W    | Latch high byte                                                         |
 | \$4159        | `LLLLLLLL` |   W    | Latch low byte                                                          |
 | \$415A        | `.....IEA` |   W    | Control                                                                 |

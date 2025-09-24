@@ -641,21 +641,16 @@ The bank upper bits are common to every sprite.
 
 You have access to 3 routines that allow you to easily clear/update OAM data without the need to write/update your own code in RAM:
 
-- **OAM slow clear** allows you to clear the sprites by writing \$FF for each sprite Y position only using registers $2003/$2004 (no OAM DMA)
 - **OAM slow update** allows you to update the sprites data for each sprite only using registers $2003/$2004 (no OAM DMA)
 - **OAM ext update** allows you to update the sprites extended bank automatically (when using Sprites Extended Mode)
 
 All you need to do is prepare your data in a specific RAM area (see routines details), and `jsr` to the corresponding routine start address.
 
-### OAM slow clear (\$4286, executable)
-
-To execute this routine, you just need to do `jsr $4286`.  
-This routine will write $FF for each sprite Y position using only registers $2003/2004, and uses **648** cycles including the final `rts` opcode.
-
 ### OAM slow update (\$4241, write-only and \$4280, executable)
 
 To execute this routine, you just need to do `jsr $4280`.  
-This routine will update the sprites OAM data using only registers $2003/2004, and uses **1548** cycles including the final `rts` opcode.
+This routine will update the sprites OAM data using only registers $2003/2004, and uses **1548** cycles including the final `rts` opcode.  
+OAM data must be written to the \$4800-\$4FFF area.
 
 Register \$4241 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM).
 
@@ -670,16 +665,26 @@ Register \$4241 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM
 ### OAM ext update (\$4242, write-only and \$4282, executable)
 
 To execute this routine, you just need to do `jsr $4282`.  
-This routine will write the extended bank data for each sprite (registers \$42xx), and uses **390** cycles including the final `rts` opcode.
+This routine will write the extended bank data for each sprite (registers \$42xx), and uses **390** cycles including the final `rts` opcode.  
+Extended bank data must be written to the \$4800-\$4FFF area, every 4 bytes.
 
-Register \$4242 sets the 64 bytes page to be used, starting at \$4800 (FPGA-RAM).
+For example:
+
+- set $4242 to 0
+- write sprite 0 extended bank value to \$4800
+- write sprite 1 extended bank value to \$4804
+- write sprite 2 extended bank value to \$4808
+
+and so on.
+
+Register \$4242 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM).
 
 ```
 7  bit  0
 ---- ----
-...P PPPP
-   | ||||
-   +-++++- OAM extended banks page index
+.... .PPP
+      |||
+      +++- OAM extended banks page index
 ```
 
 ## Window Split Mode (\$4170-\$4175)
@@ -1381,7 +1386,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4240        | `.....UUU` |   W    | Sprites global bank upper bits                                          |
 |               |            |        | **AUTO-GENERATED OAM PROCEDURES**                                       |
 | \$4241        | `.....PPP` |   W    | OAM slow update 256 bytes page index                                    |
-| \$4242        | `...PPPPP` |   W    | OAM ext update 64 bytes page                                            |
+| \$4242        | `.....PPP` |   W    | OAM ext update 256 bytes page                                           |
 | \$4243-\$427F |            |        | _Not used_                                                              |
 | \$4280        |            |   X    | OAM slow update                                                         |
 | \$4282        |            |   X    | OAM ext update                                                          |

@@ -149,9 +149,10 @@ MAP_SPR_EXT_LOWER_BANK  = $4200 ; $4200 ... $423F, one register for each sprite
 MAP_SPR_EXT_UPPER_BANK  = $4240
 
 ; Auto-generated OAM procedures
+MAP_OAM_SLOW_UPDATE_PAGE= $4241
+MAP_OAM_EXT_UPDATE_PAGE = $4242
 MAP_OAM_SLOW_UPDATE     = $4280
 MAP_OAM_EXT_UPDATE      = $4282
-MAP_OAM_SLOW_CLEAR      = $4286
 
 ; ################################################################################
 ; MAPPER FLAGS / MASKS

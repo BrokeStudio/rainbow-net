@@ -155,41 +155,43 @@ The Rainbow mapper provides:
 
 On power-up and reset, some registers are initialized/reset with specific values.
 
-| Register | Value | Note                                                                                    |
-| -------- | ----- | --------------------------------------------------------------------------------------- |
-|          |       | **PRG settings**                                                                        |
-| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)                            |
-| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it will address the first bank                |
-| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it will address the first bank                |
-|          |       | **CHR settings**                                                                        |
-| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                                    |
-|          |       | disable Sprite Extended Mode, disable Window Split Mode                                 |
-| \$4130   | \$00  | Set CHR-ROM 8K bank upper bits to $00 so it will address the first bank                 |
-| \$4140   | \$00  | Set CHR-ROM 8K bank lower bits to $00 so it will address the first bank                 |
-|          |       | **Nametables settings (horizontal mirroring using CIRAM)**                              |
-| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                                        |
-| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                                        |
-| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                                        |
-| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                                        |
-| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                               |
-| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                                           |
-| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                                           |
-| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                                           |
-| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                                           |
-| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                               |
-|          |       | **Auto-generated OAM procedures**                                                       |
-| \$4241   | \$07  | Set the OAM slow update page to 7, using $4F00 as the OAM shadow data source            |
-| \$4242   | \$1B  | Set the OAM ext update page to 27, using $4EC0 as the Sprite Extended Banks data source |
-|          |       | **Scanline IRQ settings**                                                               |
-| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                                           |
-| \$4153   | \$87  | Set scanline IRQ offset to 135                                                          |
-|          |       | **CPU Cycle IRQ settings**                                                              |
-| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                                          |
-|          |       | **Wi-Fi**                                                                               |
-| \$4190   | \$00  | Disable Wi-Fi                                                                           |
-|          |       | **Audio Expansion**                                                                     |
-| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable ZPCM                                              |
-| \$41AA   | \$0F  | Set default master volume                                                               |
+| Register | Value | Note                                                                                   |
+| -------- | ----- | -------------------------------------------------------------------------------------- |
+|          |       | **PRG settings**                                                                       |
+| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)                           |
+| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it will address the first bank               |
+| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it will address the first bank               |
+|          |       | **CHR settings**                                                                       |
+| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                                   |
+|          |       | disable Sprite Extended Mode, disable Window Split Mode                                |
+| \$4130   | \$00  | Set CHR 8K bank upper bits to $00 so it will address the first bank                    |
+| \$4140   | \$00  | Set CHR 8K bank lower bits to $00 so it will address the first bank                    |
+|          |       | **Nametables settings (horizontal mirroring using CIRAM)**                             |
+| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                                       |
+| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                                       |
+| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                                       |
+| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                                       |
+| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                              |
+| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                                          |
+| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                                          |
+| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                                          |
+| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                                          |
+| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                              |
+|          |       | **Auto-generated OAM procedures**                                                      |
+| \$4241   | \$07  | Set the OAM slow update page to 7, using $4F00 as the OAM shadow data source           |
+| \$4242   | \$06  | Set the OAM ext update page to 6, using $4E00 as the Sprite Extended Banks data source |
+|          |       | **Scanline IRQ settings**                                                              |
+| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                                          |
+| \$4153   | \$87  | Set scanline IRQ offset to 135                                                         |
+|          |       | **CPU Cycle IRQ settings**                                                             |
+| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                                         |
+|          |       | **Vector redirection**                                                                 |
+| \$416B   | \$00  | Disable NMI and IRQ vector redirection                                                 |
+|          |       | **Wi-Fi**                                                                              |
+| \$4190   | \$00  | Disable Wi-Fi                                                                          |
+|          |       | **Audio Expansion**                                                                    |
+| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable IPCM, disable EPSM                               |
+| \$41AA   | \$0F  | Set default master volume                                                              |
 
 ## PRG banking modes (\$4100, read/write)
 

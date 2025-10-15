@@ -876,9 +876,11 @@ CCCC CCCC
 ++++-++++- IRQ jitter counter
 ```
 
-### CPU cycle parity (\$4157, read-only)
+### CPU cycle parity (\$4157, read-write)
 
 This bit is toggled on every falling edge of M2.
+
+Read
 
 ```
 7  bit  0
@@ -887,6 +889,10 @@ P... ....
 |
 +--------- CPU cycle parity
 ```
+
+Write
+
+Any write to this register will reset the parity bit to 0.
 
 ## CPU Cycle IRQ (\$4158-\$415B)
 
@@ -1358,7 +1364,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4154        | `CCCCCCCC` |   R    | CPU cycle jitter counter                                                |
 | \$4155-\$4156 |            |        | _Not used_                                                              |
 |               |            |        | **CPU CYCLE COUNTER IRQ**                                               |
-| \$4157        | `P.......` |   W    | CPU cycle parity                                                        |
+| \$4157        | `P.......` |  R/W   | CPU cycle parity                                                        |
 | \$4158        | `HHHHHHHH` |   W    | Latch high byte                                                         |
 | \$4159        | `LLLLLLLL` |   W    | Latch low byte                                                          |
 | \$415A        | `.....IEA` |   W    | Control                                                                 |

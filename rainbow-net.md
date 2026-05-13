@@ -920,7 +920,7 @@ If no number of pings is passed, the default value will be 4.
 
 | Byte    | Description                                                                | Example           |
 | ------- | -------------------------------------------------------------------------- | ----------------- |
-| 0       | Length of the message (excluding this byte)                                | `1` or `2`        |
+| 0       | Length of the message (excluding this byte; 1 or 2)                        | `1` or `2`        |
 | 1       | Command ID (see commands to ESP)                                           | `SERVER_GET_PING` |
 |         | _**the next byte is required if you want to specify the number of pings**_ |                   |
 | 2 (opt) | Number of pings                                                            | `4`               |
@@ -962,11 +962,12 @@ This command sets the protocol to be use when talking to game server.
 
 **Protocol values:**
 
-| Value | PROTOCOL | Description |
-| ----- | -------- | ----------- |
-| 0     | TCP      | TCP         |
-| 1     | TCP_S    | TCP Secured |
-| 2     | UDP      | UDP         |
+| Value | PROTOCOL | Description     |
+| ----- | -------- | --------------- |
+| 0     | TCP      | TCP             |
+| 1     | TCP_S    | TCP Secured     |
+| 2     | UDP      | UDP             |
+| 3     | UDP_POOL | UDP Addess pool |
 
 [Back to command list](#Commands-overview)
 
@@ -983,29 +984,29 @@ This command returns the current server settings (hostname and port).
 
 **Returns:**
 
-| Byte | Description                                                         | Example         |
-| ---- | ------------------------------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)                         | `1` or more     |
-| 1    | Command ID (see commands from ESP)                                  | `HOST_SETTINGS` |
-|      | _**next bytes are returned if a server hostname AND port are set**_ |                 |
-| 2    | Port high byte                                                      | `0x0B`          |
-| 3    | Port low byte                                                       | `0xB8`          |
-| 4    | Hostname string length                                              | `15`            |
-| 5    | Hostname string                                                     | `G`             |
-| 6    | ...                                                                 | `A`             |
-| 7    | ...                                                                 | `M`             |
-| 8    | ...                                                                 | `E`             |
-| 9    | ...                                                                 | `.`             |
-| 10   | ...                                                                 | `S`             |
-| 11   | ...                                                                 | `E`             |
-| 12   | ...                                                                 | `R`             |
-| 13   | ...                                                                 | `V`             |
-| 14   | ...                                                                 | `E`             |
-| 15   | ...                                                                 | `R`             |
-| 16   | ...                                                                 | `.`             |
-| 17   | ...                                                                 | `N`             |
-| 18   | ...                                                                 | `E`             |
-| 19   | ...                                                                 | `T`             |
+| Byte | Description                                                         | Example           |
+| ---- | ------------------------------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte; 1 or 5+)                | `19`              |
+| 1    | Command ID (see commands from ESP)                                  | `SERVER_SETTINGS` |
+|      | _**next bytes are returned if a server hostname AND port are set**_ |                   |
+| 2    | Port high byte                                                      | `0x0B`            |
+| 3    | Port low byte                                                       | `0xB8`            |
+| 4    | Hostname string length                                              | `15`              |
+| 5    | Hostname string                                                     | `G`               |
+| 6    | ...                                                                 | `A`               |
+| 7    | ...                                                                 | `M`               |
+| 8    | ...                                                                 | `E`               |
+| 9    | ...                                                                 | `.`               |
+| 10   | ...                                                                 | `S`               |
+| 11   | ...                                                                 | `E`               |
+| 12   | ...                                                                 | `R`               |
+| 13   | ...                                                                 | `V`               |
+| 14   | ...                                                                 | `E`               |
+| 15   | ...                                                                 | `R`               |
+| 16   | ...                                                                 | `.`               |
+| 17   | ...                                                                 | `N`               |
+| 18   | ...                                                                 | `E`               |
+| 19   | ...                                                                 | `T`               |
 
 [Back to command list](#Commands-overview)
 
@@ -1016,23 +1017,25 @@ This command returns the current server settings (hostname and port).
 This command sets the current server settings (hostname and port).  
 It doesn't overwrite values set in the Rainbow Net configuration file.
 
-| Byte | Description                                 | Example               |
-| ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the message (excluding this byte) | `14`                  |
-| 1    | Command ID (see commands to ESP)            | `SERVER_SET_SETTINGS` |
-| 2    | Port high byte                              | `0x0B`                |
-| 3    | Port low byte                               | `0xB8`                |
-| 4    | Hostname string length                      | `10`                  |
-| 5    | Hostname string                             | `S`                   |
-| 6    | ...                                         | `E`                   |
-| 7    | ...                                         | `R`                   |
-| 8    | ...                                         | `V`                   |
-| 9    | ...                                         | `E`                   |
-| 10   | ...                                         | `R`                   |
-| 11   | ...                                         | `.`                   |
-| 12   | ...                                         | `N`                   |
-| 13   | ...                                         | `E`                   |
-| 14   | ...                                         | `T`                   |
+| Byte | Description                                                                  | Example               |
+| ---- | ---------------------------------------------------------------------------- | --------------------- |
+| 0    | Length of the message (excluding this byte; 1 or 5+)                         | `14`                  |
+| 1    | Command ID (see commands to ESP)                                             | `SERVER_SET_SETTINGS` |
+|      | _**next bytes are sent only to configure current server hostname and port**_ |                       |
+|      | _**set message length to 1 to clear current settings**_                      |                       |
+| 2    | Port high byte                                                               | `0x0B`                |
+| 3    | Port low byte                                                                | `0xB8`                |
+| 4    | Hostname string length (64 maximum)                                          | `10`                  |
+| 5    | Hostname string                                                              | `S`                   |
+| 6    | ...                                                                          | `E`                   |
+| 7    | ...                                                                          | `R`                   |
+| 8    | ...                                                                          | `V`                   |
+| 9    | ...                                                                          | `E`                   |
+| 10   | ...                                                                          | `R`                   |
+| 11   | ...                                                                          | `.`                   |
+| 12   | ...                                                                          | `N`                   |
+| 13   | ...                                                                          | `E`                   |
+| 14   | ...                                                                          | `T`                   |
 
 [Back to command list](#Commands-overview)
 
@@ -1049,30 +1052,30 @@ This command returns the server settings (hostname and port) from the Rainbow Ne
 
 **Returns:**
 
-| Byte | Description                                                  | Example         |
-| ---- | ------------------------------------------------------------ | --------------- |
-| 0    | Length of the message (excluding this byte)                  | `1` or more     |
-| 1    | Command ID (see commands from ESP)                           | `HOST_SETTINGS` |
-|      | _**next bytes are returned if a server hostname**_           |                 |
-|      | _**AND port are set in the Rainbow Net configuration file**_ |                 |
-| 2    | Port high byte                                               | `0x0B`          |
-| 3    | Port low byte                                                | `0xB8`          |
-| 4    | Hostname string length                                       | `15`            |
-| 5    | Hostname string                                              | `G`             |
-| 6    | ...                                                          | `A`             |
-| 7    | ...                                                          | `M`             |
-| 8    | ...                                                          | `E`             |
-| 9    | ...                                                          | `.`             |
-| 10   | ...                                                          | `S`             |
-| 11   | ...                                                          | `E`             |
-| 12   | ...                                                          | `R`             |
-| 13   | ...                                                          | `V`             |
-| 14   | ...                                                          | `E`             |
-| 15   | ...                                                          | `R`             |
-| 16   | ...                                                          | `.`             |
-| 17   | ...                                                          | `N`             |
-| 18   | ...                                                          | `E`             |
-| 19   | ...                                                          | `T`             |
+| Byte | Description                                                  | Example           |
+| ---- | ------------------------------------------------------------ | ----------------- |
+| 0    | Length of the message (excluding this byte; 1 or 5+)         | `19`              |
+| 1    | Command ID (see commands from ESP)                           | `SERVER_SETTINGS` |
+|      | _**next bytes are returned if a server hostname**_           |                   |
+|      | _**AND port are set in the Rainbow Net configuration file**_ |                   |
+| 2    | Port high byte                                               | `0x0B`            |
+| 3    | Port low byte                                                | `0xB8`            |
+| 4    | Hostname string length                                       | `15`              |
+| 5    | Hostname string                                              | `G`               |
+| 6    | ...                                                          | `A`               |
+| 7    | ...                                                          | `M`               |
+| 8    | ...                                                          | `E`               |
+| 9    | ...                                                          | `.`               |
+| 10   | ...                                                          | `S`               |
+| 11   | ...                                                          | `E`               |
+| 12   | ...                                                          | `R`               |
+| 13   | ...                                                          | `V`               |
+| 14   | ...                                                          | `E`               |
+| 15   | ...                                                          | `R`               |
+| 16   | ...                                                          | `.`               |
+| 17   | ...                                                          | `N`               |
+| 18   | ...                                                          | `E`               |
+| 19   | ...                                                          | `T`               |
 
 [Back to command list](#Commands-overview)
 
@@ -1084,13 +1087,13 @@ This command sets the server settings (hostname and port) to the Rainbow Net con
 
 | Byte | Description                                                          | Example                     |
 | ---- | -------------------------------------------------------------------- | --------------------------- |
-| 0    | Length of the message (excluding this byte)                          | `1` or `6+`                 |
+| 0    | Length of the message (excluding this byte; 1 or 5+)                 | `19`                        |
 | 1    | Command ID (see commands to ESP)                                     | `SERVER_SET_SAVED_SETTINGS` |
 |      | _**next bytes are sent only to configure server hostname and port**_ |                             |
 |      | _**set message length to 1 to clear saved settings**_                |                             |
 | 2    | Port high byte                                                       | `0x0B`                      |
 | 3    | Port low byte                                                        | `0xB8`                      |
-| 4    | Hostname string length                                               | `15`                        |
+| 4    | Hostname string length (64 maximum)                                  | `15`                        |
 | 5    | Hostname string                                                      | `G`                         |
 | 6    | ...                                                                  | `A`                         |
 | 7    | ...                                                                  | `M`                         |

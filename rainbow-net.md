@@ -721,19 +721,19 @@ This command asks the aceess point SSID.
 
 **Returns:**
 
-| Byte | Description                                                  | Example     |
-| ---- | ------------------------------------------------------------ | ----------- |
-| 0    | Length of the message (excluding this byte)                  | `1` or more |
-| 1    | Command ID (see commands from ESP)                           | `SSID`      |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |             |
-| 2    | SSID string length                                           | `7`         |
-| 3    | SSID string                                                  | `M`         |
-| 4    | ...                                                          | `Y`         |
-| 5    | ...                                                          | `_`         |
-| 6    | ...                                                          | `S`         |
-| 7    | ...                                                          | `S`         |
-| 8    | ...                                                          | `I`         |
-| 9    | ...                                                          | `D`         |
+| Byte | Description                                                  | Example |
+| ---- | ------------------------------------------------------------ | ------- |
+| 0    | Length of the message (excluding this byte; 1 to 34)         | `9`     |
+| 1    | Command ID (see commands from ESP)                           | `SSID`  |
+|      | _**the next bytes are returned only if Wi-Fi is connected**_ |         |
+| 2    | SSID string length (max 32)                                  | `7`     |
+| 3    | SSID string                                                  | `M`     |
+| 4    | ...                                                          | `Y`     |
+| 5    | ...                                                          | `_`     |
+| 6    | ...                                                          | `S`     |
+| 7    | ...                                                          | `S`     |
+| 8    | ...                                                          | `I`     |
+| 9    | ...                                                          | `D`     |
 
 [Back to command list](#Commands-overview)
 

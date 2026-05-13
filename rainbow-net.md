@@ -1313,32 +1313,31 @@ This command returns the result of the last scan.
 This command returns the network details (SSID, Channel, RSSI, hidden state, encryption type) of a scanned network referenced by the passed ID.  
 An empty message will be sent if the passed ID is not valid.
 
-| Byte | Description                                 | Example               |
-| ---- | ------------------------------------------- | --------------------- |
-| 0    | Length of the message (excluding this byte) | `2`                   |
-| 1    | Command ID (see commands to ESP)            | `NETWORK_GET_DETAILS` |
-| 2    | Network ID                                  | `1`                   |
+| Byte | Description                                 | Example                       |
+| ---- | ------------------------------------------- | ----------------------------- |
+| 0    | Length of the message (excluding this byte) | `2`                           |
+| 1    | Command ID (see commands to ESP)            | `NETWORK_GET_SCANNED_DETAILS` |
+| 2    | Network ID                                  | `1`                           |
 
 **Returns:**
 
-| Byte | Description                                                    | Example                                       |
-| ---- | -------------------------------------------------------------- | --------------------------------------------- |
-| 0    | Length of the message (excluding this byte)                    | `1` or more                                   |
-|      |                                                                | (max is 43 because SSID is 32 characters max) |
-| 1    | Command ID (see commands from ESP)                             | `NETWORK_GET_SCANNED_DETAILS`                 |
-|      | _**next bytes are sent only if the network ID sent is valid**_ |                                               |
-| 2    | Encryption type                                                | `4` (see below for details)                   |
-| 3    | RSSI (absolute value)                                          | `0x47` (means -70 DbM)                        |
-| 7    | Channel high byte                                              | `0x01`                                        |
-| 5    | Channel                                                        | `0x00`                                        |
-| 6    | Channel                                                        | `0x00`                                        |
-| 4    | Channel low byte                                               | `0x00`                                        |
-| 8    | Hidden? (0: no / 1: yes)                                       | `0`                                           |
-| 9    | SSID string length                                             | `4`                                           |
-| 10   | SSID string                                                    | `S`                                           |
-| 11   | ...                                                            | `S`                                           |
-| 12   | ...                                                            | `I`                                           |
-| 13   | ...                                                            | `D`                                           |
+| Byte | Description                                                    | Example                     |
+| ---- | -------------------------------------------------------------- | --------------------------- |
+| 0    | Length of the message (excluding this byte; 1 to 41)           | `13`                        |
+| 1    | Command ID (see commands from ESP)                             | `NETWORK_SCANNED_DETAILS`   |
+|      | _**next bytes are sent only if the network ID sent is valid**_ |                             |
+| 2    | Encryption type                                                | `4` (see below for details) |
+| 3    | RSSI (absolute value)                                          | `0x47` (means -70 DbM)      |
+| 7    | Channel high byte                                              | `0x01`                      |
+| 5    | Channel                                                        | `0x00`                      |
+| 6    | Channel                                                        | `0x00`                      |
+| 4    | Channel low byte                                               | `0x00`                      |
+| 8    | Hidden? (0: no / 1: yes)                                       | `0`                         |
+| 9    | SSID string length (max 32)                                    | `4`                         |
+| 10   | SSID string                                                    | `S`                         |
+| 11   | ...                                                            | `S`                         |
+| 12   | ...                                                            | `I`                         |
+| 13   | ...                                                            | `D`                         |
 
 **Encryption types:**
 
@@ -1393,17 +1392,17 @@ This command returns the SSID and password of the requested configuration networ
 
 | Byte | Description                                                | Example                      |
 | ---- | ---------------------------------------------------------- | ---------------------------- |
-| 0    | Length of the message (excluding this byte)                | `1` or more                  |
+| 0    | Length of the message (excluding this byte; 1 to 100)      | `16`                         |
 | 1    | Command ID (see commands from ESP)                         | `NETWORK_REGISTERED_DETAILS` |
 |      | _**next bytes are sent only if the requested network ID**_ |                              |
 |      | _**is valid and a network registered**_                    |                              |
 | 2    | Network active flag (0: inactive / 1: active)              | `0`                          |
-| 3    | SSID string length                                         | `4`                          |
+| 3    | SSID string length (max 32)                                | `4`                          |
 | 4    | SSID string                                                | `S`                          |
 | 5    | ...                                                        | `S`                          |
 | 6    | ...                                                        | `I`                          |
 | 7    | ...                                                        | `D`                          |
-| 8    | PASSWORD string length                                     | `8`                          |
+| 8    | PASSWORD string length (max 64)                            | `8`                          |
 | 9    | PASSWORD string                                            | `P`                          |
 | 10   | ...                                                        | `A`                          |
 | 11   | ...                                                        | `S`                          |
@@ -1425,26 +1424,26 @@ This command registers a network in one of the spots.
 Current ESP Wi-Fi settings will be reset to take in account modification immediately.  
 Only one network can be active at a time.
 
-| Byte | Description                                   | Example            |
-| ---- | --------------------------------------------- | ------------------ |
-| 0    | Length of the message (excluding this byte)   | `17`               |
-| 1    | Command ID (see commands to ESP)              | `NETWORK_REGISTER` |
-| 2    | Network ID (0 or 1 or 2)                      | `0`                |
-| 3    | Network active flag (0: inactive / 1: active) | `0`                |
-| 4    | SSID string length                            | `4`                |
-| 5    | SSID string                                   | `S`                |
-| 6    | ...                                           | `S`                |
-| 7    | ...                                           | `I`                |
-| 8    | ...                                           | `D`                |
-| 9    | PASSWORD string length                        | `8`                |
-| 10   | PASSWORD string                               | `P`                |
-| 11   | ...                                           | `A`                |
-| 12   | ...                                           | `S`                |
-| 13   | ...                                           | `S`                |
-| 14   | ...                                           | `W`                |
-| 15   | ...                                           | `O`                |
-| 16   | ...                                           | `R`                |
-| 17   | ...                                           | `D`                |
+| Byte | Description                                           | Example            |
+| ---- | ----------------------------------------------------- | ------------------ |
+| 0    | Length of the message (excluding this byte; 7 to 101) | `17`               |
+| 1    | Command ID (see commands to ESP)                      | `NETWORK_REGISTER` |
+| 2    | Network ID (0 or 1 or 2)                              | `0`                |
+| 3    | Network active flag (0: inactive / 1: active)         | `0`                |
+| 4    | SSID string length (max 32)                           | `4`                |
+| 5    | SSID string                                           | `S`                |
+| 6    | ...                                                   | `S`                |
+| 7    | ...                                                   | `I`                |
+| 8    | ...                                                   | `D`                |
+| 9    | PASSWORD string length (max 64)                       | `8`                |
+| 10   | PASSWORD string                                       | `P`                |
+| 11   | ...                                                   | `A`                |
+| 12   | ...                                                   | `S`                |
+| 13   | ...                                                   | `S`                |
+| 14   | ...                                                   | `W`                |
+| 15   | ...                                                   | `O`                |
+| 16   | ...                                                   | `R`                |
+| 17   | ...                                                   | `D`                |
 
 **Notes:**
 

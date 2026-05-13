@@ -29,6 +29,7 @@ TX_ADD    = $4194
   WIFI_GET_MAC_ADDRESS = 59             ; Get Wi-Fi mac address
   WIFI_GET_CONFIG = 12                  ; Get Wi-Fi station / Access Point / Web Server config
   WIFI_SET_CONFIG = 13                  ; Set Wi-Fi station / Access Point / Web Server config
+  WIFI_CONNECT = 60                     ; Connect to Wi-Fi if possible
 
 ; ACESS POINT CMDS
   AP_GET_SSID = 14                      ; Get Access Point network SSID
@@ -162,7 +163,6 @@ TX_ADD    = $4194
 
 ; ESP Wi-Fi status
 .enum WIFI_ESP_STATUS
-  NO_SHIELD = 255
   IDLE_STATUS = 0
   NO_SSID_AVAIL
   SCAN_COMPLETED
@@ -230,6 +230,7 @@ NUM_FILES = 64
   ERROR_WHILE_DELETING_FILE
   FILE_NOT_FOUND
   INVALID_PATH_OR_FILE
+  MALFORMED_MESSAGE
 .endenum
 
 ; FILE_DOWNLOAD result codes
@@ -240,6 +241,7 @@ NUM_FILES = 64
   UNKNOWN_OR_UNSUPPORTED_PROTOCOL
   NETWORK_ERROR
   HTTP_STATUS_NOT_IN_2XX
+  MALFORMED_MESSAGE
 .endenum
 
 ; FILE_DOWNLOAD network error codes

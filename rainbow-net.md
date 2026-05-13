@@ -810,7 +810,9 @@ This command returns a random byte between 0 and 255.
 
 ### RND_GET_BYTE_RANGE
 
-This command returns a random byte between custom min and max values.
+This command returns a random byte between custom min and max values.  
+If the min value is greater than the max value, then the values will be reversed.  
+A malformed command will always return 0.
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |
@@ -856,6 +858,8 @@ This command returns a random word between 0 and 65535.
 ### RND_GET_WORD_RANGE
 
 This command returns a random word between custom min and max values.
+If the min value is greater than the max value, then the values will be reversed.  
+A malformed command will always return 0.
 
 | Byte | Description                                 | Example              |
 | ---- | ------------------------------------------- | -------------------- |

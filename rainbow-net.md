@@ -1188,25 +1188,25 @@ This command clears the UDP address pool.
 
 This command adds an IP address to the UDP address pool.  
 If the address is already registered, then it's not added again.  
-You can register a maximum of 16 addresses.
-If the address string length is greater than 15, then the command will be ignored.
+You can register a maximum of 16 addresses.  
+If the command is incorrect, then the command will be ignored.
 
-| Byte | Description                                 | Example             |
-| ---- | ------------------------------------------- | ------------------- |
-| 0    | Length of the message (excluding this byte) | `13`                |
-| 1    | Command ID (see commands to ESP)            | `UDP_ADDR_POOL_ADD` |
-| 2    | Port high byte                              | `0x0B`              |
-| 3    | Port low byte                               | `0xB8`              |
-| 4    | IP address string length                    | `9`                 |
-| 5    | IP address string                           | `2`                 |
-| 6    | ...                                         | `.`                 |
-| 7    | ...                                         | `3`                 |
-| 8    | ...                                         | `.`                 |
-| 9    | ...                                         | `7`                 |
-| 10   | ...                                         | `.`                 |
-| 11   | ...                                         | `1`                 |
-| 12   | ...                                         | `1`                 |
-| 13   | ...                                         | `7`                 |
+| Byte | Description                                           | Example             |
+| ---- | ----------------------------------------------------- | ------------------- |
+| 0    | Length of the message (excluding this byte; 10 to 19) | `13`                |
+| 1    | Command ID (see commands to ESP)                      | `UDP_ADDR_POOL_ADD` |
+| 2    | Port high byte                                        | `0x0B`              |
+| 3    | Port low byte                                         | `0xB8`              |
+| 4    | IP address string length                              | `9`                 |
+| 5    | IP address string                                     | `2`                 |
+| 6    | ...                                                   | `.`                 |
+| 7    | ...                                                   | `3`                 |
+| 8    | ...                                                   | `.`                 |
+| 9    | ...                                                   | `7`                 |
+| 10   | ...                                                   | `.`                 |
+| 11   | ...                                                   | `1`                 |
+| 12   | ...                                                   | `1`                 |
+| 13   | ...                                                   | `7`                 |
 
 [Back to command list](#Commands-overview)
 
@@ -1215,7 +1215,7 @@ If the address string length is greater than 15, then the command will be ignore
 ### UDP_ADDR_POOL_REMOVE
 
 This command removes an IP address from the UDP address pool.  
-If the address string length is greater than 15, then the command will be ignored.
+If the command is incorrect, then the command will be ignored.
 
 | Byte | Description                                 | Example                |
 | ---- | ------------------------------------------- | ---------------------- |

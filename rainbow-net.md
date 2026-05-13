@@ -48,6 +48,7 @@ Special thanks to :
     - [WIFI_GET_MAC_ADDRESS](#wifi_get_mac_address)
     - [WIFI_GET_CONFIG](#wifi_get_config)
     - [WIFI_SET_CONFIG](#wifi_set_config)
+    - [WIFI_CONNECT](#wifi_connect)
     - [AP_GET_SSID](#ap_get_ssid)
     - [AP_GET_IP_ADDRESS](#ap_get_ip_address)
     - [RND_GET_BYTE](#rnd_get_byte)
@@ -149,6 +150,7 @@ Please check console folders for specific example depending on the system.
 | 59    | [WIFI_GET_MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                     | Get Wi-Fi mac address                                                                 |
 | 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                                          |
 | 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                                          |
+| 60    | [WIFI_CONNECT](#WIFI_CONNECT)                                     | Connect to Wi-Fi if possible                                                          |
 |       |                                                                   | **ACCESS POINT CMDS**                                                                 |
 | 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                                         |
 | 15    | [AP_GET_IP_ADDRESS](#AP_GET_IP_ADDRESS)                           | Get Access Point IP address                                                           |
@@ -520,7 +522,7 @@ This command asks the Wi-Fi status.
 
 ### WIFI_GET_SSID
 
-This command returns the Wi-Fi SSID (if active).
+This command returns the Wi-Fi SSID (if Wi-Fi is enabled and connected).
 
 | Byte | Description                                 | Example         |
 | ---- | ------------------------------------------- | --------------- |
@@ -529,19 +531,19 @@ This command returns the Wi-Fi SSID (if active).
 
 **Returns:**
 
-| Byte | Description                                                  | Example     |
-| ---- | ------------------------------------------------------------ | ----------- |
-| 0    | Length of the message (excluding this byte)                  | `1` or more |
-| 1    | Command ID (see commands from ESP)                           | `SSID`      |
-|      | _**the next bytes are returned only if Wi-Fi is connected**_ |             |
-| 2    | SSID string length                                           | `7`         |
-| 3    | SSID string                                                  | `M`         |
-| 4    | ...                                                          | `Y`         |
-| 5    | ...                                                          | `_`         |
-| 6    | ...                                                          | `S`         |
-| 7    | ...                                                          | `S`         |
-| 8    | ...                                                          | `I`         |
-| 9    | ...                                                          | `D`         |
+| Byte | Description                                                              | Example |
+| ---- | ------------------------------------------------------------------------ | ------- |
+| 0    | Length of the message (excluding this byte; 1 to 34)                     | `9`     |
+| 1    | Command ID (see commands from ESP)                                       | `SSID`  |
+|      | _**the next bytes are returned only if Wi-Fi is enabled and connected**_ |         |
+| 2    | SSID string length (max 32)                                              | `7`     |
+| 3    | SSID string                                                              | `M`     |
+| 4    | ...                                                                      | `Y`     |
+| 5    | ...                                                                      | `_`     |
+| 6    | ...                                                                      | `S`     |
+| 7    | ...                                                                      | `S`     |
+| 8    | ...                                                                      | `I`     |
+| 9    | ...                                                                      | `D`     |
 
 [Back to command list](#Commands-overview)
 
@@ -549,7 +551,7 @@ This command returns the Wi-Fi SSID (if active).
 
 ### WIFI_GET_IP_ADDRESS
 
-This command asks for the Wi-Fi IP address (if Wi-Fi is active and connected).  
+This command asks for the Wi-Fi IP address (if Wi-Fi is enabled and connected).  
 Returned message will use string format if the output format value is not provided or if provided value is different than 0 or 1.
 
 | Byte    | Description                                                              | Example               |
@@ -561,24 +563,24 @@ Returned message will use string format if the output format value is not provid
 
 **Returns (string mode):**
 
-| Byte | Description                                                             | Example      |
-| ---- | ----------------------------------------------------------------------- | ------------ |
-| 0    | Length of the message (excluding this byte)                             | `1` or more  |
-| 1    | Command ID (see commands from ESP)                                      | `IP_ADDRESS` |
-|      | _**the next bytes are returned only if Wi-Fi is active and connected**_ |              |
-| 2    | IP address string length                                                | `12`         |
-| 3    | IP address string                                                       | `1`          |
-| 4    | ...                                                                     | `9`          |
-| 5    | ...                                                                     | `2`          |
-| 6    | ...                                                                     | `.`          |
-| 7    | ...                                                                     | `1`          |
-| 8    | ...                                                                     | `6`          |
-| 9    | ...                                                                     | `8`          |
-| 10   | ...                                                                     | `.`          |
-| 11   | ...                                                                     | `1`          |
-| 12   | ...                                                                     | `.`          |
-| 13   | ...                                                                     | `2`          |
-| 14   | ...                                                                     | `0`          |
+| Byte | Description                                                              | Example      |
+| ---- | ------------------------------------------------------------------------ | ------------ |
+| 0    | Length of the message (excluding this byte)                              | `1` or more  |
+| 1    | Command ID (see commands from ESP)                                       | `IP_ADDRESS` |
+|      | _**the next bytes are returned only if Wi-Fi is enabled and connected**_ |              |
+| 2    | IP address string length                                                 | `12`         |
+| 3    | IP address string                                                        | `1`          |
+| 4    | ...                                                                      | `9`          |
+| 5    | ...                                                                      | `2`          |
+| 6    | ...                                                                      | `.`          |
+| 7    | ...                                                                      | `1`          |
+| 8    | ...                                                                      | `6`          |
+| 9    | ...                                                                      | `8`          |
+| 10   | ...                                                                      | `.`          |
+| 11   | ...                                                                      | `1`          |
+| 12   | ...                                                                      | `.`          |
+| 13   | ...                                                                      | `2`          |
+| 14   | ...                                                                      | `0`          |
 
 **Returns (bytes mode):**
 
@@ -686,6 +688,22 @@ This command sets the Wi-Fi Station, Access Point and Web Server configuration /
 |      | a: access point status (0: disable / 1: enable)  |                   |
 |      | w: web server status (0: disable / 1: enable)    |                   |
 |      | z: reserved for future use, must be set to zero  |                   |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### WIFI_CONNECT
+
+This command tries to connect to a registered Wi-Fi network.  
+Wi-Fi is supposed to automatically connect on startup if an active registered network is configured, but this command can be used after a Wi-Fi connection error.  
+If no network is set or if the Wi-Fi station is disabled (see [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)), then no connection attempt will be started.  
+This command is asynchronous; use [WIFI_GET_STATUS](#WIFI_GET_STATUS) to poll the connection state and last error.
+
+| Byte | Description                                 | Example        |
+| ---- | ------------------------------------------- | -------------- |
+| 0    | Length of the message (excluding this byte) | `1`            |
+| 1    | Command ID (see commands to ESP)            | `WIFI_CONNECT` |
 
 [Back to command list](#Commands-overview)
 

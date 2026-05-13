@@ -80,6 +80,7 @@ Special thanks to :
     - [NETWORK_SET_ACTIVE](#network_set_active)
   - [File commands details](#file-commands-details)
     - [File paths](#file-paths)
+    - [File config](#file-config)
     - [FILE_OPEN](#file_open)
     - [FILE_CLOSE](#file_close)
     - [FILE_STATUS](#file_status)
@@ -1496,7 +1497,7 @@ Files management can be a bit tricky.
 They can be accessed in **auto mode** or in **manual mode**.
 
 - **auto mode** allows you to use predefined folders and files using simple IDs
-- **manual mode** allows you to use real path and file names
+- **manual mode** allows you to use real path and file names; please note that each directory or file name must use the short filename (8.3) format
 
 **Auto mode** is recommended since it makes messages shorter and easier to read, however **manual mode** can be useful in specific situations.
 
@@ -1510,6 +1511,15 @@ File paths for **auto mode** are defined as follow.
 | 1     | ROMS       | Can be used to dump/flash ROMS, patches     |
 | 2     | USER       | Can be used to read/write data for the user |
 
+### File config
+
+| Description                                     | Format      |
+| ----------------------------------------------- | ----------- |
+| Config                                          | `%zzzzzzdm` |
+| m: access mode (0: auto / 1: manual)            |             |
+| d: drive (0: ESP Flash / 1: SD card)            |             |
+| z: reserved for future use, must be set to zero |             |
+
 ### FILE_OPEN
 
 This command opens a file as the working file.  
@@ -1520,14 +1530,11 @@ If the same file is already opened, then the file cursor will be reset to 0.
 
 Message first bytes:
 
-| Byte | Description                                     | Example     |
-| ---- | ----------------------------------------------- | ----------- |
-| 0    | Length of the message (excluding this byte)     | `4` or more |
-| 1    | Command ID (see commands to ESP)                | `FILE_OPEN` |
-| 2    | Config                                          | `%zzzzzzdm` |
-|      | m: access mode (0: auto / 1: manual)            |             |
-|      | d: drive (0: ESP Flash / 1: SD card)            |             |
-|      | z: reserved for future use, must be set to zero |             |
+| Byte | Description                                 | Example     |
+| ---- | ------------------------------------------- | ----------- |
+| 0    | Length of the message (excluding this byte) | `4` or more |
+| 1    | Command ID (see commands to ESP)            | `FILE_OPEN` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm` |
 
 Using **auto mode**:
 
@@ -1594,10 +1601,7 @@ Message first bytes:
 | 1    | Command ID (see commands from ESP)                              | `FILE_STATUS` |
 | 2    | File status (0: no file opened / 1: a file is currently opened) | `0` or `1`    |
 |      | _**next bytes are sent only if a file is currently opened**_    |               |
-| 3    | Config                                                          | `%zzzzzzdm`   |
-|      | m: access mode (0: auto / 1: manual)                            |               |
-|      | d: drive (0: ESP Flash / 1: SD card)                            |               |
-|      | z: reserved for future use, must be set to zero                 |               |
+| 3    | Config (see [FILE_CONFIG](#File-config))                        | `%zzzzzzdm`   |
 
 If file is opened in **auto mode**:
 
@@ -1637,14 +1641,11 @@ It returns 1 if the file exists, or 0 if it doesn't.
 
 Message first bytes:
 
-| Byte | Description                                     | Example       |
-| ---- | ----------------------------------------------- | ------------- |
-| 0    | Length of the message (excluding this byte)     | `4` or more   |
-| 1    | Command ID (see commands to ESP)                | `FILE_EXISTS` |
-| 2    | Config                                          | `%zzzzzzdm`   |
-|      | m: access mode (0: auto / 1: manual)            |               |
-|      | d: drive (0: ESP Flash / 1: SD card)            |               |
-|      | z: reserved for future use, must be set to zero |               |
+| Byte | Description                                 | Example       |
+| ---- | ------------------------------------------- | ------------- |
+| 0    | Length of the message (excluding this byte) | `4` or more   |
+| 1    | Command ID (see commands to ESP)            | `FILE_EXISTS` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`   |
 
 Using **auto mode**:
 
@@ -1657,20 +1658,20 @@ Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
-| 4    | File string length | `13`    |
-| 5    | File string        | `p`     |
-| 6    | ...                | `a`     |
-| 7    | ...                | `t`     |
-| 8    | ...                | `h`     |
-| 9    | ...                | `/`     |
-| 10   | ...                | `f`     |
-| 11   | ...                | `i`     |
-| 12   | ...                | `l`     |
-| 13   | ...                | `e`     |
-| 14   | ...                | `.`     |
-| 15   | ...                | `e`     |
-| 16   | ...                | `x`     |
-| 17   | ...                | `t`     |
+| 3    | File string length | `13`    |
+| 4    | File string        | `p`     |
+| 5    | ...                | `a`     |
+| 6    | ...                | `t`     |
+| 7    | ...                | `h`     |
+| 8    | ...                | `/`     |
+| 9    | ...                | `f`     |
+| 10   | ...                | `i`     |
+| 11   | ...                | `l`     |
+| 12   | ...                | `e`     |
+| 13   | ...                | `.`     |
+| 14   | ...                | `e`     |
+| 15   | ...                | `x`     |
+| 16   | ...                | `t`     |
 
 **Returns:**
 
@@ -1686,19 +1687,16 @@ Using **manual mode**:
 
 ### FILE_DELETE
 
-This command deletes (if exists) the file corresponding of the passed index.  
+This command deletes the corresponding file passed if it exists.  
 It can be used in auto mode (using predefined path index and filename index) or in manual mode (using path/filename string).
 
 Message first bytes:
 
-| Byte | Description                                     | Example       |
-| ---- | ----------------------------------------------- | ------------- |
-| 0    | Length of the message (excluding this byte)     | `4` or more   |
-| 1    | Command ID (see commands to ESP)                | `FILE_DELETE` |
-| 2    | Config                                          | `%zzzzzzdm`   |
-|      | m: access mode (0: auto / 1: manual)            |               |
-|      | d: drive (0: ESP Flash / 1: SD card)            |               |
-|      | z: reserved for future use, must be set to zero |               |
+| Byte | Description                                 | Example       |
+| ---- | ------------------------------------------- | ------------- |
+| 0    | Length of the message (excluding this byte) | `4` or more   |
+| 1    | Command ID (see commands to ESP)            | `FILE_DELETE` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`   |
 
 Using **auto mode**:
 
@@ -1711,20 +1709,20 @@ Using **manual mode**:
 
 | Byte | Description        | Example |
 | ---- | ------------------ | ------- |
-| 4    | File string length | `13`    |
-| 5    | File string        | `p`     |
-| 6    | ...                | `a`     |
-| 7    | ...                | `t`     |
-| 8    | ...                | `h`     |
-| 9    | ...                | `/`     |
-| 10   | ...                | `f`     |
-| 11   | ...                | `i`     |
-| 12   | ...                | `l`     |
-| 13   | ...                | `e`     |
-| 14   | ...                | `.`     |
-| 15   | ...                | `e`     |
-| 16   | ...                | `x`     |
-| 17   | ...                | `t`     |
+| 3    | File string length | `13`    |
+| 4    | File string        | `p`     |
+| 5    | ...                | `a`     |
+| 6    | ...                | `t`     |
+| 7    | ...                | `h`     |
+| 8    | ...                | `/`     |
+| 9    | ...                | `f`     |
+| 10   | ...                | `i`     |
+| 11   | ...                | `l`     |
+| 12   | ...                | `e`     |
+| 13   | ...                | `.`     |
+| 14   | ...                | `e`     |
+| 15   | ...                | `x`     |
+| 16   | ...                | `t`     |
 
 **Returns:**
 
@@ -1741,7 +1739,8 @@ Using **manual mode**:
 | 0     | File successfully deleted             |
 | 1     | Error while trying to delete the file |
 | 2     | File does not exist                   |
-| 3     | Invalid path index and/or file index  |
+| 3     | Invalid path/file index/name          |
+| 4     | Malformed message                     |
 
 [Back to command list](#Commands-overview)
 
@@ -1775,7 +1774,7 @@ If there is no working file currently open, number of bytes will be 0.
 | ---- | ------------------------------------------- | ----------- |
 | 0    | Length of the message (excluding this byte) | `2`         |
 | 1    | Command ID (see commands to ESP)            | `FILE_READ` |
-| 2    | Number of bytes to read (minimum 1)         | `64`        |
+| 2    | Number of bytes to read (min: 1, max: 253)  | `64`        |
 
 **Returns:**
 
@@ -1836,14 +1835,11 @@ It can be used in auto mode (using predefined path index and filename index) or 
 
 Message first bytes:
 
-| Byte | Description                                     | Example      |
-| ---- | ----------------------------------------------- | ------------ |
-| 0    | Length of the message (excluding this byte)     | `4` or more  |
-| 1    | Command ID (see commands to ESP)                | `FILE_COUNT` |
-| 2    | Config                                          | `%zzzzzzdm`  |
-|      | m: access mode (0: auto / 1: manual)            |              |
-|      | d: drive (0: ESP Flash / 1: SD card)            |              |
-|      | z: reserved for future use, must be set to zero |              |
+| Byte | Description                                 | Example                          |
+| ---- | ------------------------------------------- | -------------------------------- |
+| 0    | Length of the message (excluding this byte) | `3` (auto), `4` or more (manual) |
+| 1    | Command ID (see commands to ESP)            | `FILE_COUNT`                     |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`                      |
 
 Using **auto mode**:
 
@@ -1880,14 +1876,11 @@ It can be used in auto mode (using predefined path index) or in manual mode (usi
 
 Message first bytes:
 
-| Byte | Description                                     | Example         |
-| ---- | ----------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)     | `3` or more     |
-| 1    | Command ID (see commands to ESP)                | `FILE_GET_LIST` |
-| 2    | Config                                          | `%zzzzzzdm`     |
-|      | m: access mode (0: auto / 1: manual)            |                 |
-|      | d: drive (0: ESP Flash / 1: SD card)            |                 |
-|      | z: reserved for future use, must be set to zero |                 |
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `3` or more     |
+| 1    | Command ID (see commands to ESP)            | `FILE_GET_LIST` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`     |
 
 Using **auto mode**:
 
@@ -1915,6 +1908,7 @@ Using **manual mode**:
 **Notes:**
 
 - _path string_ leading and trailing `/` are not mandatory
+- _page size_ is capped to 64 in auto mode and 19 in manual mode
 
 **Returns:**
 
@@ -1969,11 +1963,12 @@ Using **manual mode**:
 
 ### FILE_GET_FREE_ID
 
-Get first free file ID in a specific predefined path.
+Get first free file ID in a specific predefined path.  
+If the destination is greater than 1, then 0 (ESP Flash) will be used.
 
 | Byte | Description                                 | Example            |
 | ---- | ------------------------------------------- | ------------------ |
-| 0    | Length of the message (excluding this byte) | `2`                |
+| 0    | Length of the message (excluding this byte) | `3`                |
 | 1    | Command ID (see commands to ESP)            | `FILE_GET_FREE_ID` |
 | 2    | Desination (0: ESP Flash / 1: SD card)      | `0`                |
 | 3    | Path index (see [FILE_PATHS](#File-paths))  | `FILE_PATHS::SAVE` |
@@ -1997,14 +1992,11 @@ This command returns file system info.
 
 Message first bytes:
 
-| Byte | Description                                         | Example            |
-| ---- | --------------------------------------------------- | ------------------ |
-| 0    | Length of the message (excluding this byte)         | `2`                |
-| 1    | Command ID (see commands to ESP)                    | `FILE_GET_FS_INFO` |
-| 2    | Config                                              | `%zzzzzzdm`        |
-|      | m: access mode (0: auto / 1: manual) - ignored here |                    |
-|      | d: drive (0: ESP Flash / 1: SD card)                |                    |
-|      | z: reserved for future use, must be set to zero     |                    |
+| Byte | Description                                 | Example            |
+| ---- | ------------------------------------------- | ------------------ |
+| 0    | Length of the message (excluding this byte) | `2`                |
+| 1    | Command ID (see commands to ESP)            | `FILE_GET_FS_INFO` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`        |
 
 **Returns:**
 
@@ -2013,6 +2005,7 @@ Message first bytes:
 | 0    | Length of the message (excluding this byte)           | `1` or `27`    |
 | 1    | Command ID (see commands from ESP)                    | `FILE_FS_INFO` |
 |      | _**next bytes are returned if file system is ready**_ |                |
+|      | _**and message is correct**_                          |                |
 | 2    | Total space high byte                                 | `0x00`         |
 | 3    | Total space                                           | `0x00`         |
 | 4    | Total space                                           | `0x00`         |
@@ -2051,14 +2044,11 @@ It can be used in auto mode (using predefined path index and filename index) or 
 
 Message first bytes:
 
-| Byte | Description                                     | Example         |
-| ---- | ----------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)     | `4` or more     |
-| 1    | Command ID (see commands to ESP)                | `FILE_GET_INFO` |
-| 2    | Config                                          | `%zzzzzzdm`     |
-|      | m: access mode (0: auto / 1: manual)            |                 |
-|      | d: drive (0: ESP Flash / 1: SD card)            |                 |
-|      | z: reserved for future use, must be set to zero |                 |
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `4` or more     |
+| 1    | Command ID (see commands to ESP)            | `FILE_GET_INFO` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`     |
 
 Using **auto mode**:
 
@@ -2117,37 +2107,34 @@ The URL **must** use HTTP or HTTPS protocol.
 
 Message first bytes:
 
-| Byte | Description                                     | Example         |
-| ---- | ----------------------------------------------- | --------------- |
-| 0    | Length of the message (excluding this byte)     | `27`            |
-| 1    | Command ID (see commands to ESP)                | `FILE_DOWNLOAD` |
-| 2    | Config                                          | `%zzzzzzdm`     |
-|      | m: access mode (0: auto / 1: manual)            |                 |
-|      | d: drive (0: ESP Flash / 1: SD card)            |                 |
-|      | z: reserved for future use, must be set to zero |                 |
-| 3    | URL String length                               | `22`            |
-| 4    | URL String (source)                             | `h`             |
-| 5    | ...                                             | `t`             |
-| 6    | ...                                             | `t`             |
-| 7    | ...                                             | `p`             |
-| 8    | ...                                             | `:`             |
-| 9    | ...                                             | `/`             |
-| 10   | ...                                             | `/`             |
-| 11   | ...                                             | `u`             |
-| 12   | ...                                             | `r`             |
-| 13   | ...                                             | `l`             |
-| 14   | ...                                             | `.`             |
-| 15   | ...                                             | `f`             |
-| 16   | ...                                             | `r`             |
-| 17   | ...                                             | `/`             |
-| 18   | ...                                             | `f`             |
-| 19   | ...                                             | `i`             |
-| 20   | ...                                             | `l`             |
-| 21   | ...                                             | `e`             |
-| 22   | ...                                             | `.`             |
-| 23   | ...                                             | `t`             |
-| 24   | ...                                             | `x`             |
-| 25   | ...                                             | `t`             |
+| Byte | Description                                 | Example         |
+| ---- | ------------------------------------------- | --------------- |
+| 0    | Length of the message (excluding this byte) | `27`            |
+| 1    | Command ID (see commands to ESP)            | `FILE_DOWNLOAD` |
+| 2    | Config (see [FILE_CONFIG](#File-config))    | `%zzzzzzdm`     |
+| 3    | URL String length                           | `22`            |
+| 4    | URL String (source)                         | `h`             |
+| 5    | ...                                         | `t`             |
+| 6    | ...                                         | `t`             |
+| 7    | ...                                         | `p`             |
+| 8    | ...                                         | `:`             |
+| 9    | ...                                         | `/`             |
+| 10   | ...                                         | `/`             |
+| 11   | ...                                         | `u`             |
+| 12   | ...                                         | `r`             |
+| 13   | ...                                         | `l`             |
+| 14   | ...                                         | `.`             |
+| 15   | ...                                         | `f`             |
+| 16   | ...                                         | `r`             |
+| 17   | ...                                         | `/`             |
+| 18   | ...                                         | `f`             |
+| 19   | ...                                         | `i`             |
+| 20   | ...                                         | `l`             |
+| 21   | ...                                         | `e`             |
+| 22   | ...                                         | `.`             |
+| 23   | ...                                         | `t`             |
+| 24   | ...                                         | `x`             |
+| 25   | ...                                         | `t`             |
 
 Using **auto mode**:
 
@@ -2195,6 +2182,7 @@ Using **manual mode**:
 | 3     | Unknown / unsupported protocol             |
 | 4     | Network error (code in byte 4, see below ) |
 | 5     | HTTP status is not in 2xx                  |
+| 6     | Malformed message                          |
 
 **Network error codes:**
 

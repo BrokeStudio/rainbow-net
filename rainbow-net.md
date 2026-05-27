@@ -1091,7 +1091,7 @@ This command returns the current server settings (hostname and port).
 |      | _**next bytes are returned if a server hostname AND port are set**_ |                   |
 | 2    | Port high byte                                                      | `0x0B`            |
 | 3    | Port low byte                                                       | `0xB8`            |
-| 4    | Hostname string length                                              | `15`              |
+| 4    | Hostname string length (64 maximum)                                 | `15`              |
 | 5    | Hostname string                                                     | `G`               |
 | 6    | ...                                                                 | `A`               |
 | 7    | ...                                                                 | `M`               |
@@ -1160,7 +1160,7 @@ This command returns the server settings (hostname and port) from the Rainbow Ne
 |      | _**AND port are set in the Rainbow Net configuration file**_ |                   |
 | 2    | Port high byte                                               | `0x0B`            |
 | 3    | Port low byte                                                | `0xB8`            |
-| 4    | Hostname string length                                       | `15`              |
+| 4    | Hostname string length (64 maximum)                          | `15`              |
 | 5    | Hostname string                                              | `G`               |
 | 6    | ...                                                          | `A`               |
 | 7    | ...                                                          | `M`               |
@@ -1651,22 +1651,22 @@ Using **auto mode**:
 
 Using **manual mode**:
 
-| Byte | Description        | Example |
-| ---- | ------------------ | ------- |
-| 3    | File string length | `13`    |
-| 4    | File string        | `p`     |
-| 5    | ...                | `a`     |
-| 6    | ...                | `t`     |
-| 7    | ...                | `h`     |
-| 8    | ...                | `/`     |
-| 9    | ...                | `f`     |
-| 10   | ...                | `i`     |
-| 11   | ...                | `l`     |
-| 12   | ...                | `e`     |
-| 13   | ...                | `.`     |
-| 14   | ...                | `e`     |
-| 15   | ...                | `x`     |
-| 16   | ...                | `t`     |
+| Byte | Description                      | Example |
+| ---- | -------------------------------- | ------- |
+| 3    | File string length (maximum 247) | `13`    |
+| 4    | File string                      | `p`     |
+| 5    | ...                              | `a`     |
+| 6    | ...                              | `t`     |
+| 7    | ...                              | `h`     |
+| 8    | ...                              | `/`     |
+| 9    | ...                              | `f`     |
+| 10   | ...                              | `i`     |
+| 11   | ...                              | `l`     |
+| 12   | ...                              | `e`     |
+| 13   | ...                              | `.`     |
+| 14   | ...                              | `e`     |
+| 15   | ...                              | `x`     |
+| 16   | ...                              | `t`     |
 
 [Back to command list](#Commands-overview)
 
@@ -1718,22 +1718,22 @@ If file is opened in **auto mode**:
 
 If file is opened in **manual mode**:
 
-| Byte | Description        | Example |
-| ---- | ------------------ | ------- |
-| 4    | File string length | `13`    |
-| 5    | File string        | `p`     |
-| 6    | ...                | `a`     |
-| 7    | ...                | `t`     |
-| 8    | ...                | `h`     |
-| 9    | ...                | `/`     |
-| 10   | ...                | `f`     |
-| 11   | ...                | `i`     |
-| 12   | ...                | `l`     |
-| 13   | ...                | `e`     |
-| 14   | ...                | `.`     |
-| 15   | ...                | `e`     |
-| 16   | ...                | `x`     |
-| 17   | ...                | `t`     |
+| Byte | Description                      | Example |
+| ---- | -------------------------------- | ------- |
+| 4    | File string length (maximum 247) | `13`    |
+| 5    | File string                      | `p`     |
+| 6    | ...                              | `a`     |
+| 7    | ...                              | `t`     |
+| 8    | ...                              | `h`     |
+| 9    | ...                              | `/`     |
+| 10   | ...                              | `f`     |
+| 11   | ...                              | `i`     |
+| 12   | ...                              | `l`     |
+| 13   | ...                              | `e`     |
+| 14   | ...                              | `.`     |
+| 15   | ...                              | `e`     |
+| 16   | ...                              | `x`     |
+| 17   | ...                              | `t`     |
 
 [Back to command list](#Commands-overview)
 
@@ -1762,22 +1762,22 @@ Using **auto mode**:
 
 Using **manual mode**:
 
-| Byte | Description        | Example |
-| ---- | ------------------ | ------- |
-| 3    | File string length | `13`    |
-| 4    | File string        | `p`     |
-| 5    | ...                | `a`     |
-| 6    | ...                | `t`     |
-| 7    | ...                | `h`     |
-| 8    | ...                | `/`     |
-| 9    | ...                | `f`     |
-| 10   | ...                | `i`     |
-| 11   | ...                | `l`     |
-| 12   | ...                | `e`     |
-| 13   | ...                | `.`     |
-| 14   | ...                | `e`     |
-| 15   | ...                | `x`     |
-| 16   | ...                | `t`     |
+| Byte | Description                      | Example |
+| ---- | -------------------------------- | ------- |
+| 3    | File string length (maximum 247) | `13`    |
+| 4    | File string                      | `p`     |
+| 5    | ...                              | `a`     |
+| 6    | ...                              | `t`     |
+| 7    | ...                              | `h`     |
+| 8    | ...                              | `/`     |
+| 9    | ...                              | `f`     |
+| 10   | ...                              | `i`     |
+| 11   | ...                              | `l`     |
+| 12   | ...                              | `e`     |
+| 13   | ...                              | `.`     |
+| 14   | ...                              | `e`     |
+| 15   | ...                              | `x`     |
+| 16   | ...                              | `t`     |
 
 **Returns:**
 
@@ -1813,22 +1813,22 @@ Using **auto mode**:
 
 Using **manual mode**:
 
-| Byte | Description        | Example |
-| ---- | ------------------ | ------- |
-| 3    | File string length | `13`    |
-| 4    | File string        | `p`     |
-| 5    | ...                | `a`     |
-| 6    | ...                | `t`     |
-| 7    | ...                | `h`     |
-| 8    | ...                | `/`     |
-| 9    | ...                | `f`     |
-| 10   | ...                | `i`     |
-| 11   | ...                | `l`     |
-| 12   | ...                | `e`     |
-| 13   | ...                | `.`     |
-| 14   | ...                | `e`     |
-| 15   | ...                | `x`     |
-| 16   | ...                | `t`     |
+| Byte | Description                      | Example |
+| ---- | -------------------------------- | ------- |
+| 3    | File string length (maximum 247) | `13`    |
+| 4    | File string                      | `p`     |
+| 5    | ...                              | `a`     |
+| 6    | ...                              | `t`     |
+| 7    | ...                              | `h`     |
+| 8    | ...                              | `/`     |
+| 9    | ...                              | `f`     |
+| 10   | ...                              | `i`     |
+| 11   | ...                              | `l`     |
+| 12   | ...                              | `e`     |
+| 13   | ...                              | `.`     |
+| 14   | ...                              | `e`     |
+| 15   | ...                              | `x`     |
+| 16   | ...                              | `t`     |
 
 **Returns:**
 
@@ -2165,24 +2165,24 @@ Using **auto mode**:
 
 Using **manual mode**:
 
-| Byte | Description        | Example |
-| ---- | ------------------ | ------- |
-| 3    | File string length | `15`    |
-| 4    | File string        | `f`     |
-| 5    | ...                | `o`     |
-| 6    | ...                | `l`     |
-| 7    | ...                | `d`     |
-| 8    | ...                | `e`     |
-| 9    | ...                | `r`     |
-| 10   | ...                | `/`     |
-| 11   | ...                | `f`     |
-| 12   | ...                | `i`     |
-| 13   | ...                | `l`     |
-| 14   | ...                | `e`     |
-| 15   | ...                | `.`     |
-| 16   | ...                | `e`     |
-| 17   | ...                | `x`     |
-| 18   | ...                | `t`     |
+| Byte | Description                      | Example |
+| ---- | -------------------------------- | ------- |
+| 3    | File string length (maximum 247) | `15`    |
+| 4    | File string                      | `f`     |
+| 5    | ...                              | `o`     |
+| 6    | ...                              | `l`     |
+| 7    | ...                              | `d`     |
+| 8    | ...                              | `e`     |
+| 9    | ...                              | `r`     |
+| 10   | ...                              | `/`     |
+| 11   | ...                              | `f`     |
+| 12   | ...                              | `i`     |
+| 13   | ...                              | `l`     |
+| 14   | ...                              | `e`     |
+| 15   | ...                              | `.`     |
+| 16   | ...                              | `e`     |
+| 17   | ...                              | `x`     |
+| 18   | ...                              | `t`     |
 
 **Returns:**
 
@@ -2251,22 +2251,22 @@ Using **auto mode**:
 
 Using **manual mode**:
 
-| Byte | Description               | Example |
-| ---- | ------------------------- | ------- |
-| 26   | File string length        | `13`    |
-| 27   | File string (destination) | `p`     |
-| 28   | ...                       | `a`     |
-| 29   | ...                       | `t`     |
-| 30   | ...                       | `h`     |
-| 31   | ...                       | `/`     |
-| 32   | ...                       | `f`     |
-| 33   | ...                       | `i`     |
-| 34   | ...                       | `l`     |
-| 35   | ...                       | `e`     |
-| 36   | ...                       | `.`     |
-| 37   | ...                       | `e`     |
-| 38   | ...                       | `x`     |
-| 39   | ...                       | `t`     |
+| Byte | Description                      | Example |
+| ---- | -------------------------------- | ------- |
+| 26   | File string length (maximum 247) | `13`    |
+| 27   | File string (destination)        | `p`     |
+| 28   | ...                              | `a`     |
+| 29   | ...                              | `t`     |
+| 30   | ...                              | `h`     |
+| 31   | ...                              | `/`     |
+| 32   | ...                              | `f`     |
+| 33   | ...                              | `i`     |
+| 34   | ...                              | `l`     |
+| 35   | ...                              | `e`     |
+| 36   | ...                              | `.`     |
+| 37   | ...                              | `e`     |
+| 38   | ...                              | `x`     |
+| 39   | ...                              | `t`     |
 
 **Returns:**
 

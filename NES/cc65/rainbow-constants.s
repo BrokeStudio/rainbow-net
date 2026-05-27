@@ -31,6 +31,10 @@ TX_ADD    = $4194
   WIFI_SET_CONFIG = 13                  ; Set Wi-Fi station / Access Point / Web Server config
   WIFI_CONNECT = 60                     ; Connect to Wi-Fi if possible
 
+; PING CMDS
+  PING_START = 61                       ; Start pinging passed hostname
+  PING_GET_RESULT = 62                  ; Get ping results
+
 ; ACESS POINT CMDS
   AP_GET_SSID = 14                      ; Get Access Point network SSID
   AP_GET_IP_ADDRESS = 15                ; Get Access Point IP address
@@ -106,6 +110,10 @@ TX_ADD    = $4194
   MAC_ADDRESS = 28                  ; Return Wi-Fi mac address
   WIFI_CONFIG = 7                   ; Return Wi-Fi station / Access Point / Web Server status
 
+; PING CMDS
+  PING_STATUS = 29                  ; Return ping status
+  PING_RESULT = 30                  ; Return ping result
+
 ; RND CMDS
   RND_BYTE = 8                      ; Return random byte value
   RND_WORD = 9                      ; Return random word value
@@ -171,6 +179,22 @@ TX_ADD    = $4194
   CONNECTION_LOST
   WRONG_PASSWORD
   DISCONNECTED
+.endenum
+
+.enum PING_START_STATUS
+  STARTED
+  BUSY
+  BAD_HOST
+  START_FAILED
+  MALFORMED
+.endenum
+
+.enum PING_RESULT_STATUS
+  IDLE
+  RUNNING
+  DONE
+  MALFORMED
+  START_FAILED
 .endenum
 
 ; Server protocols
@@ -240,8 +264,11 @@ NUM_FILES = 64
   ERROR_WHILE_DELETING_FILE
   UNKNOWN_OR_UNSUPPORTED_PROTOCOL
   NETWORK_ERROR
-  HTTP_STATUS_NOT_IN_2XX
+  HTTP_STATUS_NOT_OK
   MALFORMED_MESSAGE
+  ERROR_WHILE_OPENING_DESTINATION_FILE
+  FAILED_TO_CONNECT_TO_URL
+  TCP_CONNECTION_ACTIVE
 .endenum
 
 ; FILE_DOWNLOAD network error codes
@@ -253,8 +280,8 @@ NUM_FILES = 64
   CONNECTION_LOST = -5
   NO_STREAM = -6
   NO_HTTP_SERVER = -7
-  TOO_LESS_RAM = -8
-  ENCODING = -9
-  STREAM_WRITE = -10
+  NOT_ENOUGH_RAM = -8
+  TRANSFER_ENCODING_NOT_SUPPORTED = -9
+  STREAM_WRITE_ERROR = -10
   READ_TIMEOUT = -11
 .endenum

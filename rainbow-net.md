@@ -33,70 +33,72 @@ Special thanks to :
     - [Commands to the ESP](#commands-to-the-esp)
     - [Commands from the ESP](#commands-from-the-esp)
   - [Commands details](#commands-details)
-    - [ESP_GET_STATUS](#esp_get_status)
-    - [DEBUG_GET_LEVEL](#debug_get_level)
-    - [DEBUG_SET_LEVEL](#debug_set_level)
-    - [DEBUG_LOG](#debug_log)
-    - [BUFFER_CLEAR_RX_TX](#buffer_clear_rx_tx)
-    - [BUFFER_DROP_FROM_ESP](#buffer_drop_from_esp)
-    - [ESP_GET_FIRMWARE_VERSION](#esp_get_firmware_version)
-    - [ESP_FACTORY_RESET](#esp_factory_reset)
-    - [ESP_RESTART](#esp_restart)
-    - [WIFI_GET_STATUS](#wifi_get_status)
-    - [WIFI_GET_SSID](#wifi_get_ssid)
-    - [WIFI_GET_IP_ADDRESS](#wifi_get_ip_address)
-    - [WIFI_GET_MAC_ADDRESS](#wifi_get_mac_address)
-    - [WIFI_GET_CONFIG](#wifi_get_config)
-    - [WIFI_SET_CONFIG](#wifi_set_config)
-    - [WIFI_CONNECT](#wifi_connect)
-    - [AP_GET_SSID](#ap_get_ssid)
-    - [AP_GET_IP_ADDRESS](#ap_get_ip_address)
-    - [RND_GET_BYTE](#rnd_get_byte)
-    - [RND_GET_BYTE_RANGE](#rnd_get_byte_range)
-    - [RND_GET_WORD](#rnd_get_word)
-    - [RND_GET_WORD_RANGE](#rnd_get_word_range)
-    - [SERVER_GET_STATUS](#server_get_status)
-    - [SERVER_GET_PING](#server_get_ping)
-    - [SERVER_SET_PROTOCOL](#server_set_protocol)
-    - [SERVER_GET_SETTINGS](#server_get_settings)
-    - [SERVER_SET_SETTINGS](#server_set_settings)
-    - [SERVER_GET_SAVED_SETTINGS](#server_get_saved_settings)
-    - [SERVER_SET_SAVED_SETTINGS](#server_set_saved_settings)
-    - [SERVER_RESTORE_SAVED_SETTINGS](#server_restore_saved_settings)
-    - [SERVER_CONNECT](#server_connect)
-    - [SERVER_DISCONNECT](#server_disconnect)
-    - [SERVER_SEND_MESSAGE](#server_send_message)
-    - [UDP_ADDR_POOL_CLEAR](#udp_addr_pool_clear)
-    - [UDP_ADDR_POOL_ADD](#udp_addr_pool_add)
-    - [UDP_ADDR_POOL_REMOVE](#udp_addr_pool_remove)
-    - [UDP_ADDR_POOL_SEND_MESSAGE](#udp_addr_pool_send_message)
-    - [NETWORK_SCAN](#network_scan)
-    - [NETWORK_GET_SCAN_RESULT](#network_get_scan_result)
-    - [NETWORK_GET_SCANNED_DETAILS](#network_get_scanned_details)
-    - [NETWORK_GET_REGISTERED](#network_get_registered)
-    - [NETWORK_GET_REGISTERED_DETAILS](#network_get_registered_details)
-    - [NETWORK_REGISTER](#network_register)
-    - [NETWORK_UNREGISTER](#network_unregister)
-    - [NETWORK_SET_ACTIVE](#network_set_active)
+    - [ESP\_GET\_STATUS](#esp_get_status)
+    - [DEBUG\_GET\_LEVEL](#debug_get_level)
+    - [DEBUG\_SET\_LEVEL](#debug_set_level)
+    - [DEBUG\_LOG](#debug_log)
+    - [BUFFER\_CLEAR\_RX\_TX](#buffer_clear_rx_tx)
+    - [BUFFER\_DROP\_FROM\_ESP](#buffer_drop_from_esp)
+    - [ESP\_GET\_FIRMWARE\_VERSION](#esp_get_firmware_version)
+    - [ESP\_FACTORY\_RESET](#esp_factory_reset)
+    - [ESP\_RESTART](#esp_restart)
+    - [WIFI\_GET\_STATUS](#wifi_get_status)
+    - [WIFI\_GET\_SSID](#wifi_get_ssid)
+    - [WIFI\_GET\_IP\_ADDRESS](#wifi_get_ip_address)
+    - [WIFI\_GET\_MAC\_ADDRESS](#wifi_get_mac_address)
+    - [WIFI\_GET\_CONFIG](#wifi_get_config)
+    - [WIFI\_SET\_CONFIG](#wifi_set_config)
+    - [WIFI\_CONNECT](#wifi_connect)
+    - [PING\_START](#ping_start)
+    - [PING\_GET\_RESULT](#ping_get_result)
+    - [AP\_GET\_SSID](#ap_get_ssid)
+    - [AP\_GET\_IP\_ADDRESS](#ap_get_ip_address)
+    - [RND\_GET\_BYTE](#rnd_get_byte)
+    - [RND\_GET\_BYTE\_RANGE](#rnd_get_byte_range)
+    - [RND\_GET\_WORD](#rnd_get_word)
+    - [RND\_GET\_WORD\_RANGE](#rnd_get_word_range)
+    - [SERVER\_GET\_STATUS](#server_get_status)
+    - [SERVER\_GET\_PING](#server_get_ping)
+    - [SERVER\_SET\_PROTOCOL](#server_set_protocol)
+    - [SERVER\_GET\_SETTINGS](#server_get_settings)
+    - [SERVER\_SET\_SETTINGS](#server_set_settings)
+    - [SERVER\_GET\_SAVED\_SETTINGS](#server_get_saved_settings)
+    - [SERVER\_SET\_SAVED\_SETTINGS](#server_set_saved_settings)
+    - [SERVER\_RESTORE\_SAVED\_SETTINGS](#server_restore_saved_settings)
+    - [SERVER\_CONNECT](#server_connect)
+    - [SERVER\_DISCONNECT](#server_disconnect)
+    - [SERVER\_SEND\_MESSAGE](#server_send_message)
+    - [UDP\_ADDR\_POOL\_CLEAR](#udp_addr_pool_clear)
+    - [UDP\_ADDR\_POOL\_ADD](#udp_addr_pool_add)
+    - [UDP\_ADDR\_POOL\_REMOVE](#udp_addr_pool_remove)
+    - [UDP\_ADDR\_POOL\_SEND\_MESSAGE](#udp_addr_pool_send_message)
+    - [NETWORK\_SCAN](#network_scan)
+    - [NETWORK\_GET\_SCAN\_RESULT](#network_get_scan_result)
+    - [NETWORK\_GET\_SCANNED\_DETAILS](#network_get_scanned_details)
+    - [NETWORK\_GET\_REGISTERED](#network_get_registered)
+    - [NETWORK\_GET\_REGISTERED\_DETAILS](#network_get_registered_details)
+    - [NETWORK\_REGISTER](#network_register)
+    - [NETWORK\_UNREGISTER](#network_unregister)
+    - [NETWORK\_SET\_ACTIVE](#network_set_active)
   - [File commands details](#file-commands-details)
     - [File paths](#file-paths)
     - [File config](#file-config)
-    - [FILE_OPEN](#file_open)
-    - [FILE_CLOSE](#file_close)
-    - [FILE_STATUS](#file_status)
-    - [FILE_EXISTS](#file_exists)
-    - [FILE_DELETE](#file_delete)
-    - [FILE_SET_CUR](#file_set_cur)
-    - [FILE_READ](#file_read)
-    - [FILE_WRITE](#file_write)
-    - [FILE_APPEND](#file_append)
-    - [FILE_COUNT](#file_count)
-    - [FILE_GET_LIST](#file_get_list)
-    - [FILE_GET_FREE_ID](#file_get_free_id)
-    - [FILE_GET_FS_INFO](#file_get_fs_info)
-    - [FILE_GET_INFO](#file_get_info)
-    - [FILE_DOWNLOAD](#file_download)
-    - [FILE_FORMAT](#file_format)
+    - [FILE\_OPEN](#file_open)
+    - [FILE\_CLOSE](#file_close)
+    - [FILE\_STATUS](#file_status)
+    - [FILE\_EXISTS](#file_exists)
+    - [FILE\_DELETE](#file_delete)
+    - [FILE\_SET\_CUR](#file_set_cur)
+    - [FILE\_READ](#file_read)
+    - [FILE\_WRITE](#file_write)
+    - [FILE\_APPEND](#file_append)
+    - [FILE\_COUNT](#file_count)
+    - [FILE\_GET\_LIST](#file_get_list)
+    - [FILE\_GET\_FREE\_ID](#file_get_free_id)
+    - [FILE\_GET\_FS\_INFO](#file_get_fs_info)
+    - [FILE\_GET\_INFO](#file_get_info)
+    - [FILE\_DOWNLOAD](#file_download)
+    - [FILE\_FORMAT](#file_format)
   - [BootROM](#bootrom)
   - [TODO](#todo)
 
@@ -132,117 +134,123 @@ Please check console folders for specific example depending on the system.
 
 ### Commands to the ESP
 
-| Value | Command                                                           | Description                                                                           |
-| ----- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-|       |                                                                   | **ESP CMDS**                                                                          |
-| 0     | [ESP_GET_STATUS](#ESP_GET_STATUS)                                 | Get ESP status                                                                        |
-| 1     | [DEBUG_GET_LEVEL](#DEBUG_GET_LEVEL)                               | Get debug level                                                                       |
-| 2     | [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)                               | Set debug level                                                                       |
-| 3     | [DEBUG_LOG](#DEBUG_LOG)                                           | Debug / Log data                                                                      |
-| 4     | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                                   |
-| 5     | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->console) buffer                                           |
-| 6     | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                                          |
-| 7     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                                         |
-| 8     | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                                       |
-|       |                                                                   | **WIFI CMDS**                                                                         |
-| 9     | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                                           |
-| 10    | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                                |
-| 11    | [WIFI_GET_IP_ADDRESS](#WIFI_GET_IP_ADDRESS)                       | Get Wi-Fi IP address                                                                  |
-| 59    | [WIFI_GET_MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                     | Get Wi-Fi mac address                                                                 |
-| 12    | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                                          |
-| 13    | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                                          |
-| 60    | [WIFI_CONNECT](#WIFI_CONNECT)                                     | Connect to Wi-Fi if possible                                                          |
-|       |                                                                   | **ACCESS POINT CMDS**                                                                 |
-| 14    | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                                         |
-| 15    | [AP_GET_IP_ADDRESS](#AP_GET_IP_ADDRESS)                           | Get Access Point IP address                                                           |
-|       |                                                                   | **RND CMDS**                                                                          |
-| 16    | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                                       |
-| 17    | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                                |
-| 18    | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                                       |
-| 19    | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                                |
-|       |                                                                   | **SERVER CMDS**                                                                       |
-| 20    | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                                          |
-| 21    | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                                       |
-| 22    | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (TCP/UDP)                                      |
-| 23    | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                                 |
-| 24    | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                                 |
-| 25    | [SERVER_GET_SAVED_SETTINGS](#SERVER_GET_SAVED_SETTINGS)           | Get server host name and port values saved in the Rainbow Net configuration file      |
-| 26    | [SERVER_SET_SAVED_SETTINGS](#SERVER_SET_SAVED_SETTINGS)           | Set server host name and port values saved in the Rainbow Net configuration file      |
-| 27    | [SERVER_RESTORE_SAVED_SETTINGS](#SERVER_RESTORE_SAVED_SETTINGS)   | Restore server host name and port to saved values from Rainbow Net configuration file |
-| 28    | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                                     |
-| 29    | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                                |
-| 30    | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                                |
-|       |                                                                   | **UDP ADDRESS POOL CMDS**                                                             |
-| 55    | [UDP_ADDR_POOL_CLEAR](#UDP_ADDR_POOL_CLEAR)                       | Clear the UDP address pool                                                            |
-| 56    | [UDP_ADDR_POOL_ADD](#UDP_ADDR_POOL_ADD)                           | Add an IP address to the UDP address pool                                             |
-| 57    | [UDP_ADDR_POOL_REMOVE](#UDP_ADDR_POOL_REMOVE)                     | Remove an IP address from the UDP address pool                                        |
-| 58    | [UDP_ADDR_POOL_SEND_MESSAGE](#UDP_ADDR_POOL_SEND_MESSAGE)         | Send a message to all the addresses in the UDP address pool                           |
-|       |                                                                   | **NETWORK CMDS**                                                                      |
-| 31    | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks synchronously or asynchronously                                         |
-| 32    | [NETWORK_GET_SCAN_RESULT](#NETWORK_GET_SCAN_RESULT)               | Get result of the last scan                                                           |
-| 33    | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                                      |
-| 34    | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                                        |
-| 35    | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                                           |
-| 36    | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                                      |
-| 37    | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                                    |
-| 38    | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                                    |
-|       |                                                                   | **FILE CMDS**                                                                         |
-| 39    | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                                     |
-| 40    | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                                    |
-| 41    | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                               |
-| 42    | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                                  |
-| 43    | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                                         |
-| 44    | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                               |
-| 45    | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                              |
-| 46    | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                             |
-| 47    | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                                           |
-| 48    | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                                |
-| 49    | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)                   |
-| 50    | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)                    |
-| 51    | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                                        |
-| 52    | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                                          |
-| 53    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index               |
-| 54    | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                                    |
+| ID        | Command                                                           | Description                                                                           |
+| --------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+|           |                                                                   | **ESP CMDS**                                                                          |
+| 0 / 0x00  | [ESP_GET_STATUS](#ESP_GET_STATUS)                                 | Get ESP status                                                                        |
+| 1 / 0x01  | [DEBUG_GET_LEVEL](#DEBUG_GET_LEVEL)                               | Get debug level                                                                       |
+| 2 / 0x02  | [DEBUG_SET_LEVEL](#DEBUG_SET_LEVEL)                               | Set debug level                                                                       |
+| 3 / 0x03  | [DEBUG_LOG](#DEBUG_LOG)                                           | Debug / Log data                                                                      |
+| 4 / 0x04  | [BUFFER_CLEAR_RX_TX](#BUFFER_CLEAR_RX_TX)                         | Clear RX/TX buffers                                                                   |
+| 5 / 0x05  | [BUFFER_DROP_FROM_ESP](#BUFFER_DROP_FROM_ESP)                     | Drop messages from TX (ESP->console) buffer                                           |
+| 6 / 0x06  | [ESP_GET_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)             | Get Rainbow firmware version                                                          |
+| 7 / 0x07  | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                           | Reset ESP to factory settings                                                         |
+| 8 / 0x08  | [ESP_RESTART](#ESP_RESTART)                                       | Restart the ESP                                                                       |
+|           |                                                                   | **WIFI CMDS**                                                                         |
+| 9 / 0x09  | [WIFI_GET_STATUS](#WIFI_GET_STATUS)                               | Get Wi-Fi connection status                                                           |
+| 10 / 0x0A | [WIFI_GET_SSID](#WIFI_GET_SSID)                                   | Get Wi-Fi network SSID                                                                |
+| 11 / 0x0B | [WIFI_GET_IP_ADDRESS](#WIFI_GET_IP_ADDRESS)                       | Get Wi-Fi IP address                                                                  |
+| 59 / 0x3B | [WIFI_GET_MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                     | Get Wi-Fi mac address                                                                 |
+| 12 / 0x0C | [WIFI_GET_CONFIG](#WIFI_GET_CONFIG)                               | Get Wi-Fi / Access Point / Web Server config                                          |
+| 13 / 0x0D | [WIFI_SET_CONFIG](#WIFI_SET_CONFIG)                               | Set Wi-Fi / Access Point / Web Server config                                          |
+| 60 / 0x3C | [WIFI_CONNECT](#WIFI_CONNECT)                                     | Connect to Wi-Fi if possible                                                          |
+|           |                                                                   | **PING CMDS**                                                                         |
+| 61 / 0x3D | [PING_START](#PING_START)                                         | Start pinging passed hostname                                                         |
+| 62 / 0x3E | [PING_GET_RESULT](#PING_GET_RESULT)                               | Get ping results                                                                      |
+|           |                                                                   | **ACCESS POINT CMDS**                                                                 |
+| 14 / 0x0E | [AP_GET_SSID](#AP_GET_SSID)                                       | Get Access Point network SSID                                                         |
+| 15 / 0x0F | [AP_GET_IP_ADDRESS](#AP_GET_IP_ADDRESS)                           | Get Access Point IP address                                                           |
+|           |                                                                   | **RND CMDS**                                                                          |
+| 16 / 0x10 | [RND_GET_BYTE](#RND_GET_BYTE)                                     | Get random byte                                                                       |
+| 17 / 0x11 | [RND_GET_BYTE_RANGE](#RND_GET_BYTE_RANGE)                         | Get random byte between custom min/max                                                |
+| 18 / 0x12 | [RND_GET_WORD](#RND_GET_WORD)                                     | Get random word                                                                       |
+| 19 / 0x13 | [RND_GET_WORD_RANGE](#RND_GET_WORD_RANGE)                         | Get random word between custom min/max                                                |
+|           |                                                                   | **SERVER CMDS**                                                                       |
+| 20 / 0x14 | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                                          |
+| 21 / 0x15 | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                                       |
+| 22 / 0x16 | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (TCP/UDP)                                      |
+| 23 / 0x17 | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                                 |
+| 24 / 0x18 | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                                 |
+| 25 / 0x19 | [SERVER_GET_SAVED_SETTINGS](#SERVER_GET_SAVED_SETTINGS)           | Get server host name and port values saved in the Rainbow Net configuration file      |
+| 26 / 0x1A | [SERVER_SET_SAVED_SETTINGS](#SERVER_SET_SAVED_SETTINGS)           | Set server host name and port values saved in the Rainbow Net configuration file      |
+| 27 / 0x1B | [SERVER_RESTORE_SAVED_SETTINGS](#SERVER_RESTORE_SAVED_SETTINGS)   | Restore server host name and port to saved values from Rainbow Net configuration file |
+| 28 / 0x1C | [SERVER_CONNECT](#SERVER_CONNECT)                                 | Connect to server                                                                     |
+| 29 / 0x1D | [SERVER_DISCONNECT](#SERVER_DISCONNECT)                           | Disconnect from server                                                                |
+| 30 / 0x1E | [SERVER_SEND_MESSAGE](#SERVER_SEND_MESSAGE)                       | Send message to server                                                                |
+|           |                                                                   | **UDP ADDRESS POOL CMDS**                                                             |
+| 55 / 0x37 | [UDP_ADDR_POOL_CLEAR](#UDP_ADDR_POOL_CLEAR)                       | Clear the UDP address pool                                                            |
+| 56 / 0x38 | [UDP_ADDR_POOL_ADD](#UDP_ADDR_POOL_ADD)                           | Add an IP address to the UDP address pool                                             |
+| 57 / 0x39 | [UDP_ADDR_POOL_REMOVE](#UDP_ADDR_POOL_REMOVE)                     | Remove an IP address from the UDP address pool                                        |
+| 58 / 0x3A | [UDP_ADDR_POOL_SEND_MESSAGE](#UDP_ADDR_POOL_SEND_MESSAGE)         | Send a message to all the addresses in the UDP address pool                           |
+|           |                                                                   | **NETWORK CMDS**                                                                      |
+| 31 / 0x1F | [NETWORK_SCAN](#NETWORK_SCAN)                                     | Scan networks synchronously or asynchronously                                         |
+| 32 / 0x20 | [NETWORK_GET_SCAN_RESULT](#NETWORK_GET_SCAN_RESULT)               | Get result of the last scan                                                           |
+| 33 / 0x21 | [NETWORK_GET_DETAILS](#NETWORK_GET_DETAILS)                       | Get network SSID                                                                      |
+| 34 / 0x22 | [NETWORK_GET_REGISTERED](#NETWORK_GET_REGISTERED)                 | Get registered networks status                                                        |
+| 35 / 0x23 | [NETWORK_GET_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS) | Get registered network SSID                                                           |
+| 36 / 0x24 | [NETWORK_REGISTER](#NETWORK_REGISTER)                             | Register network                                                                      |
+| 37 / 0x25 | [NETWORK_UNREGISTER](#NETWORK_UNREGISTER)                         | Unregister network                                                                    |
+| 38 / 0x26 | [NETWORK_SET_ACTIVE](#NETWORK_SET_ACTIVE)                         | Set active network                                                                    |
+|           |                                                                   | **FILE CMDS**                                                                         |
+| 39 / 0x27 | [FILE_OPEN](#FILE_OPEN)                                           | Open working file                                                                     |
+| 40 / 0x28 | [FILE_CLOSE](#FILE_CLOSE)                                         | Close working file                                                                    |
+| 41 / 0x29 | [FILE_STATUS](#FILE_STATUS)                                       | Get working file status                                                               |
+| 42 / 0x2A | [FILE_EXISTS](#FILE_EXISTS)                                       | Check if file exists                                                                  |
+| 43 / 0x2B | [FILE_DELETE](#FILE_DELETE)                                       | Delete a file                                                                         |
+| 44 / 0x2C | [FILE_SET_CUR](#FILE_SET_CUR)                                     | Set working file cursor position a file                                               |
+| 45 / 0x2D | [FILE_READ](#FILE_READ)                                           | Read working file (at specific position)                                              |
+| 46 / 0x2E | [FILE_WRITE](#FILE_WRITE)                                         | Write working file (at specific position)                                             |
+| 47 / 0x2F | [FILE_APPEND](#FILE_APPEND)                                       | Append data to working file                                                           |
+| 48 / 0x30 | [FILE_COUNT](#FILE_COUNT)                                         | Get number of tiles in a specific path                                                |
+| 49 / 0x31 | [FILE_GET_LIST](#FILE_GET_LIST)                                   | Get list of existing files in a specific path (automatic mode only)                   |
+| 50 / 0x32 | [FILE_GET_FREE_ID](#FILE_GET_FREE_ID)                             | Get an unexisting file ID in a specific path (automatic mode only)                    |
+| 51 / 0x33 | [FILE_GET_FS_INFO](#FILE_GET_FS_INFO)                             | Get file system details (ESP flash or SD card)                                        |
+| 52 / 0x34 | [FILE_GET_INFO](#FILE_GET_INFO)                                   | Get file info (size + crc32)                                                          |
+| 53 / 0x35 | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                   | Download a file from a giving URL to a specific path index / file index               |
+| 54 / 0x36 | [FILE_FORMAT](#FILE_FORMAT)                                       | Format file system                                                                    |
 
 ### Commands from the ESP
 
-| Value | Command                                                                       | Description                                                            |
-| ----- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-|       |                                                                               | **ESP CMDS**                                                           |
-| 0     | [READY](#ESP_GET_STATUS)                                                      | ESP is ready                                                           |
-| 1     | [DEBUG_LEVEL](#DEBUG_GET_LEVEL)                                               | Return debug configuration                                             |
-| 2     | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                             | Return ESP/Rainbow firmware version                                    |
-| 3     | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                                       | Return result code (see command for details)                           |
-|       |                                                                               | **WIFI CMDS**                                                          |
-| 4     | [WIFI_STATUS](#WIFI_GET_STATUS)                                               | Return Wi-Fi connection status                                         |
-| 5     | SSID ([WIFI](#WIFI_GET_SSID)/[AP](#AP_GET_SSID))                              | Return Wi-Fi / Access Point SSID                                       |
-| 6     | IP_ADDRESS ([WIFI](#WIFI_GET_IP_ADDRESS)/[AP](#AP_GET_IP_ADDRESS))            | Return Wi-Fi / Access Point IP address                                 |
-| 28    | [MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                                          | Return Wi-Fi mac address                                               |
-| 7     | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                               | Return Wi-Fi station / Access Point / Web Server status                |
-|       |                                                                               | **RND CMDS**                                                           |
-| 8     | [RND_BYTE](#RND_GET_BYTE)                                                     | Return random byte value                                               |
-| 9     | [RND_WORD](#RND_GET_WORD)                                                     | Return random word value                                               |
-|       |                                                                               | **SERVER CMDS**                                                        |
-| 10    | [SERVER_STATUS](#SERVER_GET_STATUS)                                           | Return server connection status                                        |
-| 11    | [SERVER_PING](#SERVER_GET_PING)                                               | Return min, max and average round-trip time and number of lost packets |
-| 12    | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                                       | Return server settings (host name + port)                              |
-| 13    | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                               | Message from server                                                    |
-|       |                                                                               | **NETWORK CMDS**                                                       |
-| 14    | NETWORK_SCAN_RESULT ([SYNC](#NETWORK_SCAN)/[ASYNC](#NETWORK_GET_SCAN_RESULT)) | Return result of last scan                                             |
-| 15    | [NETWORK_GET_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)                   | Return details for a scanned network                                   |
-| 16    | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)                 | Return SSID for a registered network                                   |
-| 17    | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                                 | Return registered networks status                                      |
-|       |                                                                               | **FILE CMDS**                                                          |
-| 18    | [FILE_STATUS](#FILE_STATUS)                                                   | Return working file status                                             |
-| 19    | [FILE_EXISTS](#FILE_EXISTS)                                                   | Return if file exists or not                                           |
-| 20    | [FILE_DELETE](#FILE_DELETE)                                                   | Return result code (see command for details)                           |
-| 21    | [FILE_LIST](#FILE_GET_LIST)                                                   | Return path file list                                                  |
-| 22    | [FILE_DATA](#FILE_READ)                                                       | Return file data                                                       |
-| 23    | [FILE_COUNT](#FILE_COUNT)                                                     | Return file count in a specific path                                   |
-| 24    | [FILE_ID](#FILE_GET_FREE_ID)                                                  | Return a free file ID                                                  |
-| 25    | [FILE_FS_INFO](#FILE_GET_INFO)                                                | Return file system info                                                |
-| 26    | [FILE_INFO](#FILE_GET_INFO)                                                   | Return file info (size + CRC32)                                        |
-| 27    | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                               | Return result code (see command for details)                           |
+| ID        | Command                                                                       | Description                                             |
+| --------- | ----------------------------------------------------------------------------- | ------------------------------------------------------- |
+|           |                                                                               | **ESP CMDS**                                            |
+| 0 / 0x00  | [READY](#ESP_GET_STATUS)                                                      | ESP is ready                                            |
+| 1 / 0x01  | [DEBUG_LEVEL](#DEBUG_GET_LEVEL)                                               | Return debug configuration                              |
+| 2 / 0x02  | [ESP_FIRMWARE_VERSION](#ESP_GET_FIRMWARE_VERSION)                             | Return ESP/Rainbow firmware version                     |
+| 3 / 0x03  | [ESP_FACTORY_RESET](#ESP_FACTORY_RESET)                                       | Return result code (see command for details)            |
+|           |                                                                               | **WIFI CMDS**                                           |
+| 4 / 0x04  | [WIFI_STATUS](#WIFI_GET_STATUS)                                               | Return Wi-Fi connection status                          |
+| 5 / 0x05  | SSID ([WIFI](#WIFI_GET_SSID)/[AP](#AP_GET_SSID))                              | Return Wi-Fi / Access Point SSID                        |
+| 6 / 0x06  | IP_ADDRESS ([WIFI](#WIFI_GET_IP_ADDRESS)/[AP](#AP_GET_IP_ADDRESS))            | Return Wi-Fi / Access Point IP address                  |
+| 28 / 0x1C | [MAC_ADDRESS](#WIFI_GET_MAC_ADDRESS)                                          | Return Wi-Fi mac address                                |
+| 7 / 0x07  | [WIFI_CONFIG](#WIFI_GET_CONFIG)                                               | Return Wi-Fi station / Access Point / Web Server status |
+|           |                                                                               | **PING CMDS**                                           |
+| 29 / 0x1D | [PING_STATUS](#PING_START)                                                    | Return ping status                                      |
+| 30 / 0x1E | [PING_RESULT](#PING_GET_RESULT)                                               | Return ping result                                      |
+|           |                                                                               | **RND CMDS**                                            |
+| 8 / 0x08  | [RND_BYTE](#RND_GET_BYTE)                                                     | Return random byte value                                |
+| 9 / 0x09  | [RND_WORD](#RND_GET_WORD)                                                     | Return random word value                                |
+|           |                                                                               | **SERVER CMDS**                                         |
+| 10 / 0x0A | [SERVER_STATUS](#SERVER_GET_STATUS)                                           | Return server connection status                         |
+| 11 / 0x0B | [SERVER_PING](#SERVER_GET_PING)                                               | Return ping result                                      |
+| 12 / 0x0C | [SERVER_SETTINGS](#SERVER_GET_SETTINGS)                                       | Return server settings (host name + port)               |
+| 13 / 0x0D | [MESSAGE_FROM_SERVER](#SERVER_GET_NEXT_MESSAGE)                               | Message from server                                     |
+|           |                                                                               | **NETWORK CMDS**                                        |
+| 14 / 0x0E | NETWORK_SCAN_RESULT ([SYNC](#NETWORK_SCAN)/[ASYNC](#NETWORK_GET_SCAN_RESULT)) | Return result of last scan                              |
+| 15 / 0x0F | [NETWORK_GET_SCANNED_DETAILS](#NETWORK_GET_SCANNED_DETAILS)                   | Return details for a scanned network                    |
+| 16 / 0x10 | [NETWORK_REGISTERED_DETAILS](#NETWORK_GET_REGISTERED_DETAILS)                 | Return SSID for a registered network                    |
+| 17 / 0x11 | [NETWORK_REGISTERED](#NETWORK_GET_REGISTERED)                                 | Return registered networks status                       |
+|           |                                                                               | **FILE CMDS**                                           |
+| 18 / 0x12 | [FILE_STATUS](#FILE_STATUS)                                                   | Return working file status                              |
+| 19 / 0x13 | [FILE_EXISTS](#FILE_EXISTS)                                                   | Return if file exists or not                            |
+| 20 / 0x14 | [FILE_DELETE](#FILE_DELETE)                                                   | Return result code (see command for details)            |
+| 21 / 0x15 | [FILE_LIST](#FILE_GET_LIST)                                                   | Return path file list                                   |
+| 22 / 0x16 | [FILE_DATA](#FILE_READ)                                                       | Return file data                                        |
+| 23 / 0x17 | [FILE_COUNT](#FILE_COUNT)                                                     | Return file count in a specific path                    |
+| 24 / 0x18 | [FILE_ID](#FILE_GET_FREE_ID)                                                  | Return a free file ID                                   |
+| 25 / 0x19 | [FILE_FS_INFO](#FILE_GET_INFO)                                                | Return file system info                                 |
+| 26 / 0x1A | [FILE_INFO](#FILE_GET_INFO)                                                   | Return file info (size + CRC32)                         |
+| 27 / 0x1B | [FILE_DOWNLOAD](#FILE_DOWNLOAD)                                               | Return result code (see command for details)            |
 
 ## Commands details
 
@@ -710,6 +718,95 @@ This command is asynchronous; use [WIFI_GET_STATUS](#WIFI_GET_STATUS) to poll th
 
 ---
 
+### PING_START
+
+This command starts pinging the passed host name and returns the ping status (started correctly or error).  
+If no number of pings is passed, the default value will be 4.  
+Errors such as BAD_HOST and START_FAILED are returned immediately and do not replace the last ping result.
+
+| Byte | Description                                          | Example      |
+| ---- | ---------------------------------------------------- | ------------ |
+| 0    | Length of the message (excluding this byte; 3 to 67) | `18`         |
+| 1    | Command ID (see commands to ESP)                     | `PING_START` |
+| 2    | Hostname string length (64 maximum)                  | `15`         |
+| 3    | Hostname string                                      | `G`          |
+| 4    | ...                                                  | `A`          |
+| 5    | ...                                                  | `M`          |
+| 6    | ...                                                  | `E`          |
+| 7    | ...                                                  | `.`          |
+| 8    | ...                                                  | `S`          |
+| 9    | ...                                                  | `E`          |
+| 10   | ...                                                  | `R`          |
+| 11   | ...                                                  | `V`          |
+| 12   | ...                                                  | `E`          |
+| 13   | ...                                                  | `R`          |
+| 14   | ...                                                  | `.`          |
+| 15   | ...                                                  | `N`          |
+| 16   | ...                                                  | `E`          |
+| 17   | ...                                                  | `T`          |
+| 18   | Number of pings (4 recommended)                      | `3`          |
+
+**Returns:**
+
+| Byte | Description                                 | Example                      |
+| ---- | ------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte) | `2`                          |
+| 1    | Command ID (see commands from ESP)          | `PING_STATUS`                |
+| 2    | Status code (see below)                     | `PING_START_STATUS::STARTED` |
+
+**Status codes:**
+
+| Value | PING_START_STATUS | Description                               |
+| ----- | ----------------- | ----------------------------------------- |
+| 0     | STARTED           | Started successfully                      |
+| 1     | BUSY              | Ping already running                      |
+| 2     | BAD_HOST          | Failed while resolving hostname           |
+|       |                   | (could be because of no Wi-Fi connection) |
+| 3     | START_FAILED      | Start failed                              |
+| 4     | MALFORMED         | Malformed message                         |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### PING_GET_RESULT
+
+This command returns the last ping result: min, max and average round-trip time and number of timed-out ping requests.  
+This command only reports the state/result of a ping request that was successfully started.  
+Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.
+
+| Byte | Description                                 | Example           |
+| ---- | ------------------------------------------- | ----------------- |
+| 0    | Length of the message (excluding this byte) | `1`               |
+| 1    | Command ID (see commands to ESP)            | `PING_GET_RESULT` |
+
+**Returns:**
+
+| Byte | Description                                                            | Example                    |
+| ---- | ---------------------------------------------------------------------- | -------------------------- |
+| 0    | Length of the message (excluding this byte)                            | `2` or `6`                 |
+| 1    | Command ID (see commands from ESP)                                     | `PING_RESULT`              |
+| 2    | Status code (see below)                                                | `PING_RESULT_STATUS::DONE` |
+|      | _**the next bytes are returned only if execution status is 2 (done)**_ |                            |
+| 3    | Minimum ping round-trip time (4ms precision)                           | `0x2D`                     |
+| 4    | Maximum ping round-trip time (4ms precision)                           | `0x42`                     |
+| 5    | Average ping round-trip time (4ms precision)                           | `0x37`                     |
+| 6    | Number of timed-out ping requests                                      | `0x01`                     |
+
+**Status codes:**
+
+| Value | PING_RESULT_STATUS | Description                                     |
+| ----- | ------------------ | ----------------------------------------------- |
+| 0     | IDLE               | No ping request yet                             |
+| 1     | RUNNING            | A ping is already/currently running             |
+| 2     | DONE               | Last ping completed; result bytes are available |
+| 3     | MALFORMED          | Malformed message                               |
+| 4     | START_FAILED       | PING_START failed while starting ping process   |
+
+[Back to command list](#Commands-overview)
+
+---
+
 ### AP_GET_SSID
 
 This command asks the aceess point SSID.
@@ -913,7 +1010,10 @@ This command asks the server status.
 
 ### SERVER_GET_PING
 
-This command pings the server and returns the min, max and average round-trip time and number of lost packets.  
+**This command is deprecated and shouldn't be used anymore.**  
+**Use SERVER_PING_START or PING_START instead.**
+
+This command pings the server and returns the min, max and average round-trip time and number of timed-out ping requests.  
 If another ping is already in progress, the command will be ignored.  
 Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.  
 If no number of pings is passed, the default value will be 4.
@@ -944,7 +1044,7 @@ Following message will be sent after ping:
 | 2    | Minimum ping round-trip time (4ms precision) | `0x2D`        |
 | 3    | Maximum ping round-trip time (4ms precision) | `0x42`        |
 | 4    | Average ping round-trip time (4ms precision) | `0x37`        |
-| 5    | Number of lost packets                       | `0x01`        |
+| 5    | Number of timed-out ping requests            | `0x01`        |
 
 [Back to command list](#Commands-overview)
 

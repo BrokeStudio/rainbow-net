@@ -7,7 +7,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 # Overview
 
 - Wi-Fi capabilities to allow online gaming, cartridge update, downloadable content and more... (optional, needs the Wi-Fi chip to work)
-  - Embedded bootrom to perform multiple task (manage networks, manage files, flash the cart, ...)
+  - Embedded bootrom to perform multiple tasks (manage networks, manage files, flash the cart, ...)
   - On board micro SD card support
 - 5 PRG-ROM banking modes
 - 2 PRG-RAM banking modes
@@ -407,7 +407,7 @@ BBBB BBBB
             not all bits are used.
 ```
 
-### Nametables control ($412A-$412D, read-write)
+### Nametables control ($412A-$412D, $412F, write-only)
 
 - \$412A controls nametable at \$2000
 - \$412B controls nametable at \$2400

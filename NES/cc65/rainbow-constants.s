@@ -231,9 +231,9 @@ NUM_FILES = 64
 
 ; Network encryption types
 .enum NETWORK_ENCRYPTION_TYPES
-  WEP = 5
   WPA_PSK = 2
   WPA2_PSK = 4
+  WEP = 5
   OPEN_NETWORK = 7
   WPA_WPA2_PSK = 8
 .endenum

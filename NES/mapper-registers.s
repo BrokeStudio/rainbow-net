@@ -4,67 +4,67 @@
 ; PRG banking
 MAP_PRG_CONTROL         = $4100
 
-MAP_PRG_6_HI            = $4106
-MAP_PRG_7_HI            = $4107
-MAP_PRG_8_HI            = $4108
-MAP_PRG_9_HI            = $4109
-MAP_PRG_A_HI            = $410A
-MAP_PRG_B_HI            = $410B
-MAP_PRG_C_HI            = $410C
-MAP_PRG_D_HI            = $410D
-MAP_PRG_E_HI            = $410E
-MAP_PRG_F_HI            = $410F
+MAP_PRG_HI_6            = $4106
+MAP_PRG_HI_7            = $4107
+MAP_PRG_HI_8            = $4108
+MAP_PRG_HI_9            = $4109
+MAP_PRG_HI_A            = $410A
+MAP_PRG_HI_B            = $410B
+MAP_PRG_HI_C            = $410C
+MAP_PRG_HI_D            = $410D
+MAP_PRG_HI_E            = $410E
+MAP_PRG_HI_F            = $410F
 
 MAP_PRG_5               = $4115
-MAP_PRG_5_LO            = $4115
-MAP_PRG_6_LO            = $4116
-MAP_PRG_7_LO            = $4117
-MAP_PRG_8_LO            = $4118
-MAP_PRG_9_LO            = $4119
-MAP_PRG_A_LO            = $411A
-MAP_PRG_B_LO            = $411B
-MAP_PRG_C_LO            = $411C
-MAP_PRG_D_LO            = $411D
-MAP_PRG_E_LO            = $411E
-MAP_PRG_F_LO            = $411F
+MAP_PRG_LO_5            = $4115
+MAP_PRG_LO_6            = $4116
+MAP_PRG_LO_7            = $4117
+MAP_PRG_LO_8            = $4118
+MAP_PRG_LO_9            = $4119
+MAP_PRG_LO_A            = $411A
+MAP_PRG_LO_B            = $411B
+MAP_PRG_LO_C            = $411C
+MAP_PRG_LO_D            = $411D
+MAP_PRG_LO_E            = $411E
+MAP_PRG_LO_F            = $411F
 
 ; CHR banking
 MAP_CHR_CONTROL         = $4120
 MAP_BG_EXT_BANK         = $4121
 
-MAP_CHR_0_HI            = $4130
-MAP_CHR_1_HI            = $4131
-MAP_CHR_2_HI            = $4132
-MAP_CHR_3_HI            = $4133
-MAP_CHR_4_HI            = $4134
-MAP_CHR_5_HI            = $4135
-MAP_CHR_6_HI            = $4136
-MAP_CHR_7_HI            = $4137
-MAP_CHR_8_HI            = $4138
-MAP_CHR_9_HI            = $4139
-MAP_CHR_A_HI            = $413A
-MAP_CHR_B_HI            = $413B
-MAP_CHR_C_HI            = $413C
-MAP_CHR_D_HI            = $413D
-MAP_CHR_E_HI            = $413E
-MAP_CHR_F_HI            = $413F
+MAP_CHR_HI_0            = $4130
+MAP_CHR_HI_1            = $4131
+MAP_CHR_HI_2            = $4132
+MAP_CHR_HI_3            = $4133
+MAP_CHR_HI_4            = $4134
+MAP_CHR_HI_5            = $4135
+MAP_CHR_HI_6            = $4136
+MAP_CHR_HI_7            = $4137
+MAP_CHR_HI_8            = $4138
+MAP_CHR_HI_9            = $4139
+MAP_CHR_HI_A            = $413A
+MAP_CHR_HI_B            = $413B
+MAP_CHR_HI_C            = $413C
+MAP_CHR_HI_D            = $413D
+MAP_CHR_HI_E            = $413E
+MAP_CHR_HI_F            = $413F
 
-MAP_CHR_0_LO            = $4140
-MAP_CHR_1_LO            = $4141
-MAP_CHR_2_LO            = $4142
-MAP_CHR_3_LO            = $4143
-MAP_CHR_4_LO            = $4144
-MAP_CHR_5_LO            = $4145
-MAP_CHR_6_LO            = $4146
-MAP_CHR_7_LO            = $4147
-MAP_CHR_8_LO            = $4148
-MAP_CHR_9_LO            = $4149
-MAP_CHR_A_LO            = $414A
-MAP_CHR_B_LO            = $414B
-MAP_CHR_C_LO            = $414C
-MAP_CHR_D_LO            = $414D
-MAP_CHR_E_LO            = $414E
-MAP_CHR_F_LO            = $414F
+MAP_CHR_LO_0            = $4140
+MAP_CHR_LO_1            = $4141
+MAP_CHR_LO_2            = $4142
+MAP_CHR_LO_3            = $4143
+MAP_CHR_LO_4            = $4144
+MAP_CHR_LO_5            = $4145
+MAP_CHR_LO_6            = $4146
+MAP_CHR_LO_7            = $4147
+MAP_CHR_LO_8            = $4148
+MAP_CHR_LO_9            = $4149
+MAP_CHR_LO_A            = $414A
+MAP_CHR_LO_B            = $414B
+MAP_CHR_LO_C            = $414C
+MAP_CHR_LO_D            = $414D
+MAP_CHR_LO_E            = $414E
+MAP_CHR_LO_F            = $414F
 
 ; Fill-mode
 MAP_FILL_MODE_TILE      = $4124
@@ -150,8 +150,8 @@ MAP_SPR_EXT_LOWER_BANK  = $4200 ; $4200 ... $423F, one register for each sprite
 MAP_SPR_EXT_UPPER_BANK  = $4240
 
 ; Auto-generated OAM procedures
-MAP_OAM_SLOW_UPDATE_PAGE= $4241
-MAP_OAM_EXT_UPDATE_PAGE = $4242
+MAP_OAM_SLOW_UPDATE_RAM = $4241
+MAP_OAM_EXT_UPDATE_RAM  = $4242
 MAP_OAM_SLOW_UPDATE     = $4280
 MAP_OAM_EXT_UPDATE      = $4282
 
@@ -177,6 +177,7 @@ CHR_CHIP_FPGA_RAM       = %10000000 ; FPGA-RAM
 CHR_CHIP_MASK           = %11000000
 CHR_CHIP_CLEAR          = CHR_CHIP_MASK^$ff
 
+WINDOW_SPLIT_MODE       = %00010000
 SPR_EXT_MODE            = %00100000
 
 CHR_MODE_0              = %00000000 ; 8K mode

@@ -1473,13 +1473,13 @@ An empty message will be sent if the passed ID is not valid.
 
 **Encryption types:**
 
-| Value | Description      |
-| ----- | ---------------- |
-| 2     | WPA / PSK        |
-| 4     | WPA2 / PSK       |
-| 5     | WEP              |
-| 7     | open network     |
-| 8     | WPA / WPA2 / PSK |
+| Value | NETWORK_ENCRYPTION_TYPES | Description      |
+| ----- | ------------------------ | ---------------- |
+| 2     | WPA_PSK                  | WPA / PSK        |
+| 4     | WPA2_PSK                 | WPA2 / PSK       |
+| 5     | WEP                      | WEP              |
+| 7     | OPEN_NETWORK             | open network     |
+| 8     | WPA_WPA2_PSK             | WPA / WPA2 / PSK |
 
 [Back to command list](#Commands-overview)
 
@@ -1869,13 +1869,13 @@ Using **manual mode**:
 
 **Result codes:**
 
-| Value | Description                           |
-| ----- | ------------------------------------- |
-| 0     | File successfully deleted             |
-| 1     | Error while trying to delete the file |
-| 2     | File does not exist                   |
-| 3     | Invalid path/file index/name          |
-| 4     | Malformed message                     |
+| Value | FILE_DELETE_RES           | Description                           |
+| ----- | ------------------------- | ------------------------------------- |
+| 0     | SUCCESS                   | File successfully deleted             |
+| 1     | ERROR_WHILE_DELETING_FILE | Error while trying to delete the file |
+| 2     | FILE_NOT_FOUND            | File does not exist                   |
+| 3     | INVALID_PATH_OR_FILE      | Invalid path/file index / filename    |
+| 4     | MALFORMED_MESSAGE         | Malformed message                     |
 
 [Back to command list](#Commands-overview)
 
@@ -2309,31 +2309,35 @@ Using **manual mode**:
 
 **Result codes:**
 
-| Value | Description                                |
-| ----- | ------------------------------------------ |
-| 0     | Success (HTTP status in 2xx)               |
-| 1     | Invalid destination (path/filename)        |
-| 2     | Error while deleting existing file         |
-| 3     | Unknown / unsupported protocol             |
-| 4     | Network error (code in byte 4, see below ) |
-| 5     | HTTP status is not in 2xx                  |
-| 6     | Malformed message                          |
+| Value | FILE_DOWNLOAD_RES                    | Description                                         |
+| ----- | ------------------------------------ | --------------------------------------------------- |
+| 0     | SUCCESS                              | HTTP status is 200, 203 or 204                      |
+| 1     | INVALID_DESTINATION                  | Invalid destination (path/filename)                 |
+| 2     | ERROR_WHILE_DELETING_FILE            | Error while deleting existing file                  |
+| 3     | UNKNOWN_OR_UNSUPPORTED_PROTOCOL      | Unknown or unsupported protocol                     |
+| 4     | NETWORK_ERROR                        | Network error (code in byte 4, see below)           |
+| 5     | HTTP_STATUS_NOT_OK                   | Error (HTTP status different than 200, 203 and 204) |
+| 6     | MALFORMED_MESSAGE                    | Malformed message                                   |
+| 7     | ERROR_WHILE_OPENING_DESTINATION_FILE | Error while opening destination file                |
+| 8     | FAILED_TO_CONNECT_TO_URL             | Failed to connect to URL                            |
+| 9     | TCP_CONNECTION_ACTIVE                | A (secured) TCP connection is already active        |
+|       |                                      | (possibly server connection)                        |
 
 **Network error codes:**
 
-| Value | Description         |
-| ----- | ------------------- |
-| -1    | Connection failed   |
-| -2    | Send header failed  |
-| -3    | Send payload failed |
-| -4    | Not connected       |
-| -5    | Connection lost     |
-| -6    | No stream           |
-| -7    | No HTTP server      |
-| -8    | Too less RAM        |
-| -9    | Encoding            |
-| -10   | Stream write        |
-| -11   | Read timeout        |
+| Value | FILE_DOWNLOAD_NETWORK_ERR       | Description                     |
+| ----- | ------------------------------- | ------------------------------- |
+| -1    | CONNECTION_FAILED               | Connection failed               |
+| -2    | SEND_HEADER_FAILED              | Send header failed              |
+| -3    | SEND_PAYLOAD_FAILED             | Send payload failed             |
+| -4    | NOT_CONNECTED                   | Not connected                   |
+| -5    | CONNECTION_LOST                 | Connection lost                 |
+| -6    | NO_STREAM                       | No stream                       |
+| -7    | NO_HTTP_SERVER                  | No HTTP server                  |
+| -8    | NOT_ENOUGH_RAM                  | Not enough RAM                  |
+| -9    | TRANSFER_ENCODING_NOT_SUPPORTED | Transfer-Encoding not supported |
+| -10   | STREAM_WRITE_ERROR              | Stream write error              |
+| -11   | READ_TIMEOUT                    | Read timeout                    |
 
 **Notes:**
 

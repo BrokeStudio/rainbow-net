@@ -59,6 +59,7 @@ Special thanks to :
     - [RND\_GET\_WORD\_RANGE](#rnd_get_word_range)
     - [SERVER\_GET\_STATUS](#server_get_status)
     - [SERVER\_GET\_PING](#server_get_ping)
+    - [SERVER\_PING\_START](#server_ping_start)
     - [SERVER\_SET\_PROTOCOL](#server_set_protocol)
     - [SERVER\_GET\_SETTINGS](#server_get_settings)
     - [SERVER\_SET\_SETTINGS](#server_set_settings)
@@ -168,6 +169,7 @@ Please check console folders for specific example depending on the system.
 |           |                                                                   | **SERVER CMDS**                                                                       |
 | 20 / 0x14 | [SERVER_GET_STATUS](#SERVER_GET_STATUS)                           | Get server connection status                                                          |
 | 21 / 0x15 | [SERVER_GET_PING](#SERVER_GET_PING)                               | Get ping between ESP and server                                                       |
+| 63 / 0x3F | [SERVER_PING_START](#SERVER_PING_START)                           | Start pinging configured server hostname                                              |
 | 22 / 0x16 | [SERVER_SET_PROTOCOL](#SERVER_SET_PROTOCOL)                       | Set protocol to be used to communicate (TCP/UDP)                                      |
 | 23 / 0x17 | [SERVER_GET_SETTINGS](#SERVER_GET_SETTINGS)                       | Get current server host name and port                                                 |
 | 24 / 0x18 | [SERVER_SET_SETTINGS](#SERVER_SET_SETTINGS)                       | Set current server host name and port                                                 |
@@ -722,8 +724,9 @@ This command is asynchronous; use [WIFI_GET_STATUS](#WIFI_GET_STATUS) to poll th
 ### PING_START
 
 This command starts pinging the passed host name and returns the ping status (started correctly or error).  
-If no number of pings is passed, the default value will be 4.  
-Errors such as BAD_HOST and START_FAILED are returned immediately and do not replace the last ping result.
+If no number of pings is passed or if 0 is passed, then the default ping count will be 4.  
+BAD_HOST is returned immediately and does not replace the last ping result.  
+Use PING_GET_RESULT command to get ping result.
 
 | Byte | Description                                          | Example      |
 | ---- | ---------------------------------------------------- | ------------ |
@@ -773,7 +776,7 @@ Errors such as BAD_HOST and START_FAILED are returned immediately and do not rep
 ### PING_GET_RESULT
 
 This command returns the last ping result: min, max and average round-trip time and number of timed-out ping requests.  
-This command only reports the state/result of a ping request that was successfully started.  
+This command reports the current or last ping process state/result. Result bytes are returned only when status is DONE.  
 Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.
 
 | Byte | Description                                 | Example           |
@@ -1017,7 +1020,7 @@ This command asks the server status.
 This command pings the server and returns the min, max and average round-trip time and number of timed-out ping requests.  
 If another ping is already in progress, the command will be ignored.  
 Returned round-trip time is divided by 4 to fit in only 1 byte, so time precision is 4ms.  
-If no number of pings is passed, the default value will be 4.
+If no number of pings is passed or if 0 is passed, then the default ping count will be 4.
 
 | Byte    | Description                                                                | Example           |
 | ------- | -------------------------------------------------------------------------- | ----------------- |
@@ -1046,6 +1049,33 @@ Following message will be sent after ping:
 | 3    | Maximum ping round-trip time (4ms precision) | `0x42`        |
 | 4    | Average ping round-trip time (4ms precision) | `0x37`        |
 | 5    | Number of timed-out ping requests            | `0x01`        |
+
+[Back to command list](#Commands-overview)
+
+---
+
+### SERVER_PING_START
+
+This command starts pinging the server host name and returns the ping status (started correctly or error).  
+If no number of pings is passed or if 0 is passed, then the default ping count will be 4.  
+BAD_HOST is returned immediately and does not replace the last ping result.  
+Use PING_GET_RESULT command to get ping result.
+
+| Byte    | Description                                                                | Example             |
+| ------- | -------------------------------------------------------------------------- | ------------------- |
+| 0       | Length of the message (excluding this byte; 1 or 2)                        | `1` or `2`          |
+| 1       | Command ID (see commands to ESP)                                           | `SERVER_PING_START` |
+|         | _**the next byte is required if you want to specify the number of pings**_ |                     |
+| 2 (opt) | Number of pings                                                            | `3`                 |
+|         | _**if 0 is passed, this will perform 4 pings by default**_                 |                     |
+
+**Returns:**
+
+| Byte | Description                                        | Example                      |
+| ---- | -------------------------------------------------- | ---------------------------- |
+| 0    | Length of the message (excluding this byte)        | `2`                          |
+| 1    | Command ID (see commands from ESP)                 | `PING_STATUS`                |
+| 2    | Status code (see [PING_START_STATUS](#PING_START)) | `PING_START_STATUS::STARTED` |
 
 [Back to command list](#Commands-overview)
 

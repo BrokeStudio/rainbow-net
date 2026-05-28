@@ -46,8 +46,9 @@ TOESP_RND_GET_WORD_RANGE              EQU 19  ; Get random word between custom m
 
 ; SERVER CMDS
 TOESP_SERVER_GET_STATUS               EQU 20  ; Get server connection status
-TOESP_SERVER_PING                     EQU 21  ; Get ping between ESP and server
-TOESP_SERVER_SET_PROTOCOL             EQU 22  ; Set protocol to be used to communicate (WS/UDP/TCP)
+TOESP_SERVER_GET_PING                 EQU 21  ; Get ping between ESP and server
+TOESP_SERVER_PING_START               EQU 63  ; Start pinging configured server hostname
+TOESP_SERVER_SET_PROTOCOL             EQU 22  ; Set protocol to be used to communicate (UDP/TCP)
 TOESP_SERVER_GET_SETTINGS             EQU 23  ; Get current server host name and port
 TOESP_SERVER_SET_SETTINGS             EQU 24  ; Set current server host name and port
 TOESP_SERVER_GET_SAVED_SETTINGS       EQU 25  ; Get server host name and port values saved in the Rainbow config file

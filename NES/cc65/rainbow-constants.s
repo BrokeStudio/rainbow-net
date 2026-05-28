@@ -47,8 +47,9 @@ TX_ADD    = $4194
 
 ; SERVER CMDS
   SERVER_GET_STATUS = 20                ; Get server connection status
-  SERVER_PING = 21                      ; Get ping between ESP and server
-  SERVER_SET_PROTOCOL = 22              ; Set protocol to be used to communicate (WS/UDP/TCP)
+  SERVER_GET_PING = 21                  ; Get ping between ESP and server
+  SERVER_PING_START = 63                ; Start pinging configured server hostname
+  SERVER_SET_PROTOCOL = 22              ; Set protocol to be used to communicate (UDP/TCP)
   SERVER_GET_SETTINGS = 23              ; Get current server host name and port
   SERVER_SET_SETTINGS = 24              ; Set current server host name and port
   SERVER_GET_SAVED_SETTINGS = 25        ; Get server host name and port values saved in the Rainbow config file

@@ -502,6 +502,8 @@ This command asks the Wi-Fi status.
 
 **Wi-Fi error:**
 
+We recommend using these Wi-Fi errors instead of the ESP ones.
+
 | Value | WIFI_ERROR        | Description                       |
 | ----- | ----------------- | --------------------------------- |
 | 255   | UNKNOWN_ERROR     | Unknown error                     |
@@ -515,7 +517,6 @@ This command asks the Wi-Fi status.
 
 | Value | WIFI_STATUS     | Description                                |
 | ----- | --------------- | ------------------------------------------ |
-| 255   | WL_NO_SHIELD    | For compatibility with WiFi Shield library |
 | 0     | IDLE_STATUS     | Temporary status assigned between statuses |
 | 1     | NO_SSID_AVAIL   | Configured SSID cannot be reached          |
 | 2     | SCAN_COMPLETED  | Network scan completed                     |

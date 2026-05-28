@@ -1062,12 +1062,41 @@ This command sets the protocol to be use when talking to game server.
 
 **Protocol values:**
 
-| Value | PROTOCOL | Description     |
-| ----- | -------- | --------------- |
-| 0     | TCP      | TCP             |
-| 1     | TCP_S    | TCP Secured     |
-| 2     | UDP      | UDP             |
-| 3     | UDP_POOL | UDP Addess pool |
+| Value | PROTOCOL | Description      |
+| ----- | -------- | ---------------- |
+| 0     | TCP      | TCP              |
+| 1     | TCP_S    | TCP Secured      |
+| 2     | UDP      | UDP              |
+| 3     | UDP_POOL | UDP Address pool |
+
+**TCP message format**
+
+When using the TCP protocol, data sent by the server must be framed.  
+TCP is a byte stream protocol: it guarantees that bytes are received in order, but it does not preserve message boundaries.  
+A single server write may be received in multiple chunks, and multiple writes may be received together.  
+For this reason, each application message sent by the server to the ESP must use the following format:
+
+`[length][payload]`
+
+- length: 1 byte, payload size in bytes. Valid range: 1 to 254.
+- payload: raw message data, exactly length bytes.
+
+Example: `0x03 0xAA 0xBB 0xCC 0x02 0x10 0x20`
+
+| Byte(s)          | Meaning                        |
+| ---------------- | ------------------------------ |
+| `0x03`           | First payload length: 3 bytes  |
+| `0xAA 0xBB 0xCC` | First payload                  |
+| `0x02`           | Second payload length: 2 bytes |
+| `0x10 0x20`      | Second payload                 |
+
+This contains two messages:
+
+- Message 1: `0xAA 0xBB 0xCC`
+- Message 2: `0x10 0x20`
+
+Multiple framed messages may be sent back-to-back in the same TCP stream.  
+The ESP reconstructs each framed message before forwarding its payload to the NES.
 
 [Back to command list](#Commands-overview)
 

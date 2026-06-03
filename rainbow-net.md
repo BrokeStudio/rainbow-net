@@ -33,73 +33,73 @@ Special thanks to :
     - [Commands to the ESP](#commands-to-the-esp)
     - [Commands from the ESP](#commands-from-the-esp)
   - [Commands details](#commands-details)
-    - [ESP\_GET\_STATUS](#esp_get_status)
-    - [DEBUG\_GET\_LEVEL](#debug_get_level)
-    - [DEBUG\_SET\_LEVEL](#debug_set_level)
-    - [DEBUG\_LOG](#debug_log)
-    - [BUFFER\_CLEAR\_RX\_TX](#buffer_clear_rx_tx)
-    - [BUFFER\_DROP\_FROM\_ESP](#buffer_drop_from_esp)
-    - [ESP\_GET\_FIRMWARE\_VERSION](#esp_get_firmware_version)
-    - [ESP\_FACTORY\_RESET](#esp_factory_reset)
-    - [ESP\_RESTART](#esp_restart)
-    - [WIFI\_GET\_STATUS](#wifi_get_status)
-    - [WIFI\_GET\_SSID](#wifi_get_ssid)
-    - [WIFI\_GET\_IP\_ADDRESS](#wifi_get_ip_address)
-    - [WIFI\_GET\_MAC\_ADDRESS](#wifi_get_mac_address)
-    - [WIFI\_GET\_CONFIG](#wifi_get_config)
-    - [WIFI\_SET\_CONFIG](#wifi_set_config)
-    - [WIFI\_CONNECT](#wifi_connect)
-    - [PING\_START](#ping_start)
-    - [PING\_GET\_RESULT](#ping_get_result)
-    - [AP\_GET\_SSID](#ap_get_ssid)
-    - [AP\_GET\_IP\_ADDRESS](#ap_get_ip_address)
-    - [RND\_GET\_BYTE](#rnd_get_byte)
-    - [RND\_GET\_BYTE\_RANGE](#rnd_get_byte_range)
-    - [RND\_GET\_WORD](#rnd_get_word)
-    - [RND\_GET\_WORD\_RANGE](#rnd_get_word_range)
-    - [SERVER\_GET\_STATUS](#server_get_status)
-    - [SERVER\_GET\_PING](#server_get_ping)
-    - [SERVER\_PING\_START](#server_ping_start)
-    - [SERVER\_SET\_PROTOCOL](#server_set_protocol)
-    - [SERVER\_GET\_SETTINGS](#server_get_settings)
-    - [SERVER\_SET\_SETTINGS](#server_set_settings)
-    - [SERVER\_GET\_SAVED\_SETTINGS](#server_get_saved_settings)
-    - [SERVER\_SET\_SAVED\_SETTINGS](#server_set_saved_settings)
-    - [SERVER\_RESTORE\_SAVED\_SETTINGS](#server_restore_saved_settings)
-    - [SERVER\_CONNECT](#server_connect)
-    - [SERVER\_DISCONNECT](#server_disconnect)
-    - [SERVER\_SEND\_MESSAGE](#server_send_message)
-    - [UDP\_ADDR\_POOL\_CLEAR](#udp_addr_pool_clear)
-    - [UDP\_ADDR\_POOL\_ADD](#udp_addr_pool_add)
-    - [UDP\_ADDR\_POOL\_REMOVE](#udp_addr_pool_remove)
-    - [UDP\_ADDR\_POOL\_SEND\_MESSAGE](#udp_addr_pool_send_message)
-    - [NETWORK\_SCAN](#network_scan)
-    - [NETWORK\_GET\_SCAN\_RESULT](#network_get_scan_result)
-    - [NETWORK\_GET\_SCANNED\_DETAILS](#network_get_scanned_details)
-    - [NETWORK\_GET\_REGISTERED](#network_get_registered)
-    - [NETWORK\_GET\_REGISTERED\_DETAILS](#network_get_registered_details)
-    - [NETWORK\_REGISTER](#network_register)
-    - [NETWORK\_UNREGISTER](#network_unregister)
-    - [NETWORK\_SET\_ACTIVE](#network_set_active)
+    - [ESP_GET_STATUS](#esp_get_status)
+    - [DEBUG_GET_LEVEL](#debug_get_level)
+    - [DEBUG_SET_LEVEL](#debug_set_level)
+    - [DEBUG_LOG](#debug_log)
+    - [BUFFER_CLEAR_RX_TX](#buffer_clear_rx_tx)
+    - [BUFFER_DROP_FROM_ESP](#buffer_drop_from_esp)
+    - [ESP_GET_FIRMWARE_VERSION](#esp_get_firmware_version)
+    - [ESP_FACTORY_RESET](#esp_factory_reset)
+    - [ESP_RESTART](#esp_restart)
+    - [WIFI_GET_STATUS](#wifi_get_status)
+    - [WIFI_GET_SSID](#wifi_get_ssid)
+    - [WIFI_GET_IP_ADDRESS](#wifi_get_ip_address)
+    - [WIFI_GET_MAC_ADDRESS](#wifi_get_mac_address)
+    - [WIFI_GET_CONFIG](#wifi_get_config)
+    - [WIFI_SET_CONFIG](#wifi_set_config)
+    - [WIFI_CONNECT](#wifi_connect)
+    - [PING_START](#ping_start)
+    - [PING_GET_RESULT](#ping_get_result)
+    - [AP_GET_SSID](#ap_get_ssid)
+    - [AP_GET_IP_ADDRESS](#ap_get_ip_address)
+    - [RND_GET_BYTE](#rnd_get_byte)
+    - [RND_GET_BYTE_RANGE](#rnd_get_byte_range)
+    - [RND_GET_WORD](#rnd_get_word)
+    - [RND_GET_WORD_RANGE](#rnd_get_word_range)
+    - [SERVER_GET_STATUS](#server_get_status)
+    - [SERVER_GET_PING](#server_get_ping)
+    - [SERVER_PING_START](#server_ping_start)
+    - [SERVER_SET_PROTOCOL](#server_set_protocol)
+    - [SERVER_GET_SETTINGS](#server_get_settings)
+    - [SERVER_SET_SETTINGS](#server_set_settings)
+    - [SERVER_GET_SAVED_SETTINGS](#server_get_saved_settings)
+    - [SERVER_SET_SAVED_SETTINGS](#server_set_saved_settings)
+    - [SERVER_RESTORE_SAVED_SETTINGS](#server_restore_saved_settings)
+    - [SERVER_CONNECT](#server_connect)
+    - [SERVER_DISCONNECT](#server_disconnect)
+    - [SERVER_SEND_MESSAGE](#server_send_message)
+    - [UDP_ADDR_POOL_CLEAR](#udp_addr_pool_clear)
+    - [UDP_ADDR_POOL_ADD](#udp_addr_pool_add)
+    - [UDP_ADDR_POOL_REMOVE](#udp_addr_pool_remove)
+    - [UDP_ADDR_POOL_SEND_MESSAGE](#udp_addr_pool_send_message)
+    - [NETWORK_SCAN](#network_scan)
+    - [NETWORK_GET_SCAN_RESULT](#network_get_scan_result)
+    - [NETWORK_GET_SCANNED_DETAILS](#network_get_scanned_details)
+    - [NETWORK_GET_REGISTERED](#network_get_registered)
+    - [NETWORK_GET_REGISTERED_DETAILS](#network_get_registered_details)
+    - [NETWORK_REGISTER](#network_register)
+    - [NETWORK_UNREGISTER](#network_unregister)
+    - [NETWORK_SET_ACTIVE](#network_set_active)
   - [File commands details](#file-commands-details)
     - [File paths](#file-paths)
     - [File config](#file-config)
-    - [FILE\_OPEN](#file_open)
-    - [FILE\_CLOSE](#file_close)
-    - [FILE\_STATUS](#file_status)
-    - [FILE\_EXISTS](#file_exists)
-    - [FILE\_DELETE](#file_delete)
-    - [FILE\_SET\_CUR](#file_set_cur)
-    - [FILE\_READ](#file_read)
-    - [FILE\_WRITE](#file_write)
-    - [FILE\_APPEND](#file_append)
-    - [FILE\_COUNT](#file_count)
-    - [FILE\_GET\_LIST](#file_get_list)
-    - [FILE\_GET\_FREE\_ID](#file_get_free_id)
-    - [FILE\_GET\_FS\_INFO](#file_get_fs_info)
-    - [FILE\_GET\_INFO](#file_get_info)
-    - [FILE\_DOWNLOAD](#file_download)
-    - [FILE\_FORMAT](#file_format)
+    - [FILE_OPEN](#file_open)
+    - [FILE_CLOSE](#file_close)
+    - [FILE_STATUS](#file_status)
+    - [FILE_EXISTS](#file_exists)
+    - [FILE_DELETE](#file_delete)
+    - [FILE_SET_CUR](#file_set_cur)
+    - [FILE_READ](#file_read)
+    - [FILE_WRITE](#file_write)
+    - [FILE_APPEND](#file_append)
+    - [FILE_COUNT](#file_count)
+    - [FILE_GET_LIST](#file_get_list)
+    - [FILE_GET_FREE_ID](#file_get_free_id)
+    - [FILE_GET_FS_INFO](#file_get_fs_info)
+    - [FILE_GET_INFO](#file_get_info)
+    - [FILE_DOWNLOAD](#file_download)
+    - [FILE_FORMAT](#file_format)
   - [BootROM](#bootrom)
   - [TODO](#todo)
 
@@ -717,6 +717,8 @@ This command is asynchronous; use [WIFI_GET_STATUS](#WIFI_GET_STATUS) to poll th
 | 0    | Length of the message (excluding this byte) | `1`            |
 | 1    | Command ID (see commands to ESP)            | `WIFI_CONNECT` |
 
+**Compatibility:** This command is available on firmware version > 1.0.0
+
 [Back to command list](#Commands-overview)
 
 ---
@@ -769,6 +771,8 @@ Use PING_GET_RESULT command to get ping result.
 | 3     | START_FAILED      | Start failed                              |
 | 4     | MALFORMED         | Malformed message                         |
 
+**Compatibility:** This command is available on firmware version > 1.0.0
+
 [Back to command list](#Commands-overview)
 
 ---
@@ -806,6 +810,8 @@ Returned round-trip time is divided by 4 to fit in only 1 byte, so time precisio
 | 2     | DONE               | Last ping completed; result bytes are available |
 | 3     | MALFORMED          | Malformed message                               |
 | 4     | START_FAILED       | PING_START failed while starting ping process   |
+
+**Compatibility:** This command is available on firmware version > 1.0.0
 
 [Back to command list](#Commands-overview)
 
@@ -1076,6 +1082,8 @@ Use PING_GET_RESULT command to get ping result.
 | 0    | Length of the message (excluding this byte)        | `2`                          |
 | 1    | Command ID (see commands from ESP)                 | `PING_STATUS`                |
 | 2    | Status code (see [PING_START_STATUS](#PING_START)) | `PING_START_STATUS::STARTED` |
+
+**Compatibility:** This command is available on firmware version > 1.0.0
 
 [Back to command list](#Commands-overview)
 

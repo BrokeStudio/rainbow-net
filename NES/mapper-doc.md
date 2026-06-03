@@ -690,6 +690,27 @@ Register \$4242 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM
       +++- OAM extended banks page index
 ```
 
+### OAM sprite limit (\$4243, write-only)
+
+This register is used by both OAM update routines.  
+It defines the last sprite index to update, inclusive. Updates always start at sprite 0.
+
+Examples:
+
+- If set to 0, _OAM slow update_ updates only sprite 0, for a total of 4 bytes, and _OAM ext update_ updates 1 byte.
+- If set to 16, _OAM slow update_ updates sprites 0 through 16, for a total of 68 bytes (17 sprites, 4 bytes per sprite), and _OAM ext update_ updates 17 bytes.
+- If set to 63, both routines update all 64 sprites.
+
+If your game don't use too many sprites, it's a way to spend less time updating sprites during VBlank.
+
+```
+7  bit  0
+---- ----
+..LL LLLL
+  || ||||
+  ++-++++- OAM sprite limit
+```
+
 ## Window Split Mode (\$4170-\$4175)
 
 When Window Split Mode is enabled (see register \$4120), all VRAM fetches corresponding to the appropriate screen region will be redirected to nametable defined by registers \$412E (Window Split nametable bank) and \$412F (Window Split nametable control).
@@ -1419,7 +1440,8 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **AUTO-GENERATED OAM PROCEDURES**                                       |
 | \$4241        | `.....PPP` |   W    | OAM slow update 256 bytes page index                                    |
 | \$4242        | `.....PPP` |   W    | OAM ext update 256 bytes page                                           |
-| \$4243-\$427F |            |        | _Not used_                                                              |
+| \$4243        | `..TTTTTT` |   W    | OAM slow/ext update sprite limit                                        |
+| \$4244-\$427F |            |        | _Not used_                                                              |
 | \$4280        |            |   X    | OAM slow update                                                         |
 | \$4282        |            |   X    | OAM ext update                                                          |
 |               |            |        | **MEMORY MAPPING**                                                      |

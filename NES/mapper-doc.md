@@ -847,14 +847,12 @@ Read
 ```
 7  bit  0
 ---- ----
-HF.. ...I
-||      |
-||      +- Scanline IRQ Pending flag
+HF.. ....
+||
+||
 |+-------- In-Frame flag
 +--------- HBlank flag
 ```
-
-The Scanline IRQ Pending flag becomes set at any time that the internal scanline counter matches the value written to register \$4150. If the scanline IRQ is enabled, it will also generate /IRQ to the system.
 
 The In-Frame flag is set when the PPU is rendering a frame and cleared during vertical blank.
 
@@ -1379,7 +1377,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4150        | `VVVVVVVV` |   W    | Latch value                                                             |
 | \$4150        | `CCCCCCCC` |   R    | Current scanline value                                                  |
 | \$4151        | `........` |   W    | Enable                                                                  |
-| \$4151        | `HF.....I` |   R    | Status (in-frame, HBlank, IRQ pending flags)                            |
+| \$4151        | `HF......` |   R    | Status (in-frame, HBlank)                                               |
 | \$4152        | `........` |   W    | Disable                                                                 |
 | \$4153        | `OOOOOOOO` |   W    | Offset                                                                  |
 | \$4154        | `CCCCCCCC` |   R    | CPU cycle jitter counter                                                |

@@ -18,8 +18,8 @@ The board and mapper were designed by Broke Studio which also manufactures the c
   - last 2K are used to communicate with the Wi-Fi chip and can also be used as general purpose PRG-RAM
 - Up to 8MiB PRG-ROM
 - Up to 8MiB CHR-ROM
-- 32K or 128K of PRG-RAM
-- 32K or 128K of CHR-RAM
+- 32K, 128K or 256K of PRG-RAM
+- 32K, 128K or 256K of CHR-RAM
 - Self-flashable PRG-ROM
 - Self-flashable CHR-ROM
 - Scanline counter
@@ -44,6 +44,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
   - 2 pulse channels
   - 1 sawtooth channel
   - IPCM mode that allows expansion audio on stock NES
+- Compatible with EPSM module
 - System reset detection
   - resets main registers
 

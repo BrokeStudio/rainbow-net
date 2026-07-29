@@ -191,7 +191,7 @@ On power-up and reset, some registers are initialized/reset with specific values
 |          |       | **Wi-Fi**                                                                              |
 | \$4190   | \$00  | Disable Wi-Fi                                                                          |
 |          |       | **Audio Expansion**                                                                    |
-| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable IPCM, disable EPSM                               |
+| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable IPCM                                             |
 | \$41AA   | \$0F  | Set default master volume                                                              |
 
 ## PRG banking modes (\$4100, read/write)
@@ -1198,14 +1198,14 @@ E... FFFF
 ```
 7  bit  0
 ---- ----
-E... .ITF
-|     |||
-|     ||+- Outputs expansion audio to EXP6 pin (0: disable, 1: enable)
-|     |    usually used for front loader
-|     |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
-|     |    usually used for top loader
-|     +--- Outputs expansion audio data to APU register $4011 (read)
-+--------- EPSM support (0: disable, 1: enable)
+.... .ITF
+      |||
+      ||+- Outputs expansion audio to EXP6 pin (0: disable, 1: enable)
+      |    usually used for front loader
+      |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
+      |    usually used for top loader
+      +--- Outputs expansion audio data to APU register $4011 (read)
+           IPCM
 ```
 
 ### Audio output control (\$41AA, write-only)
@@ -1430,7 +1430,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$41A7        | `FFFFFFFF` |   W    | Saw low frequency                                                       |
 | \$41A8        | `E...FFFF` |   W    | Saw high frequency                                                      |
 |               |            |        | **AUDIO OUTPUT CONTROL**                                                |
-| \$41A9        | `E....ITF` |   W    | Audio output control                                                    |
+| \$41A9        | `.....ITF` |   W    | Audio output control                                                    |
 | \$41AA        | `....VVVV` |   W    | Audio output master volume                                              |
 | \$41AB-\$41FF |            |        | _Not used_                                                              |
 |               |            |        | **SPRITE EXTENDED MODE**                                                |

@@ -36,14 +36,13 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - Background Extended Mode allows to address up to 16384 tiles
 - Sprite Extended Mode allows to address up to 65535 tiles
 - Auto-generated OAM procedures
-  - OAM slow clear routine
   - OAM slow update routine
   - OAM Extended bank update routine
 - Window Split Mode
 - Expansion audio:
   - 2 pulse channels
   - 1 sawtooth channel
-  - IPCM mode that allows expansion audio on stock NES
+  - IPCM (Increment PCM) mode that allows expansion audio on stock NES
 - Compatible with EPSM module
 - System reset detection
   - resets main registers
@@ -191,7 +190,7 @@ On power-up and reset, some registers are initialized/reset with specific values
 |          |       | **Wi-Fi**                                                                              |
 | \$4190   | \$00  | Disable Wi-Fi                                                                          |
 |          |       | **Audio Expansion**                                                                    |
-| \$41A9   | \$03  | Enable EXP6 and EXP9 outputs, disable IPCM                                             |
+| \$41A9   | \$00  | Disable EXP6/EXP9 outputs and disable IPCM (Increment PCM)                             |
 | \$41AA   | \$0F  | Set default master volume                                                              |
 
 ## PRG banking modes (\$4100, read/write)
@@ -959,7 +958,7 @@ If this register is written to with 'E' set, the IRQ counter is reloaded with th
 If 'E' is clear, the IRQ counter remains unchanged.  
 The 'A' bit here has no immediate effect, and remains unused until IRQ Acknowledge is written to.  
 It can be used to distinguish a one-shot IRQ from a repeated IRQ.  
-If 'I' is set, the IRQ will be automatically acknowledged when reading \$4011, which makes IPCM even easier to use.
+If 'I' is set, the IRQ will be automatically acknowledged when reading \$4011, which makes IPCM (Increment PCM) even easier to use.
 
 ```
 7  bit  0
@@ -1057,6 +1056,7 @@ PPPV VVVV
 | 1               | added register \$4150 (read current scanline counter value) |
 |                 | added register \$4157 (read m2 status)                      |
 |                 | added CIRAM as a possible source for pattern table          |
+|                 | updated register \$41A9 to disable every output on reset    |
 |                 | updated register \$4242 to now select a 256 bytes page      |
 |                 | updated OAM ext routine to read every 4 bytes               |
 |                 | removed OAM clear routine                                   |
@@ -1205,7 +1205,7 @@ E... FFFF
       |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
       |    usually used for top loader
       +--- Outputs expansion audio data to APU register $4011 (read)
-           IPCM
+           IPCM (Increment PCM)
 ```
 
 ### Audio output control (\$41AA, write-only)

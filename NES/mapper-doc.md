@@ -915,17 +915,32 @@ Any write to this register will reset the parity bit to 0.
 
 ## CPU Cycle IRQ (\$4158-\$415B)
 
-This IRQ feature is a CPU cycle counting IRQ generator.  
-When enabled, the 16-bit IRQ counter is decremented once per CPU cycle.  
-When the IRQ counter reaches \$0000, an IRQ is generated and IRQ counter is reloaded with latched value.  
-The IRQ line is held low until it is acknowledged.
+This is a 16-bit CPU cycle IRQ timer.
 
-### How to Use the IRQ Generator
+While enabled, a non-zero counter is decremented once per CPU cycle.  
+When it counts down to zero, an IRQ is generated and the counter is immediately reloaded from the latch.
 
-- Set the latch to the desired number of cycles.
-- Enable the IRQ generator by turning on the IRQ Enable flag of the IRQ Control register.
-- Within the IRQ handler, write to the IRQ acknowledge register to acknowledge the IRQ.
-- Optional: Go back to Step 1 for the next IRQ.
+The CPU IRQ source is asserted only while both the enable and pending flags are set.
+
+The pending flag remains set until the IRQ is acknowledged or the control register is rewritten.
+
+Writing to the latch does not affect the current counter.
+
+| Reload value  | Behavior                                                                 |
+| ------------- | ------------------------------------------------------------------------ |
+| \$0000        | Counter remains stopped once loaded; no IRQ is generated                 |
+| \$0001        | IRQ becomes pending after one counted CPU cycle                          |
+| \$0002-\$FFFF | IRQ becomes pending after the corresponding number of counted CPU cycles |
+
+### How to use the IRQ generator
+
+1. Write the desired number of cycles to the latch registers.
+2. Write the control flags to the IRQ Control register. Setting E reloads and starts the counter.
+3. Handle the generated IRQ.
+4. Acknowledge it by writing any value to the IRQ acknowledge register, or by reading \$4011 when automatic \$4011 acknowledgement is enabled.
+
+For a one-shot IRQ, set `E=1` and `A=0`. Acknowledging the IRQ then disables the generator.  
+For a periodic IRQ, set `E=1` and `A=1`. Acknowledging the IRQ keeps the timer running without reloading the counter.
 
 ### CPU IRQ latch high byte (\$4158, write-only)
 
@@ -953,12 +968,17 @@ LLLL LLLL
 
 ### CPU IRQ control (\$415A, write-only)
 
-Writing zero to this register will disable interrupts.  
-If this register is written to with 'E' set, the IRQ counter is reloaded with the latch value.  
-If 'E' is clear, the IRQ counter remains unchanged.  
-The 'A' bit here has no immediate effect, and remains unused until IRQ Acknowledge is written to.  
-It can be used to distinguish a one-shot IRQ from a repeated IRQ.  
-If 'I' is set, the IRQ will be automatically acknowledged when reading \$4011, which makes IPCM (Increment PCM) even easier to use.
+Writing this register always clears the CPU IRQ pending flag and updates all three control flags.
+
+If `E` is set, the current counter is reloaded from the 16-bit latch and counting starts.  
+If `E` is clear, counting stops.
+
+`A` controls the value copied to `E` when the IRQ is acknowledged:
+
+- `A=0` disables the timer after acknowledgement, producing a one-shot IRQ.
+- `A=1` keeps or re-enables the timer after acknowledgement, producing periodic IRQs.
+
+`I` automatically acknowledges the IRQ when \$4011 is read. This is equivalent to writing to the IRQ acknowledge register and is useful for IPCM.
 
 ```
 7  bit  0
@@ -967,14 +987,17 @@ If 'I' is set, the IRQ will be automatically acknowledged when reading \$4011, w
       |||
       ||+- IRQ enable (0: disabled, 1: enabled)
       |+-- IRQ enable after being acknowledged (see IRQ acknowledge)
-      +--- IRQ acknowledged if $4011 is read (0: disabled, 1: enabled)
+      +--- IRQ acknowledged if \$4011 is read (0: disabled, 1: enabled)
 ```
 
 ### CPU IRQ acknowledge (\$415B, write-only)
 
-Writing any value to this register will acknowledge the pending IRQ.  
-In addition, the 'A' control bit moves to the 'E' control bit, enabling or disabling IRQs.  
-Writes to this register do not affect the current state of the IRQ counter.
+Writing any value clears the pending flag and copies `A` to `E`:
+
+- `A`=0 disables the IRQ generator.
+- `A`=1 keeps or re-enables the IRQ generator.
+
+Acknowledging an IRQ does not reload the counter. With `A`=1, counting continues uninterrupted.
 
 ```
 7  bit  0

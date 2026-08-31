@@ -155,43 +155,43 @@ The Rainbow mapper provides:
 
 On power-up and reset, some registers are initialized/reset with specific values.
 
-| Register | Value | Note                                                                                   |
-| -------- | ----- | -------------------------------------------------------------------------------------- |
-|          |       | **PRG settings**                                                                       |
-| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)                           |
-| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to $00 so it will address the first bank               |
-| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to $00 so it will address the first bank               |
-|          |       | **CHR settings**                                                                       |
-| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                                   |
-|          |       | disable Sprite Extended Mode, disable Window Split Mode                                |
-| \$4130   | \$00  | Set CHR 8K bank upper bits to $00 so it will address the first bank                    |
-| \$4140   | \$00  | Set CHR 8K bank lower bits to $00 so it will address the first bank                    |
-|          |       | **Nametables settings (horizontal mirroring using CIRAM)**                             |
-| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                                       |
-| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                                       |
-| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                                       |
-| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                                       |
-| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                              |
-| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                                          |
-| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                                          |
-| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                                          |
-| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                                          |
-| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                              |
-|          |       | **Auto-generated OAM procedures**                                                      |
-| \$4241   | \$07  | Set the OAM slow update page to 7, using $4F00 as the OAM shadow data source           |
-| \$4242   | \$06  | Set the OAM ext update page to 6, using $4E00 as the Sprite Extended Banks data source |
-|          |       | **Scanline IRQ settings**                                                              |
-| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                                          |
-| \$4153   | \$87  | Set scanline IRQ offset to 135                                                         |
-|          |       | **CPU Cycle IRQ settings**                                                             |
-| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                                         |
-|          |       | **Vector redirection**                                                                 |
-| \$416B   | \$00  | Disable NMI and IRQ vector redirection                                                 |
-|          |       | **Wi-Fi**                                                                              |
-| \$4190   | \$00  | Disable Wi-Fi                                                                          |
-|          |       | **Audio Expansion**                                                                    |
-| \$41A9   | \$00  | Disable EXP6/EXP9 outputs and disable IPCM (Increment PCM)                             |
-| \$41AA   | \$0F  | Set default master volume                                                              |
+| Register | Value | Note                                                                                    |
+| -------- | ----- | --------------------------------------------------------------------------------------- |
+|          |       | **PRG settings**                                                                        |
+| \$4100   | \$00  | Set PRG-ROM mode 0 (32K banks) and PRG-RAM mode 0 (8K banks)                            |
+| \$4108   | \$00  | Set PRG-ROM 32K bank upper bits to \$00 so it will address the first bank               |
+| \$4118   | \$00  | Set PRG-ROM 32K bank lower bits to \$00 so it will address the first bank               |
+|          |       | **CHR settings**                                                                        |
+| \$4120   | \$00  | Set CHR mode 0 (8K banks), CHR-ROM as pattern table,                                    |
+|          |       | disable Sprite Extended Mode, disable Window Split Mode                                 |
+| \$4130   | \$00  | Set CHR 8K bank upper bits to \$00 so it will address the first bank                    |
+| \$4140   | \$00  | Set CHR 8K bank lower bits to \$00 so it will address the first bank                    |
+|          |       | **Nametables settings (horizontal mirroring using CIRAM)**                              |
+| \$4126   | \$00  | Set nametable @ \$2000 bank to 0                                                        |
+| \$4127   | \$00  | Set nametable @ \$2400 bank to 0                                                        |
+| \$4128   | \$01  | Set nametable @ \$2800 bank to 1                                                        |
+| \$4129   | \$01  | Set nametable @ \$2C00 bank to 1                                                        |
+| \$412E   | \$00  | Set Window Split Mode nametable bank to 0                                               |
+| \$412A   | \$00  | Set nametable @ \$2000 chip selector to CIRAM                                           |
+| \$412B   | \$00  | Set nametable @ \$2400 chip selector to CIRAM                                           |
+| \$412C   | \$00  | Set nametable @ \$2800 chip selector to CIRAM                                           |
+| \$412D   | \$00  | Set nametable @ \$2C00 chip selector to CIRAM                                           |
+| \$412F   | \$80  | Set Window Split Mode nametable chip selector to FPGA-RAM                               |
+|          |       | **Auto-generated OAM procedures**                                                       |
+| \$4241   | \$07  | Set the OAM slow update page to 7, using \$4F00 as the OAM shadow data source           |
+| \$4242   | \$06  | Set the OAM ext update page to 6, using \$4E00 as the Sprite Extended Banks data source |
+|          |       | **Scanline IRQ settings**                                                               |
+| \$4152   | \$00  | Disable scanline IRQ (IRQ cleared if pending)                                           |
+| \$4153   | \$87  | Set scanline IRQ offset to 135                                                          |
+|          |       | **CPU Cycle IRQ settings**                                                              |
+| \$415A   | \$00  | Disable CPU Cycle IRQ (IRQ cleared if pending)                                          |
+|          |       | **Vector redirection**                                                                  |
+| \$416B   | \$00  | Disable NMI and IRQ vector redirection                                                  |
+|          |       | **Wi-Fi**                                                                               |
+| \$4190   | \$00  | Disable Wi-Fi                                                                           |
+|          |       | **Audio Expansion**                                                                     |
+| \$41A9   | \$00  | Disable EXP6/EXP9 outputs and disable IPCM (Increment PCM)                              |
+| \$41AA   | \$0F  | Set default master volume                                                               |
 
 ## PRG banking modes (\$4100, read/write)
 
@@ -365,7 +365,7 @@ CCSW .BBB
 ||||        011: 1K CHR mode 3 (CHR banks 0 to 7 are used) - see note below
 ||||        1xx: 512B CHR mode 4 (CHR banks 0 to 15 are used) - see note below
 |||+------ Window Split Mode (0: disabled, 1: enabled)
-||+------- Sprite Extended Mode (0: disabled, 1: enabled), see registers $4200-$4240
+||+------- Sprite Extended Mode (0: disabled, 1: enabled), see registers \$4200-\$4240
 ++-------- Chip selector for pattern tables
             00: CHR-ROM
             01: CHR-RAM
@@ -389,7 +389,7 @@ Note: when using 1K and 512B CHR banking modes with 512K (or more) CHR-ROM,
 When using Background Extended Mode, you can address up to 16384 tiles.  
 This registers is used to select a 256K CHR offset for every tiles.
 
-### Nametables bank ($4126-$4129, write-only)
+### Nametables bank (\$4126-\$4129, write-only)
 
 - \$4126 controls nametable at \$2000
 - \$4127 controls nametable at \$2400
@@ -407,7 +407,7 @@ BBBB BBBB
             not all bits are used.
 ```
 
-### Nametables control ($412A-$412D, $412F, write-only)
+### Nametables control (\$412A-\$412D, \$412F, write-only)
 
 - \$412A controls nametable at \$2000
 - \$412B controls nametable at \$2400
@@ -432,8 +432,8 @@ CCF. DDEE
 |||         01: 2nd 1K of FPGA-RAM
 |||         10: 3rd 1K of FPGA-RAM
 |||         11: 4th 1K of FPGA-RAM
-||+------- Fill-mode (0: disable, 1: enable, see $4124 and $4125)
-++-------- Chip selector (forced to FPGA-RAM for $412F)
+||+------- Fill-mode (0: disable, 1: enable, see \$4124 and \$4125)
+++-------- Chip selector (forced to FPGA-RAM for \$412F)
             00: CIRAM
             01: CHR-RAM
             10: FPGA-RAM
@@ -465,32 +465,32 @@ In Background extended mode, CHR banking behaves differently than normal when fe
 - CHR banks are always 4KB in this mode
 - The values of the CHR banking registers \$4130-\$414F are also ignored
 - Bits 0-5 specified above are used for selecting a 4KB CHR bank on a per-tile basis
-- Bits 0-4 of register $4121 are used for selecting a 256K CHR offset for every tiles
+- Bits 0-4 of register \$4121 are used for selecting a 256K CHR offset for every tiles
 
 #### Chip selector
 
-| Chip selector (CC) | Value | Notes                                                                          |
-| ------------------ | ----- | ------------------------------------------------------------------------------ |
-| CIRAM              | %00   | Only the lower bit of the corresponding nametable bank register is used        |
-|                    |       | to address either one or the other nametable provided by the console.          |
-|                    |       |                                                                                |
-| CHR-RAM            | %01   | Corresponding nametable bank register is used to address 1KB blocks of CHR-RAM |
-|                    |       | Depending on the CHR-RAM size, not all bits will be used.                      |
-|                    |       |                                                                                |
-| FPGA-RAM           | %10   | Only the two lower bits of the corresponding nametable bank register are used  |
-|                    |       | to address one of the 4KB of FPGA-RAM.                                         |
-|                    |       | Those 4KB of FPGA-RAM can also be accessed by the CPU at \$5000-$5FFF (bank 0) |
-|                    |       | This means that you can update the nametable during rendering.                 |
-|                    |       | /!\ Using FPGA-RAM as nametable **and** pattern table is not a good idea.      |
-|                    |       | /!\ Using FPGA-RAM as nametable **and** as Extended Mode data can be done      |
-|                    |       | under certain circumstances:                                                   |
-|                    |       | - when using FPGA-RAM as nametable at \$2000 or \$2400, you can only           |
-|                    |       | use 3rd and 4th 1K bank of FPGA-RAM as Extended Mode data.                     |
-|                    |       | - when using FPGA-RAM as nametable at \$2800 or \$2C00, you can only           |
-|                    |       | use 1st and 2nd 1K bank of FPGA-RAM as Extended Mode data.                     |
-|                    |       |                                                                                |
-| CHR-ROM            | %11   | Corresponding nametable bank register is used to address 1KB blocks of CHR-ROM |
-|                    |       | Depending on the CHR-ROM size, not all bits will be used                       |
+| Chip selector (CC) | Value | Notes                                                                           |
+| ------------------ | ----- | ------------------------------------------------------------------------------- |
+| CIRAM              | %00   | Only the lower bit of the corresponding nametable bank register is used         |
+|                    |       | to address either one or the other nametable provided by the console.           |
+|                    |       |                                                                                 |
+| CHR-RAM            | %01   | Corresponding nametable bank register is used to address 1KB blocks of CHR-RAM  |
+|                    |       | Depending on the CHR-RAM size, not all bits will be used.                       |
+|                    |       |                                                                                 |
+| FPGA-RAM           | %10   | Only the two lower bits of the corresponding nametable bank register are used   |
+|                    |       | to address one of the 4KB of FPGA-RAM.                                          |
+|                    |       | Those 4KB of FPGA-RAM can also be accessed by the CPU at \$5000-\$5FFF (bank 0) |
+|                    |       | This means that you can update the nametable during rendering.                  |
+|                    |       | /!\ Using FPGA-RAM as nametable **and** pattern table is not a good idea.       |
+|                    |       | /!\ Using FPGA-RAM as nametable **and** as Extended Mode data can be done       |
+|                    |       | under certain circumstances:                                                    |
+|                    |       | - when using FPGA-RAM as nametable at \$2000 or \$2400, you can only            |
+|                    |       | use 3rd and 4th 1K bank of FPGA-RAM as Extended Mode data.                      |
+|                    |       | - when using FPGA-RAM as nametable at \$2800 or \$2C00, you can only            |
+|                    |       | use 1st and 2nd 1K bank of FPGA-RAM as Extended Mode data.                      |
+|                    |       |                                                                                 |
+| CHR-ROM            | %11   | Corresponding nametable bank register is used to address 1KB blocks of CHR-ROM  |
+|                    |       | Depending on the CHR-ROM size, not all bits will be used                        |
 
 #### Nametables mirroring
 
@@ -644,7 +644,7 @@ The bank upper bits are common to every sprite.
 
 You have access to 3 routines that allow you to easily clear/update OAM data without the need to write/update your own code in RAM:
 
-- **OAM slow update** allows you to update the sprites data for each sprite only using registers $2003/$2004 (no OAM DMA)
+- **OAM slow update** allows you to update the sprites data for each sprite only using registers \$2003-\$2004 (no OAM DMA)
 - **OAM ext update** allows you to update the sprites extended bank automatically (when using Sprites Extended Mode)
 
 All you need to do is prepare your data in a specific RAM area (see routines details), and `jsr` to the corresponding routine start address.
@@ -652,7 +652,7 @@ All you need to do is prepare your data in a specific RAM area (see routines det
 ### OAM slow update (\$4241, write-only and \$4280, executable)
 
 To execute this routine, you just need to do `jsr $4280`.  
-This routine will update the sprites OAM data using only registers $2003/2004, and uses **1548** cycles including the final `rts` opcode.  
+This routine will update the sprites OAM data using only registers \$2003-\$2004, and uses **1548** cycles including the final `rts` opcode.  
 OAM data must be written to the \$4800-\$4FFF area.
 
 Register \$4241 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM).
@@ -673,7 +673,7 @@ Extended bank data must be written to the \$4800-\$4FFF area, every 4 bytes.
 
 For example:
 
-- set $4242 to 0
+- set \$4242 to 0
 - write sprite 0 extended bank value to \$4800
 - write sprite 1 extended bank value to \$4804
 - write sprite 2 extended bank value to \$4808
@@ -723,7 +723,7 @@ Notes:
 - Vertical scrolling for the split region operates like normal vertical scrolling. 0-239 are valid scroll values, whereas 240-255 will display Attribute table data as NT data for the first few scanlines. The split nametable will wrap so that the top of the nametable will appear below as you scroll (just as if vertical mirroring were employed).
 - FPGA-RAM is always used as the nametable in split mode (see register \$412F).
 
-### Window Split start/stop tile ($4170-$4171, write-only)
+### Window Split start/stop tile (\$4170-\$4171, write-only)
 
 Register \$4170 defines the tile where the split starts.
 
@@ -750,7 +750,7 @@ Note:
 - If the start tile is **smaller** than the stop tile, then the split NT region will appear in the middle of the normal NT region.
 - If the start tile is **higher** than the stop tile, then the normal NT region will appear in the middle of the split NT region.
 
-### Window Split start/stop tile ($4172-$4173, write-only)
+### Window Split start/stop tile (\$4172-\$4173, write-only)
 
 Register \$4172 defines the tile where the split starts.
 
@@ -777,7 +777,7 @@ Note:
 - If the start position is **smaller** than the stop position, then the _split NT region_ will appear in the middle of the _normal NT region_.
 - If the start position is **higher** than the stop position, then the _normal NT region_ will appear in the middle of the _split NT region_.
 
-### Window Split coarse X scroll ($4174, write-only)
+### Window Split coarse X scroll (\$4174, write-only)
 
 This register controls the horizontal scrolling of the split region on a per-tile basis.
 
@@ -791,7 +791,7 @@ This register controls the horizontal scrolling of the split region on a per-til
 
 TODO...
 
-### Window Split fine Y scroll ($4175, write-only)
+### Window Split fine Y scroll (\$4175, write-only)
 
 This register controls the vertical scrolling of the split region.
 
@@ -813,7 +813,7 @@ For more informations: https://www.nesdev.org/wiki/MMC5#Scanline_Detection_and_S
 Write
 
 **from MMC5 wiki page, need to test**  
-All eight bits specify the target scanline number at which to generate a scanline IRQ. Value $00 is a special case that will not produce IRQ pending conditions, though it is possible to get an IRQ while this is set to $00 (due to the pending flag being set already.) You will need to take additional measures to fully suppress the IRQ. See the detailed discussion.
+All eight bits specify the target scanline number at which to generate a scanline IRQ. Value \$00 is a special case that will not produce IRQ pending conditions, though it is possible to get an IRQ while this is set to \$00 (due to the pending flag being set already.) You will need to take additional measures to fully suppress the IRQ. See the detailed discussion.
 
 ```
 7  bit  0
@@ -984,11 +984,14 @@ Writes to this register do not affect the current state of the IRQ counter.
 
 ## FPGA-RAM auto reader/writer (\$415C-\$415F)
 
-The FPGA-RAM auto reader/writer allows you to access the FPGA-RAM without the need to set the address for each read or write.  
-First you set the start address, then you set the increment value that will be added to the address after each read or write, and finally you read or write through one register.  
-This mimic how the PPU registers \$2006 and \$2007 work and allow you to do faster updates when using the FPGA-RAM as nametables or pattern tables.
-Since the FPGA-RAM is also used to store incoming and outcoming messages for the ESP / Wi-Fi chip, you can also use the auto reader/writer to read/write messages a bit faster.  
-The auto reader/writer address should be in the \$0000-\$1FFF range, which allows you to address the 8KB of FPGA-RAM.
+The FPGA-RAM auto reader/writer allows you to access the FPGA-RAM without the need to set the address for each read or write.
+
+First you set the start address, then you set the increment value that will be added to the address after each read or write, and finally you read or write through one register.
+
+This mimics how the PPU registers \$2006 and \$2007 work and allow you to do faster updates when using the FPGA-RAM as nametables or pattern tables.
+Since the FPGA-RAM is also used to store incoming and outcoming messages for the ESP / Wi-Fi chip, you can also use the auto reader/writer to read/write messages a bit faster.
+
+The auto reader/writer address should be in the \$0000-\$1FFF range, which allows you to address the whole 8KB of FPGA-RAM.
 
 ### FPGA-RAM hi address (\$415C, write-only)
 
@@ -1204,7 +1207,7 @@ E... FFFF
       |    usually used for front loader
       |+-- Outputs expansion audio to EXP9 pin (0: disable, 1: enable)
       |    usually used for top loader
-      +--- Outputs expansion audio data to APU register $4011 (read)
+      +--- Outputs expansion audio data to APU register \$4011 (read)
            IPCM (Increment PCM)
 ```
 
@@ -1248,7 +1251,7 @@ DR.. ....
 |+------- Data ready, this flag is set to 1 if a message is waiting to be sent on the ESP side
 +-------- Data received (0: FPGA can receive a new message, 1: a new message is ready)
           This flag is set to 1 when the FPGA has received a new message
-          If the I flag of the ESP configuration register ($4190) is set, then the NES IRQ will be triggered
+          If the I flag of the ESP configuration register (\$4190) is set, then the NES IRQ will be triggered
 ```
 
 ### TX - Transimission (\$4192, read/write)

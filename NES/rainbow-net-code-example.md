@@ -23,7 +23,7 @@ Here's an example on how to send and receive data.
 
 ```
   ; to send data we first need to write our message to RAM at $4900 since that's what we configured above
-  ; let's ask the ESP for a random 16 bits number between 0x0010 and 0x2000...
+  ; let's ask the ESP for a random 16 bits number between $0010 and $2000...
   lda #$05                ; message length
   sta $4900
   lda #RND_GET_WORD_RANGE ; command
@@ -58,5 +58,5 @@ Here's an example on how to send and receive data.
 
   ; we can now acknowledge the received message
   ; this will tell the FPGA that he can store a new message if a new message is available
-  sta $4192
+  sta $4191
 ```

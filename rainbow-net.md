@@ -29,6 +29,7 @@ Special thanks to :
   - [Why 'Rainbow'?](#why-rainbow)
   - [Message format](#message-format)
   - [Code example](#code-example)
+  - [SD Card Partitioning](#sd-card-partitioning)
   - [Commands overview](#commands-overview)
     - [Commands to the ESP](#commands-to-the-esp)
     - [Commands from the ESP](#commands-from-the-esp)
@@ -130,6 +131,19 @@ A message is what is send to or received from the ESP and always have the same f
 ## Code example
 
 Please check console folders for specific example depending on the system.
+
+## SD Card Partitioning
+
+The SD card must use an MBR partition table with a single FAT32 partition. A 32 KB allocation unit size is recommended.  
+Cards previously used as bootable media may use GPT or contain additional partitions. Formatting them through Windows Explorer is not sufficient, as it does not recreate the partition table.  
+To restore the card with Rufus:
+
+- Boot selection: Non bootable
+- Partition scheme: MBR
+- File system: FAT32 or Large FAT32
+- Cluster size: 32 KB
+
+**Warning:** This operation erases all data and partitions on the card.
 
 ## Commands overview
 

@@ -47,6 +47,25 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - System reset detection
   - resets main registers
 
+## EverDrive limitations
+
+The EverDrive ports have the following limitations compared with the Rainbow cartridge:
+
+| Feature                          | N8 Original   | N8 Pro                          |
+| -------------------------------- | ------------- | ------------------------------- |
+| Maximum PRG-ROM size             | 512 KiB       | 7936 KiB                        |
+| Maximum CHR size                 | 512 KiB       | 8176 KiB                        |
+| Maximum PRG-RAM size             | 128 KiB       | 256K                            |
+| Simultaneous CHR-ROM and CHR-RAM | Not supported | Not supported                   |
+| CHR mode 4 (512-byte banks)      | Not supported | Supported                       |
+| Window Split fine Y scroll       | Not supported | Supported                       |
+| Save states                      | Not supported | FPGA-RAM contents are not saved |
+
+Both ports support CHR-ROM or CHR-RAM, but cannot use both at the same time.  
+On N8 Original, Window Split cannot override CHR address bits 0–2, so its fine Y scroll does not work.  
+On N8 Pro, restoring a save state does not restore FPGA-RAM contents, which may leave the game's state inconsistent.  
+On N8 Pro, the maximum ROM sizes are 7936 KiB for PRG-ROM and 8176 KiB for CHR-ROM. The remaining memory is reserved for the EverDrive system software and buffers.
+
 # Banks
 
 The Rainbow mapper provides:

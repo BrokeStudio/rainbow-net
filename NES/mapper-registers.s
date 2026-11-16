@@ -159,25 +159,52 @@ MAP_OAM_EXT_UPDATE      = $4282
 ; ################################################################################
 ; MAPPER FLAGS / MASKS
 
+; PRG-ROM banking: modes ($4100)
 PRG_ROM_MODE_0          = %00000000 ; 32K
 PRG_ROM_MODE_1          = %00000001 ; 16K + 16K
 PRG_ROM_MODE_2          = %00000010 ; 16K + 8K + 8K
 PRG_ROM_MODE_3          = %00000011 ; 8K + 8K + 8K + 8K
 PRG_ROM_MODE_4          = %00000100 ; 4K + 4K + 4K + 4K + 4K + 4K + 4K + 4K
+
 PRG_ROM_MODE_MASK       = %00000111
 PRG_ROM_MODE_CLEAR      = PRG_ROM_MODE_MASK^$ff
 
+; PRG-RAM banking: modes ($4100)
 PRG_RAM_MODE_0          = %00000000 ; 8K
 PRG_RAM_MODE_1          = %10000000 ; 4K + 4K
+
 PRG_RAM_MODE_MASK       = %10000000
 PRG_RAM_MODE_CLEAR      = PRG_RAM_MODE_MASK^$ff
 
+; PRG-ROM banking: chip selector ($4108-$410F)
+PRG_ROM_CHIP_ROM        = %00000000
+PRG_ROM_CHIP_RAM        = %10000000
+
+PRG_ROM_CHIP_MASK       = %10000000
+PRG_ROM_CHIP_CLEAR      = PRG_ROM_CHIP_MASK^$ff
+
+; PRG-RAM banking: chip selector ($4106-$4107)
+PRG_RAM_CHIP_ROM        = %00000000
+PRG_RAM_CHIP_RAM        = %10000000
+PRG_RAM_CHIP_FPGA_RAM   = %11000000
+
+PRG_RAM_CHIP_MASK       = %11000000
+PRG_RAM_CHIP_CLEAR      = PRG_RAM_CHIP_MASK^$ff
+
+; PRG bank upper bits ($4106-$410F)
+PRG_BANK_HI_MASK        = %00000111
+PRG_BANK_HI_CLEAR       = PRG_BANK_HI_MASK^$ff
+
+; CHR-ROM banking: chip selector ($4120)
 CHR_CHIP_ROM            = %00000000 ; CHR-ROM
 CHR_CHIP_RAM            = %01000000 ; CHR-RAM
 CHR_CHIP_FPGA_RAM       = %10000000 ; FPGA-RAM
+CHR_CHIP_CIRAM          = %11000000 ; CIRAM
+
 CHR_CHIP_MASK           = %11000000
 CHR_CHIP_CLEAR          = CHR_CHIP_MASK^$ff
 
+; CHR-ROM banking: modes ($4120)
 WINDOW_SPLIT_MODE       = %00010000
 SPR_EXT_MODE            = %00100000
 
@@ -186,24 +213,106 @@ CHR_MODE_1              = %00000001 ; 4K mode
 CHR_MODE_2              = %00000010 ; 2K mode
 CHR_MODE_3              = %00000011 ; 1K mode
 CHR_MODE_4              = %00000100 ; 512B mode
+
 CHR_MODE_MASK           = %00000111
 CHR_MODE_CLEAR          = CHR_MODE_MASK^$ff
 
+; CPU IRQ control ($415A)
+CPU_IRQ_ENABLE          = %00000001
+CPU_IRQ_ENABLE_ACK      = %00000010 ; enable after acknowledgement
+CPU_IRQ_ACK_IPCM        = %00000100 ; acknowledge on $4011 read
+
+; IRQ status ($4161)
+IRQ_STATUS_PPU          = %10000000
+IRQ_STATUS_CPU          = %01000000
+IRQ_STATUS_WIFI         = %00000001
+
+; PPU IRQ status ($4151)
+PPU_IRQ_HBLANK          = %10000000
+PPU_IRQ_IN_FRAME        = %01000000
+
+; CPU cycle parity ($4157)
+CPU_M2_PARITY_MASK      = %10000000
+
+; Vector redirection control ($416B)
+VECTOR_NMI_ENABLE       = %00000001
+VECTOR_IRQ_ENABLE       = %00000010
+
+; Wi-Fi configuration ($4190)
+RNBW_ENABLE             = %00000001
+RNBW_IRQ_ENABLE         = %00000010
+
+; Wi-Fi RX status ($4191)
+RNBW_RX_RECEIVED        = %10000000 ; message received in FPGA-RAM
+RNBW_RX_READY           = %01000000 ; message waiting on ESP side
+
+; Wi-Fi TX status ($4192)
+RNBW_TX_SENT            = %10000000
+
+; Audio output control ($41A9)
+SND_OUTPUT_EXP6         = %00000001
+SND_OUTPUT_EXP9         = %00000010
+SND_OUTPUT_IPCM         = %00000100
+
+; Audio master volume ($41AA)
+SND_MASTER_VOLUME_MASK  = %00001111
+
+; Mapper version ($4160)
+VERSION_MASK            = %00011111
+PLATFORM_MASK           = %11100000
+
+; Platform values, already shifted for comparison with PLATFORM_MASK
+PLATFORM_PCB            = %00000000
+PLATFORM_EMULATOR       = %00100000
+PLATFORM_WEB_EMULATOR   = %01000000
+PLATFORM_N8_PRO         = %01100000
+PLATFORM_N8             = %10000000
+
+; Nametable chip selector ($412A-$412D)
 NT_CIRAM                = %00000000
 NT_CHR_RAM              = %01000000
 NT_FPGA_RAM             = %10000000
 NT_CHR_ROM              = %11000000
 
+NT_CHIP_MASK            = %11000000
+NT_CHIP_CLEAR           = NT_CHIP_MASK^$ff
+
+; Nametable fill mode ($412A-$412D, $412F)
 NT_FILL_MODE            = %00100000
 
+; Nametable ext bank ($412A-$412D, $412F)
 NT_EXT_BANK_0           = %00000000
 NT_EXT_BANK_1           = %00000100
 NT_EXT_BANK_2           = %00001000
 NT_EXT_BANK_3           = %00001100
 
+NT_EXT_BANK_MASK        = %00001100
+NT_EXT_BANK_CLEAR       = NT_EXT_BANK_MASK^$ff
+
+; Nametable ext mode selector ($412A-$412D, $412F)
 NT_NO_EXT               = %00000000
 NT_EXT_AT               = %00000001
 NT_EXT_BG               = %00000010
 NT_EXT_BG_AT            = %00000011
 
-NT_BANK_IDX_MASK        = %00111111
+NT_EXT_MODE_MASK        = %00000011
+NT_EXT_MODE_CLEAR       = NT_EXT_MODE_MASK^$ff
+
+; Extended byte bits (AABBBBBB in FPGA-RAM)
+NT_EXT_TILE_MASK        = %00111111
+NT_EXT_TILE_CLEAR       = NT_EXT_TILE_MASK^$ff
+
+NT_EXT_PALETTE_MASK     = %11000000
+NT_EXT_PALETTE_CLEAR    = NT_EXT_PALETTE_MASK^$ff
+
+; ################################################################################
+; ADDITIONAL REGISTERS
+
+; IPCM sample (read)
+MAP_SND_IPCM_SAMPLE     = $4011
+
+; EPSM interface (write)
+MAP_EPSM_0             = $401C
+MAP_EPSM_1             = $401D
+MAP_EPSM_2             = $401E
+MAP_EPSM_3             = $401F

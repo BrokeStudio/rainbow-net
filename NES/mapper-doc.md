@@ -1224,6 +1224,16 @@ LLLL LLLL
 ++++-++++- Low 8 bits of address
 ```
 
+## EPSM support ($401C-$401F, write-only)
+
+The mapper provides an active-low write-select signal on EXP1 for CPU writes to \$401C-\$401F.
+
+This interface is always available and does not require an enable bit in the mapper.  
+Register \$41A9 controls Rainbow's internal audio output paths only; it does not enable or disable the EPSM interface.
+
+An external EPSM module is required to generate EPSM audio.  
+For more information: [https://www.nesdev.org/wiki/Expansion_Port_Sound_Module](https://www.nesdev.org/wiki/Expansion_Port_Sound_Module).
+
 ## Sound / Audio Expansion (\$41A0-\$41AF)
 
 Channels registers work exactly like VRC6 audio expansion minus the frequency scaling register.  

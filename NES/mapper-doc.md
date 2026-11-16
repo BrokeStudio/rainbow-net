@@ -34,7 +34,7 @@ The board and mapper were designed by Broke Studio which also manufactures the c
 - Pattern tables can be mapped to CHR-ROM/CHR-RAM/FPGA-RAM/CIRAM
 - Attribute Extended Mode allows each individual 8x8 tile to have its own palette setting
 - Background Extended Mode allows to address up to 16384 tiles
-- Sprite Extended Mode allows to address up to 65535 tiles
+- Sprite Extended Mode allows to address up to 65536 tiles
 - Auto-generated OAM procedures
   - OAM slow update routine
   - OAM Extended bank update routine
@@ -151,9 +151,15 @@ The Rainbow mapper provides:
 
 # Registers
 
+This document describes the mapper in normal application mode.  
+Manufacturer bootrom and maintenance modes are outside its scope.  
+Register \$41FF is reserved for Broke Studio and must not be written by application software.
+
 ## Power-up and reset register status
 
-On power-up and reset, some registers are initialized/reset with specific values.
+On power-up and reset, some registers are initialized/reset with specific values.  
+Registers not listed below have no guaranteed reset value.  
+Software must initialize them before use.
 
 | Register | Value | Note                                                                                    |
 | -------- | ----- | --------------------------------------------------------------------------------------- |
@@ -303,9 +309,9 @@ LLLL LLLL
 ```
 7  bit  0
 ---- ----
-CC.. UUUU
-||   ||||
-||   ++++- Bank index upper bits
+CC.. .UUU
+||    |||
+||    +++- Bank index upper bits
 ++-------- Chip selector
               0x: PRG-ROM
               10: PRG-RAM
@@ -369,8 +375,8 @@ CCSW .BBB
 ++-------- Chip selector for pattern tables
             00: CHR-ROM
             01: CHR-RAM
-            10: FPGA-RAM (4K mode is forced, \$0000-\$0FFF mirrored at \$1000-\$1FFF, banking settings are ignored)
-            11: CIRAM
+            10: FPGA-RAM (fixed 4K mapping; \$0000-\$0FFF mirrored at \$1000-\$1FFF, banking settings are ignored)
+            11: CIRAM (fixed 2KB mapping; \$0000–\$07FF is mirrored at \$0800–\$0FFF, \$1000–\$17FF, and \$1800–\$1FFF; CHR banking mode and bank registers are ignored)
 
 Note: when using 1K and 512B CHR banking modes with 512K (or more) CHR-ROM,
       you also need to update the CHR bank upper bits using the appropriate registers (\$4130-\$413F)
@@ -484,9 +490,9 @@ In Background extended mode, CHR banking behaves differently than normal when fe
 |                    |       | /!\ Using FPGA-RAM as nametable **and** pattern table is not a good idea.       |
 |                    |       | /!\ Using FPGA-RAM as nametable **and** as Extended Mode data can be done       |
 |                    |       | under certain circumstances:                                                    |
-|                    |       | - when using FPGA-RAM as nametable at \$2000 or \$2400, you can only            |
+|                    |       | - when using FPGA-RAM 1st and/or 2nd 1K bank as nametables, you can only        |
 |                    |       | use 3rd and 4th 1K bank of FPGA-RAM as Extended Mode data.                      |
-|                    |       | - when using FPGA-RAM as nametable at \$2800 or \$2C00, you can only            |
+|                    |       | - when using FPGA-RAM 3rd and/or 4th 1K bank as nametables, you can only        |
 |                    |       | use 1st and 2nd 1K bank of FPGA-RAM as Extended Mode data.                      |
 |                    |       |                                                                                 |
 | CHR-ROM            | %11   | Corresponding nametable bank register is used to address 1KB blocks of CHR-ROM  |
@@ -516,7 +522,11 @@ Mirroring depends on the way you arrange registers \$4126-\$4129 and \$412A-\$41
 
 ## Fill-mode (\$4124-\$4125)
 
-When a nametable fill-mode is set to 1 (see registers \$4126-\$4129, \$412E), all nametable fetches get replaced by the value of register \$4124 for the tile index and \$4125 for the attribute index. Only the nametable is affected by fill-mode. When the PPU later uses this information to fetch the corresponding tile from the pattern table, CHR banking is unaffected and continues to work normally.
+When fill-mode is enabled for a nametable (see registers \$412A–\$412D and \$412F), the PPU renders it using the same tile index (\$4124) and background palette (\$4125) at every position.
+
+Fill-mode provides these values during rendering but it does not modify the underlying nametable memory. Outside rendering, PPU reads/writes access the selected memory normally.
+
+Pattern-table fetches still use the configured CHR source and banking rules. Fill-mode changes the tile index and palette supplied to the PPU, not the tile graphics themselves.
 
 ### Fill-mode tile index (\$4124, write-only)
 
@@ -593,15 +603,15 @@ TTTT TTTT
 ```
 7  bit  0
 ---- ----
-...B BBBB
-   | ||||
-   +-++++- Bank index upper bits (\$413x)
+..UU UUUU
+  || ||||
+  ++-++++- Bank index upper bits (\$413x)
 ```
 
 ```
 7  bit  0
 ---- ----
-BBBB BBBB
+LLLL LLLL
 |||| ||||
 ++++-++++- Bank index lower bits (\$414x)
 ```
@@ -610,11 +620,22 @@ BBBB BBBB
 
 In Sprite Extended Mode, CHR banking behaves differently than normal when fetching tiles from pattern tables:
 
-- CHR banking mode (register \$4120) is ignored but not CHR source (register \$4120)
-- CHR banks are always 4KB in this mode
+- CHR banking mode (register \$4120) is ignored but CHR source is not (register \$4120)
+- CHR bank size is fixed in this mode (4KB or 8KB depending on sprite size)
 - The values of the CHR banking registers \$4130-\$414F are also ignored
-- Registers \$4200-\$423F specify the bank lower bits for each sprite (4K CHR bank selector) allowing the possibility to address 65535 sprites
-- Register \$4240 specify the bank upper bits for all sprites (1024K CHR bank selector)
+- Registers \$4200-\$423F specify the CHR bank lower bits for each sprite giving the possibility to address 65536 sprites
+- Register \$4240 specifies the CHR bank upper bits for all sprites
+
+| Sprite size | CHR bank size | CHR bank upper bits (`$4240`) | CHR bank upper bits used |
+| ----------- | ------------: | ----------------------------: | ------------------------ |
+| 8×8         |         4 Kio |                    1 MiB step | Bits 0–2                 |
+| 8×16        |         8 Kio |                    2 MiB step | Bits 0–1                 |
+
+Sprite Extended Mode requires the mapper to track each sprite's Y position so it can select the corresponding CHR bank during rendering.
+
+The mapper tracks OAM updates by observing CPU writes to \$2003 and \$2004. On original NES/Famicom hardware, this also supports OAM DMA through \$4014.
+
+Some compatible systems, such as the AVS, do not expose OAM DMA writes to the cartridge. On these systems, use the OAM slow update routine (\$4280), or update OAM through explicit \$2003/\$2004 writes, to keep the mapper's sprite tracking synchronized with the PPU.
 
 ### Sprite Extended Mode bank lower bits (\$4200-\$423F, write-only)
 
@@ -642,17 +663,22 @@ The bank upper bits are common to every sprite.
 
 ## Auto-generated OAM procedures
 
-You have access to 3 routines that allow you to easily clear/update OAM data without the need to write/update your own code in RAM:
+You have access to two routines that allow you to easily update OAM data without the need to write/update your own code in RAM:
 
-- **OAM slow update** allows you to update the sprites data for each sprite only using registers \$2003-\$2004 (no OAM DMA)
+- **OAM slow update** allows you to update the sprites data for each sprite only using registers \$2004 (no OAM DMA)
 - **OAM ext update** allows you to update the sprites extended bank automatically (when using Sprites Extended Mode)
 
-All you need to do is prepare your data in a specific RAM area (see routines details), and `jsr` to the corresponding routine start address.
+All you need to do is:
+
+- prepare your data in a specific RAM area (see routines details)
+- initialize _OAM sprite limit_ (\$4243) before the first OAM routine call after power-up or reset; no reset value is guaranteed
+- for OAM slow update, set _OAMADDR register_ (\$2003) to the destination OAM address (zero to start at sprite 0)
+- `jsr` to the corresponding routine start address
 
 ### OAM slow update (\$4241, write-only and \$4280, executable)
 
 To execute this routine, you just need to do `jsr $4280`.  
-This routine will update the sprites OAM data using only registers \$2003-\$2004, and uses **1548** cycles including the final `rts` opcode.  
+This routine will update the sprites OAM data using only registers \$2004, and uses **1548** cycles including the initial `jsr` and the final `rts` opcode if OAM sprite limit is set to 63.  
 OAM data must be written to the \$4800-\$4FFF area.
 
 Register \$4241 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM).
@@ -668,7 +694,7 @@ Register \$4241 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM
 ### OAM ext update (\$4242, write-only and \$4282, executable)
 
 To execute this routine, you just need to do `jsr $4282`.  
-This routine will write the extended bank data for each sprite (registers \$42xx), and uses **390** cycles including the final `rts` opcode.  
+This routine will write the extended bank data for each sprite (registers \$42xx), and uses **396** cycles including the initial `jsr` and the final `rts` opcode if OAM sprite limit is set to 63.  
 Extended bank data must be written to the \$4800-\$4FFF area, every 4 bytes.
 
 For example:
@@ -693,7 +719,8 @@ Register \$4242 sets the 256 bytes page to be used, starting at \$4800 (FPGA-RAM
 ### OAM sprite limit (\$4243, write-only)
 
 This register is used by both OAM update routines.  
-It defines the last sprite index to update, inclusive. Updates always start at sprite 0.
+It defines the last sprite index to update, inclusive.  
+Updates always reads data from sprite 0.
 
 Examples:
 
@@ -713,17 +740,23 @@ If your game don't use too many sprites, it's a way to spend less time updating 
 
 ## Window Split Mode (\$4170-\$4175)
 
-When Window Split Mode is enabled (see register \$4120), all VRAM fetches corresponding to the appropriate screen region will be redirected to nametable defined by registers \$412E (Window Split nametable bank) and \$412F (Window Split nametable control).
+When Window Split Mode is enabled, background nametable and attribute fetches within the selected screen region use the window nametable configured by \$412E and \$412F. Pattern fetches continue to use the configured CHR source and banking rules, with fine Y adjusted to the window's vertical scroll.
 
 Notes:
 
 - 34 background tiles are fetched per scanline. The mapper performs the split by watching which background tile is being fetched during which scanline, and if it is within the split region, replacing the normal NT data with the split data according to the absolute screen position of the tile (i.e., ignoring the coarse horizontal and vertical scroll output as part of the VRAM address for the fetch).
 - Since it operates on a per-tile basis horizontally, fine horizontal scrolling "carries into" the split region: setting the horizontal scroll to 1-7 will result in the split being moved to the left 1-7 pixels. Whenever scrolling exceeds a multiple of 8, the split will "snap" back to its normal position.
 - Horizontal scrolling for the split region operates on a per-tile basis, meaning that it will move horizontally by 8px steps.
-- Vertical scrolling for the split region operates like normal vertical scrolling. 0-239 are valid scroll values, whereas 240-255 will display Attribute table data as NT data for the first few scanlines. The split nametable will wrap so that the top of the nametable will appear below as you scroll (just as if vertical mirroring were employed).
+- Vertical scrolling wraps within the 240-pixel-high split nametable.
 - FPGA-RAM is always used as the nametable in split mode (see register \$412F).
 
 ### Window Split start/stop tile (\$4170-\$4171, write-only)
+
+Start and stop tile indices are inclusive.
+
+If start <= stop, the window covers columns start through stop. If start > stop, it covers columns start through 31 and 0 through stop.
+
+Setting start equal to stop selects one tile column. Setting start to 0 and stop to 31 selects the full width.
 
 Register \$4170 defines the tile where the split starts.
 
@@ -745,62 +778,64 @@ Register \$4171 defines the tile where the split region stops.
    +-++++- Specify Window Split stop tile (0-31)
 ```
 
-Note:
+### Window Split start/stop scanline (\$4172-\$4173, write-only)
 
-- If the start tile is **smaller** than the stop tile, then the split NT region will appear in the middle of the normal NT region.
-- If the start tile is **higher** than the stop tile, then the normal NT region will appear in the middle of the split NT region.
+Start and stop scanline numbers are inclusive and use screen coordinates.
 
-### Window Split start/stop tile (\$4172-\$4173, write-only)
+If start <= stop, the window covers scanlines start through stop. If start > stop, it covers scanlines start through 255 and 0 through stop. Only the visible part of this range is displayed.
 
-Register \$4172 defines the tile where the split starts.
+Setting start equal to stop selects one scanline. Setting start to 0 and stop to 239 selects the full visible height.
+
+Register \$4172 defines the scanline where the split starts.
 
 ```
 7  bit  0
 ---- ----
 SSSS SSSS
 ||||-||||
-++++-++++- Specify Window Split start position (0-256)
+++++-++++- Specify Window Split start position (0-255)
 ```
 
-Register \$4173 defines the tile where the split region stops.
+Register \$4173 defines the scanline where the split region stops.
 
 ```
 7  bit  0
 ---- ----
 EEEE EEEE
 ||||-||||
-++++-++++- Specify Window Split stop position (0-256)
+++++-++++- Specify Window Split stop position (0-255)
 ```
-
-Note:
-
-- If the start position is **smaller** than the stop position, then the _split NT region_ will appear in the middle of the _normal NT region_.
-- If the start position is **higher** than the stop position, then the _normal NT region_ will appear in the middle of the _split NT region_.
 
 ### Window Split coarse X scroll (\$4174, write-only)
 
-This register controls the horizontal scrolling of the split region on a per-tile basis.
+This register adds a horizontal offset to the window's nametable coordinates, in steps of one tile (8 pixels). Increasing the value by 1 selects the next nametable column, moving the displayed contents left by one tile.
+
+The source column wraps modulo 32. The offset is added to the screen tile column, not to the distance from the window's left edge.
+
+This register scrolls the contents of the window; it does not move the window boundaries defined by \$4170 and \$4171.
 
 ```
 7  bit  0
 ---- ----
 ...X XXXX
    |-||||
-   +-++++- Specify Window Split coarse X scroll (0-32)
+   +-++++- Specify Window Split coarse X scroll (0-31)
 ```
-
-TODO...
 
 ### Window Split fine Y scroll (\$4175, write-only)
 
-This register controls the vertical scrolling of the split region.
+This register adds a vertical offset to the window's nametable coordinates, in pixels. The source position wraps modulo 240. Values 240–255 are clamped to 239.
+
+The offset is relative to the screen's vertical position, not to the window's top edge. Increasing it by 1 moves the displayed contents up by one pixel without moving the window boundaries.
+
+Writes during rendering affect subsequent PPU fetches in the current frame.
 
 ```
 7  bit  0
 ---- ----
 YYYY YYYY
 ||||-||||
-++++-++++- Specify Window Split fine Y scroll (0-256)
+++++-++++- Specify Window Split fine Y scroll (0-239)
 ```
 
 ## Scanline/PPU IRQ (\$4150-\$4154)
@@ -808,12 +843,18 @@ YYYY YYYY
 Scanline IRQ is very close to MMC5's.  
 For more informations: https://www.nesdev.org/wiki/MMC5#Scanline_Detection_and_Scanline_IRQ.
 
+The scanline IRQ pending flag is also cleared when the mapper's In-Frame flag clears.  
+A pending scanline IRQ is therefore not retained through vertical blank.
+
 ### PPU IRQ latch (\$4150, read-write)
 
 Write
 
-**from MMC5 wiki page, need to test**  
-All eight bits specify the target scanline number at which to generate a scanline IRQ. Value \$00 is a special case that will not produce IRQ pending conditions, though it is possible to get an IRQ while this is set to \$00 (due to the pending flag being set already.) You will need to take additional measures to fully suppress the IRQ. See the detailed discussion.
+All eight bits specify the target scanline number at which to generate a scanline IRQ.  
+Values 0–241 select the target scanline.  
+Value \$00 targets scanline 0 and follows the same offset timing as other values; writing it does not immediately generate an IRQ.  
+Values 242–255 do not generate a new pending condition.  
+The IRQ output is asserted only when scanline IRQs are enabled.
 
 ```
 7  bit  0
@@ -825,6 +866,10 @@ LLLL LLLL
 
 Read
 
+Reading this register will return the current scanline being rendered.  
+When the mapper's In-Frame flag is clear, this register reads as \$FF.  
+Disabling rendering during a frame resets the scanline tracking; the counter no longer represents the absolute screen scanline when rendering resumes.
+
 ```
 7  bit  0
 ---- ----
@@ -832,9 +877,6 @@ CCCC CCCC
 |||| ||||
 ++++-++++- IRQ scanline counter value
 ```
-
-Reading this register will return the current scanline being rendered.  
-This only works if rendering is enabled and if it hasn't been disabled during rendering.
 
 ### PPU IRQ enable / status (\$4151, read-write)
 
@@ -856,7 +898,8 @@ HF.. ....
 
 The In-Frame flag is set when the PPU is rendering a frame and cleared during vertical blank.
 
-The HBlank flag is set when the PPU is rendering pixel 256 of each scanline.
+The HBlank flag is set when the In-Frame flag is active and PPU is rendering pixel 256+ of each scanline.  
+It clears when the counter restarts for the next scanline or when the In-Frame flag clears.
 
 Any time this register is read, the Scanline IRQ Pending flag is cleared (acknowledging the pending IRQ).
 
@@ -866,8 +909,9 @@ Writing any value to this register will disable scanline IRQ AND acknowledge any
 
 ### PPU IRQ offset (\$4153, write-only)
 
-The IRQ offset let's you control when the IRQ is triggered to adjust the timing depending on your needs.  
-This value corresponds to the **even PPU dot** you want to trigger the IRQ on (1 for dot 1, 2 for dot 3, 3 for dot 5, etc).
+This register adjusts the IRQ timing within the selected scanline in two-dot steps.  
+During normal rendering, increasing the offset by 1 delays the IRQ by two PPU dots.  
+Offset 1 corresponds to the mapper's detection of the start of the scanline.
 
 The minimum value is 1 (\$01) and offset will be set to 1 if you try to set it to 0.  
 The default value set on power-up and reset is 135 (\$87).  
@@ -883,9 +927,10 @@ OOOO OOOO
 
 ### PPU IRQ jitter counter (\$4154, read-only)
 
-This counter is incremented on every m2 falling edge.  
-When an IRQ is triggered, this counter is reset to zero.  
-It can then be read and used to adjust a delay to execute a piece of code (almost) always at the same time every time.
+While the scanline IRQ pending flag is set, this counter increments once per detected falling edge of M2 and wraps after 255.  
+It resets to zero shortly after the pending flag is cleared.  
+Read it before acknowledging the scanline IRQ.  
+It can be used to adjust a delay to execute a piece of code (almost) always at the same time every time.
 
 ```
 7  bit  0
@@ -1075,34 +1120,52 @@ PPPV VVVV
 | 1              | Emulator         |
 | 2              | Web emulator     |
 | 3              | Everdrive N8 PRO |
+| 4              | Everdrive N8     |
 
-| Version (vvvvv) | Description                                                 |
-| --------------- | ----------------------------------------------------------- |
-| 0               | Initial release                                             |
-| 1               | added register \$4150 (read current scanline counter value) |
-|                 | added register \$4157 (read m2 status)                      |
-|                 | added CIRAM as a possible source for pattern table          |
-|                 | updated register \$41A9 to disable every output on reset    |
-|                 | updated register \$4242 to now select a 256 bytes page      |
-|                 | updated OAM ext routine to read every 4 bytes               |
-|                 | removed OAM clear routine                                   |
-|                 | improved level shifter direction timing                     |
-|                 | added EPSM support                                          |
+| Version (vvvvv) | Description                                                                                               |
+| --------------- | --------------------------------------------------------------------------------------------------------- |
+| 0               | Initial release                                                                                           |
+| 1               | Second release with improved mapper:                                                                      |
+|                 | added register \$4150 (read current scanline counter value)                                               |
+|                 | added register \$4157 (read CPU cycle parity / write to reset parity)                                     |
+|                 | added register \$4243 (last sprite index for OAM update routines)                                         |
+|                 | added CIRAM as a possible source for pattern tables                                                       |
+|                 | added EPSM support                                                                                        |
+|                 | updated register \$4151 to remove the IRQ pending flag (now read from \$4161)                             |
+|                 | updated register \$4161 to report enabled IRQ sources only                                                |
+|                 | updated register \$41A9 to disable all audio outputs on reset and use Hi-Z for disabled EXP6/EXP9 outputs |
+|                 | updated register \$4242 to select a 256-byte page                                                         |
+|                 | updated OAM ext update routine to read every 4 bytes                                                      |
+|                 | updated OAM slow update routine to use the current OAMADDR                                                |
+|                 | removed OAM clear routine                                                                                 |
+|                 | fixed IRQ/NMI vector redirection                                                                          |
+|                 | fixed CPU cycle IRQ handling and scanline IRQ timing                                                      |
+|                 | fixed Window Split scrolling, boundaries and sprite conflicts                                             |
+|                 | fixed PPU/BSRAM access timing and rendering detection                                                     |
+|                 | updated PRG/CHR mode 4 decoding                                                                           |
+|                 | fixed PRG-RAM mode initialization on reset                                                                |
+|                 | fixed audio waveform initialization and channel disable behavior                                          |
+|                 | improved ESP UART reliability and reset handling                                                          |
+|                 | improved level shifter direction timing                                                                   |
+|                 | improved compatibility with Famicom, console mods and cartridge tools                                     |
 
 ## IRQ status (\$4161, read-only)
 
-Read this register to get the IRQ status.  
-It will indicate if PPU IRQ or CPU IRQ or ESP / Wi-Fi IRQ is pending (1) or not (0).  
-Reading this register will **NOT** acknowledge any IRQ.
+This register reports which mapper IRQ sources are currently asserting the CPU IRQ line.  
+Each bit is set only when the corresponding IRQ source is both enabled and pending.  
+For Wi-Fi, this means that reception IRQs are enabled and a received message is ready.  
+If any of these bits is set, the mapper asserts the CPU IRQ line.  
+Disabled IRQ sources read as 0.  
+Reading this register does not acknowledge any IRQ.
 
 ```
 7  bit  0
 ---- ----
 PC.. ...W
 ||      |
-||      +- ESP / Wi-Fi IRQ status
-|+-------- CPU Cycle IRQ status
-+--------- PPU Scanline IRQ status
+||      +- ESP / Wi-Fi IRQ active
+|+-------- CPU Cycle IRQ active
++--------- PPU Scanline IRQ active
 ```
 
 ## Vector redirection (\$416B-\$416F, write-only)
@@ -1164,7 +1227,7 @@ LLLL LLLL
 ## Sound / Audio Expansion (\$41A0-\$41AF)
 
 Channels registers work exactly like VRC6 audio expansion minus the frequency scaling register.  
-For more informations: https://wiki.nesdev.com/w/index.php/VRC6_audio.
+For more information: [https://wiki.nesdev.com/w/index.php/VRC6_audio](https://wiki.nesdev.com/w/index.php/VRC6_audio).
 
 ### Pulse control (\$41A0, \$41A3, write-only)
 
@@ -1236,6 +1299,10 @@ E... FFFF
 
 ### Audio output control (\$41AA, write-only)
 
+Controls the master volume of the EXP6 and EXP9 audio outputs.  
+It does not affect IPCM samples read from \$4011.  
+Per-channel volume settings affect both output paths.
+
 ```
 7  bit  0
 ---- ----
@@ -1244,11 +1311,37 @@ E... FFFF
      ++++- Controls expansion audio output master volume
 ```
 
+### IPCM sample (\$4011, read-only)
+
+When IPCM is enabled through bit 2 of \$41A9, reading \$4011 returns the sum of Rainbow's three internal audio channels in this format:
+
+```
+7  bit  0
+---- ----
+0SSS SSS0
+ ||| |||
+ +++-+++- Six-bit mixed audio sample
+```
+
+The six-bit sample is shifted left by one bit, producing an even value between 0 and 122.
+
+Reading this register does not update the APU DAC. Software must write the returned value to \$4011 to play the sample through the console's internal audio output.
+
+Per-channel volume settings affect this sample, but the master volume register \$41AA does not.
+
+If automatic CPU IRQ acknowledgement is enabled through bit 2 of \$415A, reading \$4011 also acknowledges the CPU cycle IRQ, independently of whether IPCM output is enabled.
+
 ## Wi-Fi (\$4190-\$4194)
 
 ### Configuration (\$4190, read/write)
 
 This register is readable and writable.
+
+Clearing E aborts pending and active FPGA transfers and resets the FPGA communication controller.  
+The received-message flag is cleared, but FPGA-RAM contents are not erased.  
+An interrupted reception may leave a partial message in RAM.  
+Subsequent receptions may overwrite the retained data.  
+This does not reset the ESP or guarantee delivery of an interrupted message.
 
 ```
 7  bit  0
@@ -1281,6 +1374,14 @@ DR.. ....
 
 Writing any value to this register sends the message currently stored in FPGA-RAM and sets the bit 7 of the register to 0.  
 The bit 7 will be set to 1 again when the message is sent.
+
+Before preparing a new message, it is recommended to make sure that bit 7 reads as 1.  
+Prepare the message in the selected TX buffer, then write any value to \$4192 to request transmission.  
+Bit 7 remains 0 while the request is pending or transmission is in progress, and returns to 1 when transmission completes.
+
+Do not modify the TX buffer or the TX RAM source address (\$4194) until bit 7 returns to 1.  
+Additional requests while a transmission is pending or active do not queue another message.  
+ESP must be enabled (\$4190).
 
 Reading this register will return the following byte:
 
@@ -1315,6 +1416,8 @@ Only the last 2K of the total 8K of the FPGA-RAM can be used for this.
 Those 2K are permanently mapped at \$4800-\$4FFF.  
 This register allows you to specify a \$100 bytes page from \$4800 to be used for ready to be sent messages.
 
+Do not change this register while a transmission request is pending or active.
+
 ```
 7  bit  0
 ---- ----
@@ -1330,16 +1433,16 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **CPU / PRG control**                                                   |
 | \$4100        | `A....OOO` |  R/W   | PRG banking modes                                                       |
 | \$4101-\$4105 |            |        | _Not used_                                                              |
-| \$4106        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 0,1)                       |
-| \$4107        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 1)                          |
-| \$4108        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 0,1,2,3,4)                 |
-| \$4109        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
-| \$410A        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 3,4)                       |
-| \$410B        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
-| \$410C        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 1,2,3,4)                   |
-| \$410D        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
-| \$410E        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (modes 2,3,4)                     |
-| \$410F        | `CC   UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$4106        | `CC...UUU` |   W    | PRG bank upper bits and chip selector (modes 0,1)                       |
+| \$4107        | `CC...UUU` |   W    | PRG bank upper bits and chip selector (mode 1)                          |
+| \$4108        | `C....UUU` |   W    | PRG bank upper bits and chip selector (modes 0,1,2,3,4)                 |
+| \$4109        | `C....UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410A        | `C....UUU` |   W    | PRG bank upper bits and chip selector (modes 3,4)                       |
+| \$410B        | `C....UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410C        | `C....UUU` |   W    | PRG bank upper bits and chip selector (modes 1,2,3,4)                   |
+| \$410D        | `C....UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
+| \$410E        | `C....UUU` |   W    | PRG bank upper bits and chip selector (modes 2,3,4)                     |
+| \$410F        | `C....UUU` |   W    | PRG bank upper bits and chip selector (mode 4)                          |
 | \$4110-\$4114 |            |        | _Not used_                                                              |
 | \$4115        | `.......B` |   W    | FPGA-RAM bank bits                                                      |
 | \$4116        | `LLLLLLLL` |   W    | PRG bank lower bits (modes 0,1)                                         |
@@ -1357,33 +1460,33 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4121        | `...UUUUU` |   W    | Background Extended Mode bank upper bits control                        |
 | \$4122-\$4123 |            |        | _Not used_                                                              |
 | \$4124        | `TTTTTTTT` |   W    | Fill-mode tile index                                                    |
-| \$4125        | `AAAAAAAA` |   W    | Fill-mode attribute index                                               |
+| \$4125        | `......AA` |   W    | Fill-mode attribute index                                               |
 | \$4126        | `BBBBBBBB` |   W    | Nametable A bank (\$2000)                                               |
 | \$4127        | `BBBBBBBB` |   W    | Nametable B bank (\$2400)                                               |
 | \$4128        | `BBBBBBBB` |   W    | Nametable C bank (\$2800)                                               |
 | \$4129        | `BBBBBBBB` |   W    | Nametable D bank (\$2C00)                                               |
-| \$412A        | `CCF.DDEE` |  R/W   | Nametable A control (\$2000)                                            |
-| \$412B        | `CCF.DDEE` |  R/W   | Nametable B control (\$2400)                                            |
-| \$412C        | `CCF.DDEE` |  R/W   | Nametable C control (\$2800)                                            |
-| \$412D        | `CCF.DDEE` |  R/W   | Nametable D control (\$2C00)                                            |
+| \$412A        | `CCF.DDEE` |   W    | Nametable A control (\$2000)                                            |
+| \$412B        | `CCF.DDEE` |   W    | Nametable B control (\$2400)                                            |
+| \$412C        | `CCF.DDEE` |   W    | Nametable C control (\$2800)                                            |
+| \$412D        | `CCF.DDEE` |   W    | Nametable D control (\$2C00)                                            |
 | \$412E        | `BBBBBBBB` |   W    | Nametable W bank (Window Split)                                         |
-| \$412F        | `....DDEE` |  R/W   | Nametable W control (Window Split)                                      |
-| \$4130        | `...UUUUU` |   W    | CHR bank upper bits (modes 0,1,2,3,4)                                   |
-| \$4131        | `...UUUUU` |   W    | CHR bank upper bits (modes 1,2,3,4)                                     |
-| \$4132        | `...UUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
-| \$4133        | `...UUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
-| \$4134        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4135        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4136        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4137        | `...UUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
-| \$4138        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$4139        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413A        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413B        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413C        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413D        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413E        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
-| \$413F        | `...UUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$412F        | `..F.DDEE` |   W    | Nametable W control (Window Split)                                      |
+| \$4130        | `..UUUUUU` |   W    | CHR bank upper bits (modes 0,1,2,3,4)                                   |
+| \$4131        | `..UUUUUU` |   W    | CHR bank upper bits (modes 1,2,3,4)                                     |
+| \$4132        | `..UUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
+| \$4133        | `..UUUUUU` |   W    | CHR bank upper bits (modes 2,3,4)                                       |
+| \$4134        | `..UUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4135        | `..UUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4136        | `..UUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4137        | `..UUUUUU` |   W    | CHR bank upper bits (modes 3,4)                                         |
+| \$4138        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$4139        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413A        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413B        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413C        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413D        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413E        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
+| \$413F        | `..UUUUUU` |   W    | CHR bank upper bits (mode 4)                                            |
 | \$4140        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 0,1,2,3,4)                                   |
 | \$4141        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 1,2,3,4)                                     |
 | \$4142        | `LLLLLLLL` |   W    | CHR bank lower bits (modes 2,3,4)                                       |
@@ -1413,7 +1516,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4157        | `P.......` |  R/W   | CPU cycle parity                                                        |
 | \$4158        | `HHHHHHHH` |   W    | Latch high byte                                                         |
 | \$4159        | `LLLLLLLL` |   W    | Latch low byte                                                          |
-| \$415A        | `.....IEA` |   W    | Control                                                                 |
+| \$415A        | `.....IAE` |   W    | Control                                                                 |
 | \$415B        | `........` |   W    | Acknowledge                                                             |
 |               |            |        | **FPGA-RAM auto R/W**                                                   |
 | \$415C        | `...HHHHH` |   W    | FPGA-RAM address high byte                                              |
@@ -1436,7 +1539,7 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 | \$4172        | `SSSSSSSS` |   W    | Window Split Y start (0-255)                                            |
 | \$4173        | `EEEEEEEE` |   W    | Window Split Y end (0-255)                                              |
 | \$4174        | `...XXXXX` |   W    | Window Split coarse X scroll (0-31)                                     |
-| \$4175        | `YYYYYYYY` |   W    | Window Split fine Y scroll (0-256)                                      |
+| \$4175        | `YYYYYYYY` |   W    | Window Split fine Y scroll (0-239)                                      |
 | \$4176-\$418F |            |        | _Not used_                                                              |
 |               |            |        | **WIFI**                                                                |
 | \$4190        | `......IE` |  R/W   | Control                                                                 |
@@ -1458,7 +1561,8 @@ This register allows you to specify a \$100 bytes page from \$4800 to be used fo
 |               |            |        | **AUDIO OUTPUT CONTROL**                                                |
 | \$41A9        | `.....ITF` |   W    | Audio output control                                                    |
 | \$41AA        | `....VVVV` |   W    | Audio output master volume                                              |
-| \$41AB-\$41FF |            |        | _Not used_                                                              |
+| \$41AB-\$41FE |            |        | _Not used_                                                              |
+| \$41FF        |            |        | _Reserved, manufacturer use only_                                       |
 |               |            |        | **SPRITE EXTENDED MODE**                                                |
 | \$4200-\$423F | `LLLLLLLL` |   W    | Sprites individual bank lower bits                                      |
 | \$4240        | `.....UUU` |   W    | Sprites global bank upper bits                                          |

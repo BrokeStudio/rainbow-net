@@ -4,14 +4,16 @@ Here you'll find the Rainbow mapper documentation for the NES and 6502 library f
 
 | File / Folder                                              | Description                                 |
 | ---------------------------------------------------------- | ------------------------------------------- |
-| [rainbow-net.md](../rainbow-net.md)                        | Rainbow NET Wi-Fi protocol documentation    |
-| [mapper-doc.md](mapper-doc.md)                             | Rainbow NES mapper documentation            |
+| [mapper-doc.md](mapper-doc.md)                             | Rainbow mapper documentation                |
+| [mapper-registers.s](mapper-registers.s)                   | Rainbow mapper registers                    |
+| [bootrom.md](bootrom.md)                                   | Rainbow BootROM documentation               |
+| [rainbow-patch-format.md](rainbow-patch-format.md)         | Rainbow patch file format                   |
 | [prg-rom-self-flashing.md](prg-rom-self-flashing.md)       | Rainbow PRG-ROM self-flashing documentation |
 | [chr-rom-self-flashing.md](chr-rom-self-flashing.md)       | Rainbow CHR-ROM self-flashing documentation |
+| [rainbow-net.md](../rainbow-net.md)                        | Rainbow Net Wi-Fi protocol documentation    |
 | [rainbow-net-code-example.md](rainbow-net-code-example.md) | Rainbow Net example code                    |
-| [mapper-registers.s](mapper-registers.s)                   | Rainbow NES mapper registers                |
-| [/asm6](./asm6)                                            | ASM6 Rainbow Net lib code                   |
-| [/cc65](./cc65)                                            | cc65 suite Rainbow Net lib code             |
+| [asm6](asm6)                                               | ASM6 Rainbow Net library                    |
+| [cc65](cc65)                                               | cc65 Rainbow Net library                    |
 
 # Try it yourself
 
@@ -28,7 +30,7 @@ If you want to try this mapper, here are some resources:
 # Notes
 
 - [official MesenCE](https://github.com/nesdev-org/MesenCE) already supports the Rainbow mapper, minus the Wi-Fi feature
-- [custom MesenCE](https://github.com/BrokeStudio/MesenCE/) version doesn't support secured TCP protocol
+- [custom MesenCE](https://github.com/BrokeStudio/MesenCE/) supports the Rainbow mapper, including the Wi-Fi feature (but doesn't support secured TCP protocol)
 - [custom FCEUX](https://github.com/BrokeStudio/fceux) version hasn't been updated for a long time and is not up to date with the latest mapper features
 
 # Contact

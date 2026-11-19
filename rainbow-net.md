@@ -2420,17 +2420,19 @@ Current ESP configuration will be saved afterwards.
 
 ## BootROM
 
-A BootROM is provided directly on the cartridge, embedded in the FPGA Flash Memory.  
-To access it, simply press `SELECT` and `START` on controller 1 or 2 while powering on the console.  
-The BootROM allows you to perform some low level actions:
+A BootROM is provided directly on the cartridge, embedded in the FPGA flash memory.
 
-- display cartridge informations
-- display ESP informations
+The BootROM allows you to perform some low-level operations:
+
+- display cartridge information
+- display ESP information
 - configure Wi-Fi networks
 - configure game server hostname and port
-- update the cartridge (PRG-ROM/CHR-ROM) from a file on the ESP Flash Memory / SD Card
-- manage files on the ESP Flash Memory / SD Card
+- update the cartridge from a file on the ESP flash memory or SD card
+- manage files on the ESP flash memory or SD card
 - reset the ESP to factory settings
+
+See the [NES BootROM documentation](NES/bootrom.md) for access instructions, initial Wi-Fi setup, cartridge updates and error codes.
 
 ---
 
